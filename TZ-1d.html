@@ -93,6 +93,10 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
 
 .edit-btn{background:none;border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:'Nunito',sans-serif;font-size:0.65rem;font-weight:700;padding:3px 7px;cursor:pointer;transition:all 0.15s;}
 .edit-btn:hover{border-color:var(--amber);color:var(--amber);}
+.reorder-col{display:flex;flex-direction:column;align-items:center;gap:2px;margin-left:4px;}
+.reorder-btn{background:none;border:1.5px solid var(--border);border-radius:6px;color:var(--muted);font-size:0.75rem;padding:2px 6px;cursor:pointer;line-height:1;transition:all 0.15s;}
+.reorder-btn:hover{border-color:var(--blue1);color:var(--blue1);}
+.reorder-btn:disabled{opacity:0.2;cursor:default;border-color:var(--border);color:var(--muted);}
 
 .diff-panel{display:none;background:#EAF7F0;border-top:1px solid #CDEADB;padding:6px 11px;align-items:center;justify-content:space-between;gap:8px;}
 [data-theme="dark"] .diff-panel{background:#0F2E1F;border-top-color:#1A4A2E;}
@@ -408,7 +412,7 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
     <h2 id="modalTitle">Edit Location</h2>
     <p class="modal-sub">Type a city and tap Search — then pick from the list.</p>
     <label class="flabel">Label Name</label>
-    <input class="txt" id="editName" type="text" placeholder="e.g. ❤️ Husband, Mom, Sister…">
+    <input class="txt" id="editName" type="text" placeholder="e.g. ❤️ Husband, Mom, Sister…" oninput="validateEditName()">
     <label class="flabel">City / Location</label>
     <div class="search-row">
       <input class="txt" id="editCity" type="text" placeholder="e.g. Madison  or  Madison, SD" onkeydown="if(event.key==='Enter')doSearch()">
@@ -625,7 +629,7 @@ function addPreset(){
   const keys=getActiveKeys();
   if(keys.length>=MAX_PRESETS)return;
   const key=newPresetKey();
-  state[key]={label:'Custom',city:'',tz:''};
+  state[key]={label:'',city:'',tz:''};
   saveState();renderAll();
   // Open edit immediately
   openEdit(key,null);
@@ -1218,7 +1222,7 @@ function selectResult(idx){
   selectedResultIdx=idx;const r=searchResultsData[idx];
   foundTZ=r.tz;foundLat=r.lat;foundLon=r.lon;
   const loc=formatLocation(r.address||{});if(loc)document.getElementById('editCity').value=loc;
-  document.getElementById('saveBtn').disabled=false;renderResultsList();
+  document.getElementById('saveBtn').disabled=!document.getElementById('editName').value.trim();renderResultsList();
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────
@@ -1243,7 +1247,8 @@ function renderMyCard(){
   }
 }
 
-function cardHTML(key){
+function cardHTML(key,keys){
+  if(!keys)keys=getActiveKeys();
   const p=state[key];const has=!!p.tz;const isActive=selectedKey===key;
   const diff=has?getDiff(myTZ,p.tz):null;
   const pLat=(p.lat!==undefined&&p.lat!==null)?p.lat:null;
@@ -1282,7 +1287,11 @@ function cardHTML(key){
             <span class="call-wrap ${callCls}" title="${callCls==='call-green'?'Good time to call':callCls==='call-yellow'?'Borderline hours':'Likely sleeping'} — tap to calculate" onclick="openCallModal('${key}',event)"><span class="call-ph">☎</span></span>
           </div>
         </div>`:''}
-        ${isActive?`<button class="edit-btn" onclick="openEdit('${key}',event)">✏️</button>`:''}
+        ${isActive?`<div class="reorder-col">
+          <button class="reorder-btn" onclick="movePreset('${key}',-1,event)" ${keys.indexOf(key)===0?'disabled':''}>▲</button>
+          <button class="edit-btn" onclick="openEdit('${key}',event)">✏️</button>
+          <button class="reorder-btn" onclick="movePreset('${key}',1,event)" ${keys.indexOf(key)===keys.length-1?'disabled':''}>▼</button>
+        </div>`:''}
         ${!has?`<button class="edit-btn" onclick="openEdit('${key}',event)">✏️ Set up</button>`:''}
       </div>
     </div>
@@ -1304,7 +1313,7 @@ function renderAll(){
         <button onclick="addPreset()" style="background:none;border:1.5px solid var(--border);border-radius:20px;color:var(--muted);font-family:'Nunito',sans-serif;font-size:0.75rem;font-weight:700;padding:5px 16px;cursor:pointer;transition:all 0.15s;" onmouseover="this.style.borderColor='var(--blue1)';this.style.color='var(--blue1)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">＋ Add preset</button>
       </div>`
     :'';
-  document.getElementById('allCards').innerHTML=keys.map(cardHTML).join('')+addPill;
+  document.getElementById('allCards').innerHTML=keys.map(k=>cardHTML(k,keys)).join('')+addPill;
 }
 
 // ── SLEEPING ANIMATION ─────────────────────────────────────────────
@@ -1367,6 +1376,24 @@ document.getElementById('callOverlay').addEventListener('click',e=>{if(e.target.
 
 // ── EDIT MODAL ─────────────────────────────────────────────────────
 function tapCard(key){const was=selectedKey===key;selectedKey=was?null:key;renderAll();}
+function movePreset(key,dir,evt){
+  if(evt)evt.stopPropagation();
+  const keys=getActiveKeys();
+  const idx=keys.indexOf(key);
+  const newIdx=idx+dir;
+  if(newIdx<0||newIdx>=keys.length)return;
+  // Swap in localStorage order by swapping the keys in state
+  const otherKey=keys[newIdx];
+  // We store order implicitly via Object.keys — swap by rebuilding state
+  const entries=Object.entries(state);
+  const idxA=entries.findIndex(e=>e[0]===key);
+  const idxB=entries.findIndex(e=>e[0]===otherKey);
+  [entries[idxA],entries[idxB]]=[entries[idxB],entries[idxA]];
+  // Rebuild state preserving reference
+  Object.keys(state).forEach(k=>delete state[k]);
+  entries.forEach(([k,v])=>state[k]=v);
+  saveState();renderAll();
+}
 function openEdit(key,evt){
   if(evt)evt.stopPropagation();
   editKey=key;foundTZ=null;foundLat=null;foundLon=null;selectedResultIdx=null;searchResultsData=[];
@@ -1375,9 +1402,10 @@ function openEdit(key,evt){
   document.getElementById('modalTitle').textContent='Edit: '+p.label;
   document.getElementById('editName').value=p.label;
   document.getElementById('editName').disabled=false;
+  validateEditName();
   document.getElementById('editCity').value=p.city||'';
   document.getElementById('searchResults').innerHTML='';
-  document.getElementById('saveBtn').disabled=!p.tz;
+  document.getElementById('saveBtn').disabled=!p.tz||!p.label.trim();
   const clrBtn=document.getElementById('clearBtn');
   clrBtn.style.display=(p.tz||!isFixed)?'':'none';
   clrBtn.textContent=isFixed?'Reset':'Remove';
@@ -1391,6 +1419,15 @@ function closeModal(){
   }
   editKey=null;foundTZ=null;foundLat=null;foundLon=null;searchResultsData=[];selectedResultIdx=null;
   renderAll();
+}
+function validateEditName(){
+  const inp=document.getElementById('editName');
+  const empty=!inp.value.trim();
+  inp.style.outline=empty?'2px solid #E74C3C':'';
+  inp.style.borderColor=empty?'#E74C3C':'';
+  // Save needs label AND a TZ (either already set or freshly found)
+  const hasTZ=!!(foundTZ||(editKey&&state[editKey]&&state[editKey].tz));
+  document.getElementById('saveBtn').disabled=empty||!hasTZ;
 }
 function saveEdit(){
   if(!editKey)return;const p=state[editKey];
