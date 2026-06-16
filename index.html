@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- v1.1 -->
+<script>const APP_VERSION='v1.6';</script>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -53,8 +53,8 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
 .my-date{font-size:0.7rem;opacity:0.8;margin-top:2px;}
 .my-tz-row{margin-top:6px;display:flex;align-items:flex-end;justify-content:space-between;gap:6px;}
 .my-tz-left{display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:0.64rem;opacity:0.65;}
-.tz-pill{background:rgba(255,255,255,0.18);border-radius:20px;padding:2px 9px;font-weight:700;font-size:0.63rem;letter-spacing:0.05em;cursor:pointer;transition:background 0.15s;}
-.tz-pill:hover{background:rgba(255,255,255,0.32);}
+.tz-pill{background:var(--border);border-radius:20px;padding:2px 9px;font-weight:700;font-size:0.63rem;letter-spacing:0.05em;cursor:pointer;transition:background 0.15s;color:var(--text);}
+.tz-pill:hover{background:var(--blue1);color:white;}
 .my-sun-right{font-size:0.63rem;opacity:0.7;white-space:nowrap;text-align:right;}
 .loc-badge{position:absolute;top:10px;right:10px;background:rgba(255,255,255,0.14);border-radius:9px;padding:3px 9px;font-size:0.62rem;font-weight:700;color:white;max-width:46%;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:pointer;transition:background 0.15s;}
 .loc-badge:hover{background:rgba(255,255,255,0.28);}
@@ -74,23 +74,19 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
 .preset-card.active{border-color:var(--green);box-shadow:0 3px 14px rgba(30,132,73,0.18);}
 .preset-card.unset{border-style:dashed;background:rgba(255,255,255,0.6);}
 [data-theme="dark"] .preset-card.unset{background:rgba(28,45,62,0.6);}
-.card-main{display:flex;justify-content:space-between;align-items:center;padding:9px 11px 7px;gap:7px;min-height:58px;}
-.card-left{flex:1;min-width:0;}
-.card-name{font-family:'Playfair Display',serif;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.2;}
-.card-city-row{display:flex;align-items:center;gap:4px;margin-top:1px;}
-.card-city{font-size:0.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.card-main{display:grid;grid-template-columns:1fr auto;grid-template-rows:2.0rem 1.0rem 1.6rem;padding:7px 11px 6px;gap:0 4px;}
+.card-main.active-card{grid-template-columns:1fr auto 32px;}
+.card-left-col{grid-column:1;grid-row:1/4;display:grid;grid-template-rows:2.0rem 1.0rem 1.6rem;min-width:0;}
+.card-right-col{grid-column:2;grid-row:1/4;display:grid;grid-template-rows:2.0rem 1.0rem 1.6rem;}
+.card-reorder-col{grid-column:3;grid-row:1/4;display:flex;flex-direction:column;justify-content:space-between;align-self:stretch;width:32px;padding-top:6px;}
+.card-name{font-family:'Playfair Display',serif;font-size:0.97rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;}
+.card-time-cell{font-family:'Playfair Display',serif;font-size:1.35rem;line-height:1;text-align:right;white-space:nowrap;display:flex;align-items:center;justify-content:flex-end;}
+.card-city{font-size:0.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;}
+.card-date{font-size:0.72rem;color:var(--muted);text-align:right;white-space:nowrap;display:flex;align-items:center;justify-content:flex-end;}
+.card-bottom-left{display:flex;align-items:center;gap:4px;}
+.card-bottom-right{display:flex;align-items:center;gap:4px;justify-content:flex-end;}
 .card-weather{font-size:1.1rem;line-height:1;flex-shrink:0;cursor:pointer;transition:transform 0.15s;}
 .card-weather:hover{transform:scale(1.25);}
-.card-actions{display:flex;align-items:center;gap:5px;flex-shrink:0;}
-.card-right{text-align:right;}
-.card-time-row{display:flex;align-items:baseline;gap:4px;justify-content:flex-end;}
-.card-coffee{font-size:1rem;line-height:1;cursor:pointer;transition:transform 0.15s;}
-.card-coffee:hover{transform:scale(1.3);}
-.card-time{font-family:'Playfair Display',serif;font-size:1.35rem;line-height:1;}
-.card-date{font-size:0.72rem;color:var(--muted);margin-top:1px;}
-.card-icons{display:flex;align-items:center;gap:4px;margin-top:3px;justify-content:flex-end;}
-.sun-icon{font-size:1rem;line-height:1;cursor:pointer;transition:transform 0.15s;}
-.sun-icon:hover{transform:scale(1.25);}
 
 .call-wrap{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;cursor:pointer;}
 .call-wrap.call-green{background:rgba(30,132,73,0.15);}
@@ -107,7 +103,11 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
 .reorder-btn{background:none;border:1.5px solid var(--border);border-radius:6px;color:var(--muted);font-size:0.75rem;padding:2px 6px;cursor:pointer;line-height:1;transition:all 0.15s;}
 .reorder-btn:hover{border-color:var(--blue1);color:var(--blue1);}
 .reorder-btn:disabled{opacity:0.2;cursor:default;border-color:var(--border);color:var(--muted);}
-.copy-time-btn{background:none;border:none;cursor:pointer;font-size:0.95rem;opacity:0.55;padding:2px 4px;transition:opacity 0.15s;vertical-align:middle;line-height:1;}
+.note-icon{cursor:pointer;font-size:0.9rem;transition:transform 0.15s;display:inline-block;}
+.note-icon:hover{transform:scale(1.2);}
+.note-popup{position:fixed;z-index:9999;background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:10px 14px;max-width:260px;font-size:0.82rem;font-style:italic;color:var(--text);box-shadow:0 4px 18px rgba(0,0,0,0.15);pointer-events:none;opacity:0;transition:opacity 0.18s;}
+.note-popup.show{opacity:1;pointer-events:none;}
+.card-color-stripe{height:4px;width:100%;border-radius:13px 13px 0 0;margin-bottom:0;}
 .copy-time-btn:hover{opacity:1;}
 .copy-toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%);background:#1A5276;color:white;font-family:'Nunito',sans-serif;font-size:0.78rem;font-weight:700;padding:7px 18px;border-radius:20px;pointer-events:none;opacity:0;transition:opacity 0.2s;z-index:999;white-space:nowrap;}
 .copy-toast.show{opacity:1;}
@@ -204,10 +204,19 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
 .modal-sub{font-size:0.7rem;color:var(--muted);margin-bottom:12px;}
 .flabel{display:block;font-size:0.62rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:4px;margin-top:11px;}
 .txt{width:100%;padding:10px 11px;border:1.5px solid var(--border);border-radius:9px;font-family:'Nunito',sans-serif;font-size:0.9rem;background:var(--card);color:var(--text);outline:none;transition:border-color 0.2s;}
+.txt::placeholder{color:var(--muted);opacity:0.45;}
 .txt:focus{border-color:var(--blue1);}
 .txt:disabled{opacity:0.5;}
 .search-row{display:flex;gap:6px;}
 .search-row .txt{flex:1;}
+.search-anim{display:flex;align-items:center;justify-content:center;padding:12px 0;position:relative;height:2.4rem;}
+.search-anim-globe{font-size:1.4rem;line-height:1;flex-shrink:0;}
+.search-anim-lens{font-size:1.2rem;line-height:1;position:absolute;left:calc(50% - 1rem);animation:lensSearch 1.4s cubic-bezier(0.45,0,0.55,1) infinite;}
+@keyframes lensSearch{
+  0%  {transform:translateX(0);}
+  50% {transform:translateX(10vw);}
+  100%{transform:translateX(0);}
+}
 .search-btn{background:var(--blue1);color:white;border:none;border-radius:9px;padding:0 14px;font-family:'Nunito',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;transition:background 0.2s;white-space:nowrap;}
 .search-btn:hover{background:var(--blue2);}
 .search-btn:disabled{background:#8EB4CC;cursor:default;}
@@ -243,6 +252,22 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
 .wx-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:8px;}
 .wx-stat{background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;}
 .wx-stat-label{font-size:0.6rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.wx-runway{position:relative;width:100%;height:2.4rem;background:#1a1a1a;border-radius:6px;overflow:visible;margin:10px 0 4px;display:flex;align-items:center;}
+.wx-runway-line{position:absolute;top:50%;left:0;right:0;height:2px;transform:translateY(-50%);background:repeating-linear-gradient(to right,white 0px,white 16px,transparent 16px,transparent 28px);overflow:hidden;border-radius:6px;}
+.wx-runway-marker{position:absolute;top:50%;transform:translateY(-50%);font-size:3.5rem;font-weight:900;color:white;letter-spacing:-1px;line-height:1;font-family:monospace;left:4px;z-index:1;}
+.wx-runway-plane{position:absolute;top:50%;left:0;transform:translateY(-50%) translateX(-2em) rotate(45deg);font-size:1.3rem;line-height:1;will-change:transform;z-index:9999;}
+@keyframes rwTakeoff{
+  0%  {transform:translateY(-50%) translateX(0%)    rotate(45deg) scale(1);animation-timing-function:cubic-bezier(0.4,0,1,1);}
+  30% {transform:translateY(-50%) translateX(36vw)  rotate(45deg) scale(1);animation-timing-function:linear;}
+  100%{transform:translateY(-50%) translateX(120vw) rotate(45deg) scale(4);}
+}
+@keyframes rwLand{
+  0%  {transform:translateY(-50%) translateX(120vw) rotate(225deg) scale(4);animation-timing-function:linear;}
+  70% {transform:translateY(-50%) translateX(36vw)  rotate(225deg) scale(1);animation-timing-function:cubic-bezier(0,0,0.3,1);}
+  100%{transform:translateY(-50%) translateX(0%)    rotate(225deg) scale(1);}
+}
+.wx-narrative-fadein{animation:narrativeFade 0.35s ease forwards;}
+@keyframes narrativeFade{from{opacity:0;}to{opacity:1;}}
 .wx-stat-val{font-size:0.95rem;font-weight:700;color:var(--text);}
 .wx-unit-toggle{background:var(--border);border:none;border-radius:20px;color:var(--muted);font-size:0.72rem;font-family:'Nunito',sans-serif;font-weight:700;padding:2px 10px;cursor:pointer;transition:background 0.15s;letter-spacing:0.03em;}
 .wx-unit-toggle:hover{background:var(--blue1);color:white;}
@@ -317,7 +342,10 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
 </head>
 <body>
 <header>
-  <button class="hdr-btn" id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
+  <div style="display:flex;align-items:center;gap:6px;">
+    <button class="hdr-btn" id="didYouKnowBtn" onclick="openDidYouKnow()" title="Did you know?">?</button>
+    <button class="hdr-btn" id="darkBtn" onclick="toggleDark()">🌙 Dark</button>
+  </div>
   <div class="hdr-title"><h1>ChronoZone</h1><p>Your world, at a glance</p></div>
   <button class="hdr-btn" onclick="openSettings()">⚙️ Settings</button>
 </header>
@@ -340,7 +368,7 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
         <div class="my-date" id="myDate">---</div>
         <div style="margin-top:5px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;font-size:0.64rem;opacity:0.65;">
           <span class="tz-pill" id="myTZpill" style="cursor:pointer" onclick="openTZInfo(event)">---</span>
-          <span id="myLoc" style="opacity:0.75"></span>
+          <span id="myFlag" style="font-size:1rem;line-height:1"></span>
         </div>
       </div>
       <div class="my-card-right">
@@ -352,6 +380,7 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
   <div class="preset-list" id="allCards"></div>
 </div></div>
 <div class="copy-toast" id="copyToast"></div>
+<div class="note-popup" id="notePopup"></div>
 
 <!-- CALL TIME MODAL -->
 <div class="call-modal-overlay" id="callOverlay">
@@ -369,6 +398,21 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
     </div>
     <div id="callBestTime" style="font-size:0.78rem;color:var(--muted);margin:8px 4px 4px;min-height:1.2em;text-align:center;"></div>
     <button class="btn-close-call" onclick="closeCallModal()">Done</button>
+  </div>
+</div>
+
+<!-- DID YOU KNOW OVERLAY -->
+<div class="settings-overlay" id="dykOverlay">
+  <div class="settings-modal" style="max-height:60vh;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+      <h2 style="margin:0">💡 Did you know:</h2>
+      <span style="font-size:0.7rem;color:var(--muted);font-family:'Nunito',sans-serif;" id="dykCounter"></span>
+    </div>
+    <p id="dykText" style="font-size:0.95rem;line-height:1.6;color:var(--text);font-family:'Nunito',sans-serif;margin-bottom:20px;"></p>
+    <div style="display:flex;gap:10px;">
+      <button class="btn-close-call" onclick="nextDidYouKnow()" style="flex:1;background:var(--blue1);">Next →</button>
+      <button class="btn-close-call" onclick="closeDidYouKnow()" style="flex:1;background:var(--card);color:var(--text);border:1.5px solid var(--border);">Close</button>
+    </div>
   </div>
 </div>
 
@@ -408,6 +452,10 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
       <label>Weather</label>
       <button class="unit-btn" id="weatherToggleBtn" onclick="toggleWeatherPref()"></button>
     </div>
+    <div class="s-row">
+      <label>Country Flags</label>
+      <button class="unit-btn" id="flagsToggleBtn" onclick="toggleFlagsPref()"></button>
+    </div>
     <div class="s-section">Call Hours</div>
     <div class="s-row">
       <label>Good hours to call <span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:rgba(30,132,73,0.15);margin-left:4px;vertical-align:middle"><span style="font-size:1.05rem;color:#1A7A3A">☎</span></span></label>
@@ -437,16 +485,23 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
     <h2 id="modalTitle">Edit Location</h2>
     <p class="modal-sub">Type a city and tap Search — then pick from the list.</p>
     <label class="flabel">Label Name</label>
-    <input class="txt" id="editName" type="text" placeholder="e.g. ❤️ Husband, Mom, Sister…" oninput="validateEditName()">
+    <input class="txt" id="editName" type="text" placeholder="e.g. Mom 💖, Sister, 🐕‍🦺🚶, etc." oninput="validateEditName()">
+    <label class="flabel">🗒️ Note</label>
+    <input class="txt" id="editNote" type="text" placeholder="e.g. 🎂 9/19, Loves 🍕, Corinthians fan, etc." maxlength="120">
+    <label class="flabel">Custom Color</label>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+      <input type="color" id="editColorPick" style="width:36px;height:36px;border:none;border-radius:8px;cursor:pointer;padding:2px;" oninput="setEditColor(this.value)">
+      <button onclick="clearEditColor()" style="font-size:0.7rem;background:none;border:1px solid var(--border);border-radius:8px;padding:3px 8px;color:var(--muted);cursor:pointer;">✕ None</button>
+    </div>
     <label class="flabel">City / Location</label>
     <div class="search-row">
-      <input class="txt" id="editCity" type="text" placeholder="e.g. Madison  or  Madison, SD" onkeydown="if(event.key==='Enter')doSearch()">
+      <input class="txt" id="editCity" type="text" placeholder="e.g. Zermatt or Marshfield, WI" onkeydown="if(event.key==='Enter')doSearch()">
       <button class="search-btn" id="searchBtn" onclick="doSearch()">🔍 Search</button>
     </div>
     <div id="searchResults"></div>
     <div class="modal-actions">
       <button class="btn-save" id="saveBtn" onclick="saveEdit()" disabled>Save</button>
-      <button class="btn-clr" id="clearBtn" onclick="clearPreset()" style="display:none">Reset</button>
+      <button class="btn-clr" id="clearBtn" onclick="clearPreset()" style="display:none">Remove</button>
       <button class="btn-cancel" onclick="closeModal()">Cancel</button>
     </div>
   </div>
@@ -469,9 +524,6 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
     </div>
     <div class="wx-grid" id="wxGrid"></div>
     <div id="wxNarrative" style="font-size:0.8rem;color:var(--muted);line-height:1.45;margin:10px 2px 4px;min-height:1.2em;font-style:italic;"></div>
-    <div id="wxRefreshRow" style="display:none;margin-bottom:12px;text-align:center">
-      <button class="diff-tz" id="wxRefreshBtn" onclick="refreshWxCard()" style="font-size:0.75rem;padding:4px 14px;">🔄 Update</button>
-    </div>
     <button class="btn-close-wx" onclick="closeWxCard()">Close</button>
   </div>
 </div>
@@ -570,7 +622,6 @@ header p{color:rgba(235,245,251,0.4);font-size:0.58rem;letter-spacing:0.1em;text
 </div>
 
 <script>
-const APP_VERSION='v1.1';
 // ── WEATHER CODE → EMOJI ───────────────────────────────────────────
 function weatherEmoji(code){
   if(code===0)return'☀️';if(code===1)return'🌤️';if(code===2)return'⛅';if(code===3)return'☁️';
@@ -611,33 +662,19 @@ const MOON_PHASES=[
 ];
 
 // ── DEFAULTS & CONFIG ──────────────────────────────────────────────
-const MAX_PRESETS=6;
-// p1 and p2 are permanent fixed slots; custom slots are added dynamically
-const FIXED_DEFAULTS={
-  p1:{label:'❤️ Husband',city:'',tz:''},
-  p2:{label:'🇧🇷 São Paulo',city:'São Paulo, Brazil',tz:'America/Sao_Paulo',lat:-23.5505,lon:-46.6333},
-};
-// ALL_KEYS computed from live state
-function getActiveKeys(){return Object.keys(state).filter(k=>state[k]!==undefined);}
-const COLOR_PRESETS=[
-  ['#1A5276','#0E3148','Navy'],['#1A3A5C','#0D2137','Midnight'],
-  ['#1B5E20','#0A3B12','Forest'],['#4A148C','#2D0A5A','Plum'],
-  ['#7B1A2A','#4A0E18','Wine'],['#0E3D3A','#061E1C','Teal'],
-  ['#5D4037','#3E2723','Espresso'],['#2C3E50','#1A2535','Slate'],
-  ['#BF4800','#7A2D00','Orange'],['#009C3B','#FEDF00','Brazil'],
-];
-
+const MAX_PRESETS=6; // Maximum number of preset cards allowed
 // ── STATE ──────────────────────────────────────────────────────────
-function freshState(){return {p1:{...FIXED_DEFAULTS.p1},p2:{...FIXED_DEFAULTS.p2}};}
+// freshState returns empty — users build their own presets from scratch
+function freshState(){return {};}
 function loadState(){
   try{
     // Migrate from old v9 flat format
     const r9=localStorage.getItem('tzapp_v9');
     if(r9){
       const old=JSON.parse(r9);
-      const s={p1:{...FIXED_DEFAULTS.p1,...(old.p1||{})},p2:{...FIXED_DEFAULTS.p2,...(old.p2||{})}};
-      // Carry over any configured custom slots from the old format
-      ['c1','c2','c3'].forEach(k=>{if(old[k]&&old[k].tz)s[k]={...old[k]};});
+      const s={};
+      // Migrate all old preset keys as-is
+      Object.keys(old).forEach(k=>{if(old[k]&&old[k].tz)s[k]={...old[k]};});
       localStorage.setItem('tzapp_v10',JSON.stringify(s));
       localStorage.removeItem('tzapp_v9');
       return s;
@@ -648,6 +685,14 @@ function loadState(){
   return freshState();
 }
 function saveState(){localStorage.setItem('tzapp_v10',JSON.stringify(state));}
+function getActiveKeys(){return Object.keys(state).filter(k=>state[k]!==undefined&&(state[k].tz||state[k].label));}
+const COLOR_PRESETS=[
+  ['#1A5276','#0E3148','Navy'],['#1A3A5C','#0D2137','Midnight'],
+  ['#1B5E20','#0A3B12','Forest'],['#4A148C','#2D0A5A','Plum'],
+  ['#7B1A2A','#4A0E18','Wine'],['#0D7E8A','#0A4F5E','Teal'],
+  ['#5D4037','#3E2723','Espresso'],['#2C3E50','#1A2535','Slate'],
+  ['#BF4800','#7A2D00','Orange'],['#AA336A','#6D1F42','Rose'],
+];
 // Generate a unique key for a new custom preset
 function newPresetKey(){
   let i=1;while(state['c'+i]!==undefined)i++;return 'c'+i;
@@ -663,7 +708,7 @@ function addPreset(){
 }
 function removePreset(key){
   delete state[key];
-  delete weatherCache[key];delete weatherFullCache[key];
+  clearWeatherCache(key);
   if(selectedKey===key)selectedKey=null;
   saveState();renderAll();
 }
@@ -671,9 +716,9 @@ function removePreset(key){
 let state=loadState();
 let myTZ=Intl.DateTimeFormat().resolvedOptions().timeZone;
 let myLocLabel=myTZ.split('/').pop().replace(/_/g,' ');
-let myLat=null,myLon=null,mySunTimes={rise:null,set:null};
+let myLat=null,myLon=null,mySunTimes={rise:null,set:null},myCC=null;
 let selectedKey=null,editKey=null;
-let foundTZ=null,foundLat=null,foundLon=null;
+let foundTZ=null,foundLat=null,foundLon=null,foundCC=null;
 let selectedResultIdx=null,searchResultsData=[];
 let callKey=null;
 let darkMode=localStorage.getItem('tzDark')==='1';
@@ -683,14 +728,16 @@ const weatherCache={};
 const weatherFullCache={};
 let sleepTimer=null;
 let lastCalcWasSleeping=false;
-let prefTempUnit=localStorage.getItem('prefTempUnit')||'C';
-let prefWindUnit=localStorage.getItem('prefWindUnit')||'kph';
+let prefTempUnit=localStorage.getItem('prefTempUnit')||'F';
+let prefWindUnit=localStorage.getItem('prefWindUnit')||'mph';
 // Call time window preferences
 let prefCallStart=parseInt(localStorage.getItem('prefCallStart')||'8',10);   // hour, default 8am
 let prefCallEnd=parseInt(localStorage.getItem('prefCallEnd')||'21',10);      // hour, default 9pm
 let prefCallBuffer=parseInt(localStorage.getItem('prefCallBuffer')||'60',10); // minutes, default 60
-let prefWeather=localStorage.getItem('prefWeather')!=='0'; // default on
-let wxTempUnit=prefTempUnit;
+let prefWeather=localStorage.getItem('prefWeather')!=='0';
+let prefFlags=localStorage.getItem('prefFlags')==='1'; // default off
+<!-- ===== END OF PART 1 — PASTE PART 2 IMMEDIATELY AFTER ===== -->
+  let wxTempUnit=prefTempUnit;
 let wxOpenKey=null;
 let wxOpenCity='';
 
@@ -704,10 +751,13 @@ function toggleDark(){
   else document.documentElement.removeAttribute('data-theme');
   localStorage.setItem('tzDark',darkMode?'1':'0');
   document.getElementById('darkBtn').textContent=darkMode?'☀️ Light':'🌙 Dark';
-  syncDarkBtn();
 }
-function syncDarkBtn(){
-  // dark btn in header only now
+
+// ── HELPERS ───────────────────────────────────────────────────────
+function renderBoth(){renderMyCard();renderAll();}
+function clearWeatherCache(key){
+  delete weatherCache[key];delete weatherFullCache[key];
+  delete nwsCache[key];delete nwsGridCache[key];
 }
 
 // ── SETTINGS ──────────────────────────────────────────────────────
@@ -715,7 +765,7 @@ function openSettings(){
   document.getElementById('colorA').value=cardColorA;
   document.getElementById('colorB').value=cardColorB;
   document.getElementById('versionPill').textContent=APP_VERSION;
-  buildColorPresets();syncUnitBtns();buildCallSelects();syncWeatherBtn();
+  buildColorPresets();syncUnitBtns();buildCallSelects();syncWeatherBtn();syncFlagsBtn();
   document.getElementById('settingsOverlay').classList.add('open');
 }
 function syncUnitBtns(){
@@ -726,22 +776,26 @@ function syncUnitBtns(){
 }
 function setTempUnit(u){prefTempUnit=u;localStorage.setItem('prefTempUnit',u);syncUnitBtns();}
 function setWindUnit(u){prefWindUnit=u;localStorage.setItem('prefWindUnit',u);syncUnitBtns();}
-function syncWeatherBtn(){
-  const btn=document.getElementById('weatherToggleBtn');
+function syncToggleBtn(btnId,value){
+  const btn=document.getElementById(btnId);
   if(!btn)return;
-  btn.textContent=prefWeather?'On ✓':'Off';
-  btn.classList.toggle('active-unit',prefWeather);
+  btn.textContent=value?'On ✓':'Off';
+  btn.classList.toggle('active-unit',value);
 }
+function syncWeatherBtn(){syncToggleBtn('weatherToggleBtn',prefWeather);}
+function syncFlagsBtn(){syncToggleBtn('flagsToggleBtn',prefFlags);}
 function toggleWeatherPref(){
   prefWeather=!prefWeather;
   localStorage.setItem('prefWeather',prefWeather?'1':'0');
   syncWeatherBtn();
-  if(prefWeather){
-    // Clear the __my cache so fetchMyWeather runs unconditionally
-    delete weatherCache['__my'];delete weatherFullCache['__my'];
-    fetchMyWeather().then(()=>renderMyCard());
-  }
-  renderMyCard();renderAll();
+  if(prefWeather){clearWeatherCache('__my');fetchMyWeather().then(()=>renderMyCard());}
+  renderBoth();
+}
+function toggleFlagsPref(){
+  prefFlags=!prefFlags;
+  localStorage.setItem('prefFlags',prefFlags?'1':'0');
+  syncFlagsBtn();
+  renderBoth();
 }
 function buildCallSelects(){
   const fmt=h=>{const hh=h%12||12,ap=h>=12?'PM':'AM';return hh+':00 '+ap;};
@@ -793,8 +847,264 @@ document.getElementById('settingsOverlay').addEventListener('click',e=>{if(e.tar
 // ── TIME UTILS ─────────────────────────────────────────────────────
 const fmtTime=tz=>new Date().toLocaleTimeString('en-US',{timeZone:tz,hour:'2-digit',minute:'2-digit',hour12:true});
 const fmtDate=tz=>new Date().toLocaleDateString('en-US',{timeZone:tz,weekday:'short',month:'short',day:'numeric'});
-function tzAbbr(tz){try{return new Date().toLocaleTimeString('en-US',{timeZone:tz,timeZoneName:'short'}).split(' ').pop();}catch(e){return'';}}
+
+// IANA → proper abbreviation override (for zones where browser returns GMT±X)
+const TZ_ABBR_OVERRIDE={
+  // ── SOUTH AMERICA ──────────────────────────────────────────────
+  'America/Belem':'BRT','America/Maceio':'BRT','America/Bahia':'BRT',
+  'America/Manaus':'AMT','America/Porto_Velho':'AMT','America/Boa_Vista':'AMT',
+  'America/Cuiaba':'AMT','America/Campo_Grande':'AMT',
+  'America/Rio_Branco':'ACT','America/Porto_Acre':'ACT','America/Eirunepe':'ACT',
+  'America/Noronha':'FNT',
+  'America/Argentina/Buenos_Aires':'ART','America/Argentina/Cordoba':'ART',
+  'America/Argentina/Salta':'ART','America/Argentina/Jujuy':'ART',
+  'America/Argentina/Tucuman':'ART','America/Argentina/Catamarca':'ART',
+  'America/Argentina/La_Rioja':'ART','America/Argentina/San_Juan':'ART',
+  'America/Argentina/Mendoza':'ART','America/Argentina/San_Luis':'ART',
+  'America/Argentina/Rio_Gallegos':'ART','America/Argentina/Ushuaia':'ART',
+  'America/Lima':'PET','America/Bogota':'COT','America/Caracas':'VET',
+  'America/La_Paz':'BOT','America/Guayaquil':'ECT','America/Guyana':'GYT',
+  'America/Paramaribo':'SRT','America/Cayenne':'GFT',
+  // ── CENTRAL AMERICA & CARIBBEAN ────────────────────────────────
+  'America/Costa_Rica':'CST','America/Guatemala':'CST','America/Tegucigalpa':'CST',
+  'America/El_Salvador':'CST','America/Managua':'CST','America/Belize':'CST',
+  // ── ASIA ────────────────────────────────────────────────────────
+  'Asia/Kolkata':'IST','Asia/Calcutta':'IST','Asia/Colombo':'SLST',
+  'Asia/Karachi':'PKT','Asia/Dhaka':'BST','Asia/Kathmandu':'NPT',
+  'Asia/Katmandu':'NPT','Asia/Rangoon':'MMT','Asia/Yangon':'MMT',
+  'Asia/Bangkok':'ICT','Asia/Ho_Chi_Minh':'ICT','Asia/Saigon':'ICT',
+  'Asia/Phnom_Penh':'ICT','Asia/Vientiane':'ICT',
+  'Asia/Shanghai':'CST','Asia/Chongqing':'CST','Asia/Harbin':'CST',
+  'Asia/Urumqi':'XJT','Asia/Kashgar':'XJT',
+  'Asia/Hong_Kong':'HKT','Asia/Macau':'CST','Asia/Taipei':'CST',
+  'Asia/Tokyo':'JST','Asia/Seoul':'KST','Asia/Pyongyang':'KST',
+  'Asia/Singapore':'SGT','Asia/Kuala_Lumpur':'MYT','Asia/Kuching':'MYT',
+  'Asia/Manila':'PHT','Asia/Jakarta':'WIB','Asia/Pontianak':'WIB',
+  'Asia/Makassar':'WITA','Asia/Ujung_Pandang':'WITA',
+  'Asia/Jayapura':'WIT','Asia/Dili':'TLT',
+  'Asia/Riyadh':'AST','Asia/Kuwait':'AST','Asia/Bahrain':'AST',
+  'Asia/Qatar':'AST','Asia/Muscat':'GST','Asia/Dubai':'GST',
+  'Asia/Baghdad':'AST','Asia/Aden':'AST','Asia/Sanaa':'AST',
+  'Asia/Tbilisi':'GET','Asia/Yerevan':'AMT_ARM','Asia/Baku':'AZT',
+  'Asia/Tashkent':'UZT','Asia/Samarkand':'UZT','Asia/Ashgabat':'TMT',
+  'Asia/Ashkhabad':'TMT','Asia/Dushanbe':'TJT','Asia/Bishkek':'KGT',
+  'Asia/Almaty':'ALMT','Asia/Qyzylorda':'QYZT',
+  'Asia/Novosibirsk':'NOVT','Asia/Omsk':'OMST','Asia/Krasnoyarsk':'KRAT',
+  'Asia/Irkutsk':'IRKT','Asia/Yakutsk':'YAKT','Asia/Vladivostok':'VLAT',
+  'Asia/Magadan':'MAGT','Asia/Sakhalin':'SAKT','Asia/Kamchatka':'PETT',
+  'Asia/Anadyr':'ANAT','Asia/Srednekolymsk':'SRET',
+  'Asia/Ulaanbaatar':'ULAT','Asia/Ulan_Bator':'ULAT',
+  'Asia/Kabul':'AFT','Asia/Yekaterinburg':'YEKT',
+  // ── AFRICA ──────────────────────────────────────────────────────
+  'Africa/Nairobi':'EAT','Africa/Addis_Ababa':'EAT','Africa/Dar_es_Salaam':'EAT',
+  'Africa/Kampala':'EAT','Africa/Mogadishu':'EAT','Africa/Djibouti':'EAT',
+  'Africa/Asmara':'EAT','Africa/Asmera':'EAT','Africa/Antananarivo':'EAT',
+  'Africa/Comoro':'EAT','Africa/Mayotte':'EAT',
+  'Africa/Lagos':'WAT','Africa/Bangui':'WAT','Africa/Brazzaville':'WAT',
+  'Africa/Douala':'WAT','Africa/Kinshasa':'WAT','Africa/Libreville':'WAT',
+  'Africa/Luanda':'WAT','Africa/Malabo':'WAT','Africa/Ndjamena':'WAT',
+  'Africa/Niamey':'WAT','Africa/Porto-Novo':'WAT','Africa/Tunis':'CET',
+  'Africa/Johannesburg':'SAST','Africa/Maseru':'SAST','Africa/Mbabane':'SAST',
+  'Africa/Harare':'CAT','Africa/Lusaka':'CAT','Africa/Maputo':'CAT',
+  'Africa/Blantyre':'CAT','Africa/Gaborone':'CAT','Africa/Bujumbura':'CAT',
+  'Africa/Kigali':'CAT','Africa/Lubumbashi':'CAT',
+  'Africa/Cairo':'EET','Africa/Tripoli':'EET',
+  'Africa/Casablanca':'WET','Africa/El_Aaiun':'WET',
+  'Africa/Accra':'GMT','Africa/Abidjan':'GMT','Africa/Bamako':'GMT',
+  'Africa/Banjul':'GMT','Africa/Conakry':'GMT','Africa/Dakar':'GMT',
+  'Africa/Freetown':'GMT','Africa/Lome':'GMT','Africa/Monrovia':'GMT',
+  'Africa/Nouakchott':'GMT','Africa/Ouagadougou':'GMT','Africa/Sao_Tome':'GMT',
+  'Africa/Khartoum':'CAT','Africa/Juba':'EAT',
+  // ── PACIFIC ─────────────────────────────────────────────────────
+  'Pacific/Port_Moresby':'PGT','Pacific/Guadalcanal':'SBT',
+  'Pacific/Efate':'VUT','Pacific/Noumea':'NCT','Pacific/Pohnpei':'PONT',
+  'Pacific/Kosrae':'KOST','Pacific/Majuro':'MHT','Pacific/Tarawa':'GILT',
+  'Pacific/Funafuti':'TVT','Pacific/Wake':'WAKT','Pacific/Nauru':'NRT',
+  'Pacific/Honolulu':'HST','Pacific/Tahiti':'TAHT','Pacific/Marquesas':'MART',
+  'Pacific/Gambier':'GAMT','Pacific/Pitcairn':'PST_PC',
+  'Pacific/Easter':'EAST','Pacific/Galapagos':'GALT',
+  'Pacific/Fakaofo':'TKT','Pacific/Niue':'NUT','Pacific/Rarotonga':'CKT',
+  'Pacific/Pago_Pago':'SST','Pacific/Midway':'SST',
+  // ── AUSTRALIA ───────────────────────────────────────────────────
+  'Australia/Darwin':'ACST',
+  'Australia/Perth':'AWST','Australia/Eucla':'ACWST',
+  // ── US & CANADA ─────────────────────────────────────────────────
+  'America/Indiana/Marengo':'EST','America/Indiana/Vincennes':'EST','America/Indiana/Winamac':'EST',
+  'America/Indiana/Vevay':'EST','America/Indiana/Petersburg':'EST',
+  'America/Thunder_Bay':'EST','America/Nipigon':'EST','America/Iqaluit':'EST',
+  'America/North_Dakota/Center':'CST','America/North_Dakota/New_Salem':'CST',
+  'America/Rainy_River':'CST','America/Rankin_Inlet':'CST','America/Resolute':'CST',
+  'America/Cambridge_Bay':'MST','America/Yellowknife':'MST','America/Inuvik':'MST',
+  'America/Phoenix':'MST',
+  'America/Dawson_Creek':'MST','America/Fort_Nelson':'MST','America/Creston':'MST',
+  'America/Goose_Bay':'AST','America/Blanc-Sablon':'AST',
+  'America/Regina':'CST','America/Swift_Current':'CST',
+  // ── MEXICO & CARIBBEAN ──────────────────────────────────────────
+  'America/Bahia_Banderas':'CST','America/Matamoros':'CST',
+  'America/Hermosillo':'MST','America/Cancun':'EST',
+  'America/Puerto_Rico':'AST','America/Santo_Domingo':'AST',
+  'America/Port_of_Spain':'AST','America/Barbados':'AST',
+  'America/Martinique':'AST','America/Guadeloupe':'AST','America/Dominica':'AST',
+  'America/St_Lucia':'AST','America/St_Vincent':'AST','America/Grenada':'AST',
+  'America/Antigua':'AST','America/St_Kitts':'AST','America/Montserrat':'AST',
+  'America/Tortola':'AST','America/St_Thomas':'AST','America/Aruba':'AST',
+  'America/Curacao':'AST','America/Anguilla':'AST',
+  // ── INDIAN OCEAN ────────────────────────────────────────────────
+  'Indian/Mahe':'SCT','Indian/Comoro':'EAT','Indian/Antananarivo':'EAT',
+  'Indian/Kerguelen':'TFT','Indian/Chagos':'IOT','Indian/Christmas':'CXT',
+  'Indian/Cocos':'CCT',
+  // ── ATLANTIC ────────────────────────────────────────────────────
+  'Atlantic/South_Georgia':'GST_ATL','Atlantic/Stanley':'FKST',
+  // ── MIDDLE EAST GAPS ────────────────────────────────────────────
+  'Asia/Oman':'GST','Asia/Yemen':'AST','Asia/Jordan':'EET',
+  'Asia/Gaza':'EET','Asia/Hebron':'EET',
+  // ── RUSSIAN GAPS ────────────────────────────────────────────────
+  'Europe/Ufa':'YEKT','Europe/Chelyabinsk':'YEKT','Europe/Astrakhan':'SAMT',
+  'Europe/Ulyanovsk':'SAMT','Europe/Kirov':'MSK',
+  'Asia/Barnaul':'KRAT','Asia/Tomsk':'KRAT','Asia/Novokuznetsk':'KRAT',
+  'Asia/Chita':'IRKT','Asia/Khandyga':'YAKT','Asia/Ust-Nera':'VLAT',
+  // ── EUROPE ──────────────────────────────────────────────────────
+  'Europe/Istanbul':'TRT','Europe/Moscow':'MSK','Europe/Kaliningrad':'EET',
+  'Europe/Samara':'SAMT','Europe/Volgograd':'MSK',
+  'Europe/Minsk':'FET','Europe/Simferopol':'MSK',
+  'Europe/Skopje':'CET','Europe/Podgorica':'CET','Europe/Tirane':'CET',
+  'Europe/Andorra':'CET','Europe/San_Marino':'CET','Europe/Vatican':'CET',
+  'Europe/Malta':'CET','Europe/Gibraltar':'CET',
+  'Europe/Nicosia':'EET',
+  'Europe/Uzhgorod':'EET','Europe/Zaporozhye':'EET',
+};
+
+// DST-aware override: check if currently in summer time for zones with DST variants
+const TZ_ABBR_DST={
+  'America/Sao_Paulo':{std:'BRT',dst:'BRST'},
+  'America/Santiago':{std:'CLT',dst:'CLST'},
+  'America/Asuncion':{std:'PYT',dst:'PYST'},
+  'America/Montevideo':{std:'UYT',dst:'UYST'},
+  'Asia/Tehran':{std:'IRST',dst:'IRDT'},
+  'Asia/Jerusalem':{std:'IST',dst:'IDT'},
+  'Asia/Tel_Aviv':{std:'IST',dst:'IDT'},
+  'Asia/Beirut':{std:'EET',dst:'EEST'},
+  'Asia/Damascus':{std:'EET',dst:'EEST'},
+  'Asia/Amman':{std:'EET',dst:'EEST'},
+  'Asia/Nicosia':{std:'EET',dst:'EEST'},
+  'Pacific/Auckland':{std:'NZST',dst:'NZDT'},
+  'Pacific/Chatham':{std:'CHAST',dst:'CHADT'},
+  'Pacific/Fiji':{std:'FJT',dst:'FJST'},
+  'Pacific/Apia':{std:'WST',dst:'WSDT'},
+  'Australia/Sydney':{std:'AEST',dst:'AEDT'},
+  'Australia/Melbourne':{std:'AEST',dst:'AEDT'},
+  'Australia/Hobart':{std:'AEST',dst:'AEDT'},
+  'Australia/Canberra':{std:'AEST',dst:'AEDT'},
+  'Australia/Adelaide':{std:'ACST',dst:'ACDT'},
+  'Australia/Broken_Hill':{std:'ACST',dst:'ACDT'},
+  'Australia/Lord_Howe':{std:'LHST',dst:'LHDT'},
+  'Africa/Windhoek':{std:'WAT',dst:'WAST'},
+  // ── EUROPE ──────────────────────────────────────────────────────
+  'Europe/Zurich':{std:'CET',dst:'CEST'},
+  'Europe/Berlin':{std:'CET',dst:'CEST'},
+  'Europe/Paris':{std:'CET',dst:'CEST'},
+  'Europe/Rome':{std:'CET',dst:'CEST'},
+  'Europe/Madrid':{std:'CET',dst:'CEST'},
+  'Europe/Vienna':{std:'CET',dst:'CEST'},
+  'Europe/Amsterdam':{std:'CET',dst:'CEST'},
+  'Europe/Brussels':{std:'CET',dst:'CEST'},
+  'Europe/Warsaw':{std:'CET',dst:'CEST'},
+  'Europe/Prague':{std:'CET',dst:'CEST'},
+  'Europe/Budapest':{std:'CET',dst:'CEST'},
+  'Europe/Stockholm':{std:'CET',dst:'CEST'},
+  'Europe/Oslo':{std:'CET',dst:'CEST'},
+  'Europe/Copenhagen':{std:'CET',dst:'CEST'},
+  'Europe/Zagreb':{std:'CET',dst:'CEST'},
+  'Europe/Ljubljana':{std:'CET',dst:'CEST'},
+  'Europe/Bratislava':{std:'CET',dst:'CEST'},
+  'Europe/Belgrade':{std:'CET',dst:'CEST'},
+  'Europe/Athens':{std:'EET',dst:'EEST'},
+  'Europe/Helsinki':{std:'EET',dst:'EEST'},
+  'Europe/Bucharest':{std:'EET',dst:'EEST'},
+  'Europe/Sofia':{std:'EET',dst:'EEST'},
+  'Europe/Vilnius':{std:'EET',dst:'EEST'},
+  'Europe/Riga':{std:'EET',dst:'EEST'},
+  'Europe/Tallinn':{std:'EET',dst:'EEST'},
+  'Europe/Kiev':{std:'EET',dst:'EEST'},
+  'Europe/Chisinau':{std:'EET',dst:'EEST'},
+  'Europe/London':{std:'GMT',dst:'BST'},
+  'Europe/Dublin':{std:'GMT',dst:'IST'},
+  'Europe/Lisbon':{std:'WET',dst:'WEST'},
+  'Atlantic/Canary':{std:'WET',dst:'WEST'},
+  // ── US & CANADA DST ─────────────────────────────────────────────
+  'America/New_York':{std:'EST',dst:'EDT'},
+  'America/Detroit':{std:'EST',dst:'EDT'},
+  'America/Indiana/Indianapolis':{std:'EST',dst:'EDT'},
+  'America/Kentucky/Louisville':{std:'EST',dst:'EDT'},
+  'America/Toronto':{std:'EST',dst:'EDT'},
+  'America/Montreal':{std:'EST',dst:'EDT'},
+  'America/Chicago':{std:'CST',dst:'CDT'},
+  'America/Winnipeg':{std:'CST',dst:'CDT'},
+  'America/Denver':{std:'MST',dst:'MDT'},
+  'America/Boise':{std:'MST',dst:'MDT'},
+  'America/Edmonton':{std:'MST',dst:'MDT'},
+  'America/Los_Angeles':{std:'PST',dst:'PDT'},
+  'America/Vancouver':{std:'PST',dst:'PDT'},
+  'America/Anchorage':{std:'AKST',dst:'AKDT'},
+  'America/Juneau':{std:'AKST',dst:'AKDT'},
+  'America/Nome':{std:'AKST',dst:'AKDT'},
+  'America/Adak':{std:'HST',dst:'HDT'},
+  'America/Halifax':{std:'AST',dst:'ADT'},
+  'America/Moncton':{std:'AST',dst:'ADT'},
+  'America/St_Johns':{std:'NST',dst:'NDT'},
+  'America/Whitehorse':{std:'PST',dst:'PDT'},
+  'America/Dawson':{std:'PST',dst:'PDT'},
+  // ── MEXICO DST ──────────────────────────────────────────────────
+  'America/Mexico_City':{std:'CST',dst:'CDT'},
+  'America/Monterrey':{std:'CST',dst:'CDT'},
+  'America/Merida':{std:'CST',dst:'CDT'},
+  'America/Chihuahua':{std:'MST',dst:'MDT'},
+  'America/Mazatlan':{std:'MST',dst:'MDT'},
+  'America/Tijuana':{std:'PST',dst:'PDT'},
+  'America/Havana':{std:'CST',dst:'CDT'},
+  'America/Grand_Turk':{std:'EST',dst:'EDT'},
+  'America/Nassau':{std:'EST',dst:'EDT'},
+  'America/Port-au-Prince':{std:'EST',dst:'EDT'},
+  'Atlantic/Bermuda':{std:'AST',dst:'ADT'},
+  // ── ATLANTIC DST ────────────────────────────────────────────────
+  'Atlantic/Azores':{std:'AZOT',dst:'AZOST'},
+  'Atlantic/Madeira':{std:'WET',dst:'WEST'},
+  'Atlantic/Faroe':{std:'WET',dst:'WEST'},
+  // ── INDIAN OCEAN DST ────────────────────────────────────────────
+  'Indian/Mauritius':{std:'MUT',dst:'MUST'},
+};
+
 function offsetH(tz){const now=new Date();return(new Date(now.toLocaleString('en-US',{timeZone:tz}))-new Date(now.toLocaleString('en-US',{timeZone:'UTC'})))/3600000;}
+
+function isDST(tz){
+  // Compare the UTC offset in January (always standard time) vs July (always DST if observed)
+  // If they differ, the zone observes DST. Then check if the current offset matches the DST offset.
+  const jan=new Date(new Date().getFullYear(),0,1);
+  const jul=new Date(new Date().getFullYear(),6,1);
+  const janOff=(new Date(jan.toLocaleString('en-US',{timeZone:tz}))-new Date(jan.toLocaleString('en-US',{timeZone:'UTC'})))/3600000;
+  const julOff=(new Date(jul.toLocaleString('en-US',{timeZone:tz}))-new Date(jul.toLocaleString('en-US',{timeZone:'UTC'})))/3600000;
+  if(janOff===julOff)return false; // No DST observed in this zone
+  // DST offset is the one further from UTC (larger absolute value)
+  const dstOff=Math.abs(janOff)>Math.abs(julOff)?janOff:julOff;
+  return Math.abs(offsetH(tz)-dstOff)<0.1; // Currently on DST if current offset matches DST offset
+}
+
+function tzAbbr(tz){
+  if(!tz)return'';
+  try{
+    // Check DST variants first
+    if(TZ_ABBR_DST[tz]){
+      return isDST(tz)?TZ_ABBR_DST[tz].dst:TZ_ABBR_DST[tz].std;
+    }
+    // Check static override
+    if(TZ_ABBR_OVERRIDE[tz])return TZ_ABBR_OVERRIDE[tz];
+    // Fall back to browser
+    const abbr=new Date().toLocaleTimeString('en-US',{timeZone:tz,timeZoneName:'short'}).split(' ').pop();
+    // If browser returns GMT±X, try one more lookup by offset
+    if(abbr&&abbr.startsWith('GMT'))return TZ_ABBR_OVERRIDE[tz]||abbr;
+    return abbr||'';
+  }catch(e){return'';}
+}
 function getDiff(a,b){
   const d=offsetH(b)-offsetH(a);if(d===0)return{text:'Same time as you',neg:false};
   const abs=Math.abs(d),h=Math.floor(abs),m=Math.round((abs-h)*60);
@@ -803,7 +1113,9 @@ function getDiff(a,b){
 }
 function formatLocation(addr){
   if(!addr)return'';
-  const city=addr.city||addr.town||addr.village||addr.hamlet||addr.province||addr.district||addr.county||'';
+  const city=addr.city||addr.town||addr.village||addr.hamlet||
+              addr.municipality||addr.city_district||addr.district||
+              addr.suburb||addr.county||addr.province||'';
   const st=addr.state||'';const country=addr.country||'';
   const cc=(addr.country_code||'').toUpperCase();
   if(['US','CA','AU'].includes(cc)&&st)return city?city+', '+st:st;
@@ -862,71 +1174,89 @@ function callIndicator(tz){
 }
 
 // ── WEATHER ────────────────────────────────────────────────────────
-async function fetchWeather(key,lat,lon){
+async function fetchWeatherForCoords(key,lat,lon){
   if(!prefWeather||!lat||!lon)return;
   const now=Date.now();
   const cached=weatherCache[key];
   if(cached&&(now-cached.fetched)<1800000)return;
   try{
-    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m,windspeed_10m,apparent_temperature&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&forecast_days=1&timezone=auto`);
+    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,apparent_temperature,relative_humidity_2m,weathercode,windspeed_10m&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&forecast_days=1&timezone=auto`);
     const d=await r.json();
-    if(d&&d.current_weather){
-      const code=d.current_weather.weathercode;
-      const tempC=d.current_weather.temperature;
-      const windKph=d.current_weather.windspeed;
-      let humidity=null;
-      if(d.hourly&&d.hourly.relativehumidity_2m)humidity=d.hourly.relativehumidity_2m[0];
-      let feelsLike=null;
-      if(d.hourly&&d.hourly.apparent_temperature)feelsLike=d.hourly.apparent_temperature[0];
+    if(d&&d.current){
+      const code=d.current.weathercode;
+      const tempC=d.current.temperature_2m;
+      const windKph=d.current.windspeed_10m;
+      const humidity=d.current.relative_humidity_2m??null;
+      const feelsLike=d.current.apparent_temperature??null;
       const daily=d.daily||{};
+      const isMyCard=key==='__my';
       weatherCache[key]={emoji:weatherEmoji(code),desc:weatherDesc(code),fetched:now};
       weatherFullCache[key]={code,tempC:Math.round(tempC),tempF:Math.round(tempC*9/5+32),feelsLikeC:feelsLike!==null?Math.round(feelsLike):null,feelsLikeF:feelsLike!==null?Math.round(feelsLike*9/5+32):null,windKph,windMph:Math.round(windKph*0.621371),humidity,fetched:now,lat,lon,dailyCode:daily.weathercode?daily.weathercode[0]:code,hiC:daily.temperature_2m_max?Math.round(daily.temperature_2m_max[0]):null,loC:daily.temperature_2m_min?Math.round(daily.temperature_2m_min[0]):null,precipPct:daily.precipitation_probability_max?daily.precipitation_probability_max[0]:null,dailyWindKph:daily.windspeed_10m_max?daily.windspeed_10m_max[0]:null};
-      const el=document.getElementById('wx-'+key);
+      const elId=isMyCard?'myWeather':'wx-'+key;
+      const el=document.getElementById(elId);
       if(el){el.textContent=weatherCache[key].emoji;el.title=weatherCache[key].desc;}
     }
   }catch(e){}
 }
+function fetchWeather(key,lat,lon){return fetchWeatherForCoords(key,lat,lon);}
+function fetchMyWeather(){return fetchWeatherForCoords('__my',myLat,myLon);}
 
-async function fetchMyWeather(){
-  if(!prefWeather||myLat===null)return;
-  const now=Date.now();
-  const cached=weatherCache['__my'];
-  if(cached&&(now-cached.fetched)<1800000)return;
-  try{
-    const r=await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${myLat}&longitude=${myLon}&current_weather=true&hourly=relativehumidity_2m,windspeed_10m,apparent_temperature&daily=weathercode,temperature_2m_max,temperature_2m_min,precipitation_probability_max,windspeed_10m_max&forecast_days=1&timezone=auto`);
-    const d=await r.json();
-    if(d&&d.current_weather){
-      const code=d.current_weather.weathercode;
-      const tempC=d.current_weather.temperature;
-      const windKph=d.current_weather.windspeed;
-      let humidity=null;
-      if(d.hourly&&d.hourly.relativehumidity_2m)humidity=d.hourly.relativehumidity_2m[0];
-      let feelsLike=null;
-      if(d.hourly&&d.hourly.apparent_temperature)feelsLike=d.hourly.apparent_temperature[0];
-      const daily=d.daily||{};
-      weatherCache['__my']={emoji:weatherEmoji(code),desc:weatherDesc(code),fetched:now};
-      weatherFullCache['__my']={code,tempC:Math.round(tempC),tempF:Math.round(tempC*9/5+32),feelsLikeC:feelsLike!==null?Math.round(feelsLike):null,feelsLikeF:feelsLike!==null?Math.round(feelsLike*9/5+32):null,windKph,windMph:Math.round(windKph*0.621371),humidity,fetched:now,lat:myLat,lon:myLon,dailyCode:daily.weathercode?daily.weathercode[0]:code,hiC:daily.temperature_2m_max?Math.round(daily.temperature_2m_max[0]):null,loC:daily.temperature_2m_min?Math.round(daily.temperature_2m_min[0]):null,precipPct:daily.precipitation_probability_max?daily.precipitation_probability_max[0]:null,dailyWindKph:daily.windspeed_10m_max?daily.windspeed_10m_max[0]:null};
-      const el=document.getElementById('myWeather');
-      if(el){el.textContent=weatherCache['__my'].emoji;el.title=weatherCache['__my'].desc;}
-    }
-  }catch(e){}
+// ── US LOCATION DETECTION ──────────────────────────────────────────
+function isUSLocation(lat,lon){
+  if(!lat||!lon)return false;
+  if(lat>=24&&lat<=50&&lon>=-125&&lon<=-66)return true;   // Continental US
+  if(lat>=51&&lat<=72&&lon>=-170&&lon<=-130)return true;  // Alaska
+  if(lat>=18&&lat<=23&&lon>=-161&&lon<=-154)return true;  // Hawaii
+  return false;
 }
 
-// ── WEATHER DETAIL CARD ────────────────────────────────────────────
+// ── NWS FORECAST CACHE ─────────────────────────────────────────────
+const nwsCache={};
+const nwsGridCache={};
+async function fetchNWSForecast(lat,lon,key){
+  try{
+    // Step 1: Hit the /points/ endpoint to get the forecast grid URL for this lat/lon
+    // NWS divides the US into grid cells — each cell has its own forecast URL
+    let forecastUrl=nwsGridCache[key];
+    if(!forecastUrl){
+      const pt=await fetch(`https://api.weather.gov/points/${lat.toFixed(4)},${lon.toFixed(4)}`,
+        {headers:{'User-Agent':'ChronoZone/1.1','Accept':'application/geo+json'}});
+      if(!pt.ok)return null;
+      const ptd=await pt.json();
+      forecastUrl=ptd.properties&&ptd.properties.forecast;
+      if(!forecastUrl)return null;
+      nwsGridCache[key]=forecastUrl;
+    }
+    // Step 2: Fetch US and SI unit forecasts in parallel — cache both so unit toggle is instant
+    const [usRes,siRes]=await Promise.all([
+      fetch(forecastUrl+'?units=us',{headers:{'User-Agent':'ChronoZone/1.1','Accept':'application/geo+json'}}),
+      fetch(forecastUrl+'?units=si',{headers:{'User-Agent':'ChronoZone/1.1','Accept':'application/geo+json'}})
+    ]);
+    if(!usRes.ok||!siRes.ok)return null;
+    const [usd,sid]=await Promise.all([usRes.json(),siRes.json()]);
+    const usPeriods=(usd.properties&&usd.properties.periods)||[];
+    const siPeriods=(sid.properties&&sid.properties.periods)||[];
+    // Keep only first 3 periods
+    nwsCache[key]={us:usPeriods.slice(0,3),si:siPeriods.slice(0,3),fetched:Date.now()};
+    return nwsCache[key];
+  }catch(e){return null;}
+}
+
+// ── TEMPLATE NARRATIVE (NWS-style prose) ───────────────────────────
 function buildTemplateNarrative(full,showC){
   if(!full)return null;
-  const desc=weatherDesc(full.code||full.dailyCode||0);
+  const desc=weatherDesc(full.dailyCode||full.code||0);
   const hi=showC?(full.hiC!==null?full.hiC+'°C':null):(full.hiC!==null?Math.round(full.hiC*9/5+32)+'°F':null);
   const lo=showC?(full.loC!==null?full.loC+'°C':null):(full.loC!==null?Math.round(full.loC*9/5+32)+'°F':null);
-  const wind=full.dailyWindKph!==null?(showC?Math.round(full.dailyWindKph)+' km/h':Math.round((full.dailyWindKph||0)*0.621371)+' mph'):null;
+  const windMax=full.dailyWindKph!==null?(showC?Math.round(full.dailyWindKph)+' km/h':Math.round((full.dailyWindKph||0)*0.621371)+' mph'):null;
   const precip=full.precipPct!==null?full.precipPct:null;
-  let parts=[];
-  parts.push(desc);
-  if(hi&&lo)parts.push(`with a high of ${hi} and low of ${lo}`);
-  else if(hi)parts.push(`with a high of ${hi}`);
-  if(precip!==null&&precip>20)parts.push(`${precip}% chance of precipitation`);
-  if(wind)parts.push(`winds up to ${wind}`);
-  return parts.join(', ')+'.';
+  // Build NWS-style sentence
+  let sentence=desc;
+  if(hi&&lo)sentence+=`, with a high near ${hi} and a low around ${lo}`;
+  else if(hi)sentence+=`, with a high near ${hi}`;
+  if(precip!==null&&precip>20)sentence+=`. ${precip}% chance of precipitation`;
+  if(windMax)sentence+=`. Winds up to ${windMax}`;
+  return sentence+'.';
 }
 
 // ── WEATHER DETAIL CARD ────────────────────────────────────────────
@@ -939,58 +1269,192 @@ function openWxCard(key,cityName,evt){
   document.getElementById('wxCardLoc').textContent=cityName||'';
   if(!basic){
     document.getElementById('wxDesc').textContent='Loading…';
-    document.getElementById('wxBigEmoji').textContent='⏳';
+    document.getElementById('wxBigEmoji').innerHTML='<span style="font-size:1rem">🏃‍♂️</span><span style="font-size:3rem">🌪️</span>';
     document.getElementById('wxGrid').innerHTML='';
     document.getElementById('wxTemp').textContent='';
     document.getElementById('wxUnitToggle').style.display='none';
-    document.getElementById('wxRefreshRow').style.display='none';
     document.getElementById('wxNarrative').textContent='';
+    // Start runway animation and fetch weather
+    document.getElementById('wxOverlay').classList.add('open');
+    showRunway();
+    fetchWeatherForCoords(key,
+      key==='__my'?myLat:(state[key]&&state[key].lat),
+      key==='__my'?myLon:(state[key]&&state[key].lon)
+    ).then(()=>{
+      const b=weatherCache[key];
+      if(b){document.getElementById('wxBigEmoji').textContent=b.emoji;document.getElementById('wxDesc').textContent=b.desc;}
+      _signalRunwayDataReady();
+    });
+    return;
   }else{
     document.getElementById('wxBigEmoji').textContent=basic.emoji;
     document.getElementById('wxDesc').textContent=basic.desc;
     renderWxCardData(full);
   }
   document.getElementById('wxOverlay').classList.add('open');
+  // NWS fetch for US locations — show runway only when fetch is needed
+  if(full&&full.lat!==undefined&&isUSLocation(full.lat,full.lon)){
+    const needsFetch=!nwsCache[wxOpenKey]||(Date.now()-nwsCache[wxOpenKey].fetched)>1800000;
+    if(needsFetch){
+      showRunway();
+      fetchNWSForecast(full.lat,full.lon,wxOpenKey).then(()=>{
+        _signalRunwayDataReady();
+      });
+    }
+  }
 }
+let _runwayDataReady=false; // true when weather/NWS fetch has completed
+let _runwayActive=false;    // true while runway animation is running
+const RUNWAY_DURATION=2000; // milliseconds for one takeoff or landing pass
+
+function showRunway(){
+  const el=document.getElementById('wxNarrative');
+  if(!el)return;
+  _runwayDataReady=false;
+  _runwayActive=true;
+  el.style.fontStyle='normal';
+  el.innerHTML=`<div class="wx-runway" id="wxRunway">
+    <div class="wx-runway-line"></div>
+    <span class="wx-runway-marker" id="rwMarker">≡</span>
+    <span class="wx-runway-plane" id="rwPlane">✈️</span>
+  </div>`;
+  _rwTakeoff();
+}
+
+function _rwPlane(){return document.getElementById('rwPlane');}
+function _rwActive(){return _runwayActive&&!!document.getElementById('wxRunway');}
+
+function _rwTakeoff(){
+  if(!_rwActive())return;
+  const plane=_rwPlane();
+  if(!plane)return;
+  plane.style.transition='none';
+  plane.style.animation='none';
+  plane.style.transform='translateY(-50%) translateX(0%) rotate(45deg) scale(1)';
+  plane.getBoundingClientRect();
+  plane.style.animation=`rwTakeoff ${RUNWAY_DURATION}ms linear forwards`;
+  plane.addEventListener('animationend',()=>{
+    if(!_rwActive())return;
+    if(_runwayDataReady){_runwayActive=false;_showNarrativeNow();return;}
+    setTimeout(()=>{if(_rwActive())_rwLand();},100);
+  },{once:true});
+}
+
+function _rwLand(){
+  if(!_rwActive())return;
+  const plane=_rwPlane();
+  if(!plane)return;
+  plane.style.transition='none';
+  plane.style.animation='none';
+  plane.style.transform='translateY(-50%) translateX(120vw) rotate(225deg) scale(4)';
+  plane.getBoundingClientRect();
+  plane.style.animation=`rwLand ${RUNWAY_DURATION}ms linear forwards`;
+  plane.addEventListener('animationend',()=>{
+    if(!_rwActive())return;
+    plane.style.animation='none';
+    plane.style.transform='translateY(-50%) translateX(0%) rotate(225deg) scale(1)';
+    if(_runwayDataReady){_runwayActive=false;_showNarrativeNow();return;}
+    _rwSpin();
+  },{once:true});
+}
+
+function _rwSpin(){
+  if(!_rwActive())return;
+  const plane=_rwPlane();
+  if(!plane)return;
+  plane.style.transition='none';
+  plane.style.transform='translateY(-50%) translateX(0%) rotate(225deg) scale(1)';
+  plane.getBoundingClientRect();
+  plane.style.transition='transform 0.4s ease';
+  plane.style.transform='translateY(-50%) translateX(0%) rotate(405deg) scale(1)';
+  setTimeout(()=>{
+    if(!_rwActive())return;
+    plane.style.transition='none';
+    plane.style.transform='translateY(-50%) translateX(0%) rotate(45deg) scale(1)';
+    if(_runwayDataReady){_runwayActive=false;_showNarrativeNow();return;}
+    setTimeout(()=>{if(_rwActive())_rwTakeoff();},50);
+  },400);
+}
+
+function _signalRunwayDataReady(){
+  _runwayDataReady=true;
+  // If runway isn't active, render immediately
+  if(!_runwayActive)_showNarrativeNow();
+  // Otherwise the active animation phase will call _showNarrativeNow when it ends
+}
+
+function _showNarrativeNow(){
+  renderWxCardData(weatherFullCache[wxOpenKey]);
+}
+
 function renderWxCardData(full){
   const toggle=document.getElementById('wxUnitToggle');
-  const refreshRow=document.getElementById('wxRefreshRow');
   const narrativeEl=document.getElementById('wxNarrative');
-  if(!full){document.getElementById('wxGrid').innerHTML='';document.getElementById('wxTemp').textContent='';toggle.style.display='none';refreshRow.style.display='none';if(narrativeEl)narrativeEl.textContent='';return;}
+  if(!full){document.getElementById('wxGrid').innerHTML='';document.getElementById('wxTemp').textContent='';toggle.style.display='none';if(narrativeEl)narrativeEl.textContent='';return;}
   const showC=wxTempUnit==='C';const showKph=prefWindUnit==='kph';
   document.getElementById('wxTemp').textContent=showC?`${full.tempC}°C`:`${full.tempF}°F`;
   toggle.style.display='inline-block';toggle.textContent=showC?'°F':'°C';
   const feelsVal=showC?(full.feelsLikeC!==null?full.feelsLikeC+'°C':'—'):(full.feelsLikeF!==null?full.feelsLikeF+'°F':'—');
-  const windVal=showKph?`${full.windKph} km/h`:`${full.windMph} mph`;
-  const stale=(Date.now()-full.fetched)>1800000;
-  refreshRow.style.display=stale?'block':'none';
+  const windVal=showKph?`${Math.round(full.windKph)} km/h`:`${Math.round(full.windMph)} mph`;
   document.getElementById('wxGrid').innerHTML=`
     <div class="wx-stat"><div class="wx-stat-label">🌡 Feels Like</div><div class="wx-stat-val">${feelsVal}</div></div>
     <div class="wx-stat"><div class="wx-stat-label">💧 Humidity</div><div class="wx-stat-val">${full.humidity!==null?full.humidity+'%':'—'}</div></div>
     <div class="wx-stat"><div class="wx-stat-label">💨 Wind</div><div class="wx-stat-val">${windVal}</div></div>
   `;
-  // Narrative — show template immediately, replace with NWS if US
+  // Narrative — NWS for US locations, template fallback for all others
   if(narrativeEl){
-    const updatedPill=`<span style="display:inline-block;font-size:0.68rem;font-style:normal;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:1px 8px;margin-left:6px;color:var(--muted);vertical-align:middle;white-space:nowrap">🕐 ${new Date(full.fetched).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true})}</span>`;
-    const template=buildTemplateNarrative(full,showC);
-    narrativeEl.innerHTML=(template||'')+updatedPill;
+    const isStale=(Date.now()-full.fetched)>1800000;
+  const updatedPill=isStale
+    ?`<span onclick="refreshWxCardWeather()" style="display:inline-block;font-size:0.68rem;font-style:normal;background:var(--blue1);color:white;border-radius:20px;padding:1px 8px;margin-left:6px;cursor:pointer;vertical-align:middle;white-space:nowrap">🔄 Refresh</span>`
+    :`<span style="display:inline-block;font-size:0.68rem;font-style:normal;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:1px 8px;margin-left:6px;color:var(--muted);vertical-align:middle;white-space:nowrap">🕐 ${new Date(full.fetched).toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:true})}</span>`;
+    const nws=nwsCache[wxOpenKey];
+    const useNWS=nws&&isUSLocation(full.lat,full.lon);
+    if(useNWS){
+      const periods=showC?nws.si:nws.us;
+      const lines=periods.slice(0,2).map(p=>{
+        return `<div style="margin-bottom:4px"><span style="font-size:0.72rem;font-weight:700;font-style:normal;color:var(--text);opacity:0.7">${p.name}:</span> ${p.detailedForecast||p.shortForecast||''}</div>`;
+      }).join('');
+      narrativeEl.style.fontStyle='normal';
+      narrativeEl.className='wx-narrative-fadein';
+      narrativeEl.innerHTML=lines+updatedPill;
+    } else {
+      const template=buildTemplateNarrative(full,showC);
+      narrativeEl.style.fontStyle='italic';
+      narrativeEl.className='wx-narrative-fadein';
+      narrativeEl.innerHTML=(template||'')+updatedPill;
+    }
   }
 }
-function toggleWxTempUnit(){wxTempUnit=wxTempUnit==='C'?'F':'C';renderWxCardData(weatherFullCache[wxOpenKey]);}
-async function refreshWxCard(){
-  const btn=document.getElementById('wxRefreshBtn');btn.textContent='⏳ Updating…';btn.disabled=true;
-  // Clear and re-fetch all weather caches
-  const allKeys=['__my',...getActiveKeys()];
-  allKeys.forEach(k=>{delete weatherCache[k];delete weatherFullCache[k];});
-  const fetches=[fetchMyWeather()];
-  getActiveKeys().forEach(k=>{const p=state[k];if(p&&p.lat!=null)fetches.push(fetchWeather(k,p.lat,p.lon));});
-  await Promise.all(fetches);
-  // Re-render the open card with fresh data
-  const basic=weatherCache[wxOpenKey];
-  if(basic){document.getElementById('wxBigEmoji').textContent=basic.emoji;document.getElementById('wxDesc').textContent=basic.desc;renderWxCardData(weatherFullCache[wxOpenKey]);}
-  btn.textContent='🔄 Update';btn.disabled=false;renderAll();
+function toggleWxTempUnit(){
+  wxTempUnit=wxTempUnit==='C'?'F':'C';
+  prefWindUnit=wxTempUnit==='C'?'kph':'mph';
+  renderWxCardData(weatherFullCache[wxOpenKey]);
 }
-function closeWxCard(){document.getElementById('wxOverlay').classList.remove('open');wxOpenKey=null;}
+async function refreshWxCardWeather(){
+  if(!wxOpenKey)return;
+  const allKeys=['__my',...getActiveKeys()];
+  allKeys.forEach(k=>clearWeatherCache(k));
+  Object.keys(nwsCache).forEach(k=>{delete nwsCache[k];});
+  Object.keys(nwsGridCache).forEach(k=>{delete nwsGridCache[k];});
+  // Show runway animation while fetching
+  showRunway();
+  // Re-fetch all
+  fetchWeatherForCoords('__my',myLat,myLon);
+  getActiveKeys().forEach(k=>{const p=state[k];if(p&&p.lat!=null)fetchWeatherForCoords(k,p.lat,p.lon);});
+  // Signal runway when open card data is ready
+  const full=weatherFullCache[wxOpenKey];
+  const lat=wxOpenKey==='__my'?myLat:(full&&full.lat);
+  const lon=wxOpenKey==='__my'?myLon:(full&&full.lon);
+  if(lat&&lon){
+    fetchWeatherForCoords(wxOpenKey,lat,lon).then(()=>{
+      _signalRunwayDataReady();
+      renderAll();
+    });
+  } else {
+    setTimeout(()=>{_signalRunwayDataReady();renderAll();},2000);
+  }
+}
+function closeWxCard(){document.getElementById('wxOverlay').classList.remove('open');wxOpenKey=null;_runwayActive=false;}
 document.getElementById('wxOverlay').addEventListener('click',e=>{if(e.target.id==='wxOverlay')closeWxCard();});
 
 // ── MOON PHASES CARD ───────────────────────────────────────────────
@@ -1012,6 +1476,7 @@ function closeMoonCard(){document.getElementById('moonOverlay').classList.remove
 document.getElementById('moonOverlay').addEventListener('click',e=>{if(e.target.id==='moonOverlay')closeMoonCard();});
 
 // ── TIMEZONE INFO CARD ──────────────────────────────────────────────
+<!-- ===== END OF PART 2 — PASTE PART 3 IMMEDIATELY AFTER ===== -->
 const TZ_INFO={
   'UTC':{full:'Coordinated Universal Time',desc:'The world\'s primary time standard. All other time zones are expressed as offsets from UTC. It replaced GMT as the standard reference in 1972.',fact:'🌍 UTC never observes daylight saving time — it\'s a constant, unchanging reference.'},
   'GMT':{full:'Greenwich Mean Time',desc:'Based on the mean solar time at the Royal Observatory in Greenwich, London. Historically the world\'s time standard before UTC.',fact:'🏛️ The Observatory was built in 1675 — the prime meridian (0° longitude) passes right through it.'},
@@ -1061,6 +1526,124 @@ const TZ_INFO={
   'WAT':{full:'West Africa Time',desc:'UTC+1. Nigeria, Angola, Cameroon, and most of central-west Africa.',fact:'🌍 Lagos, Africa\'s largest city, runs on WAT — the same offset as Central European Time in winter.'},
   'CAT':{full:'Central Africa Time',desc:'UTC+2. Zambia, Zimbabwe, Mozambique, and much of central Africa.',fact:'🦁 Zambia and Zimbabwe share CAT despite being in Southern Africa — the same offset as Eastern Europe.'},
   'SAST':{full:'South Africa Standard Time',desc:'UTC+2. South Africa does not observe daylight saving, keeping a constant UTC+2 offset.',fact:'🐘 South Africa is one of few countries close to the equator that has explicitly chosen to never observe DST.'},
+  // ── AMERICAS ────────────────────────────────────────────────────
+  'AMT':{full:'Amazon Time',desc:'UTC−4. Used in western Brazil states like Amazonas, Mato Grosso, Rondônia, and Roraima.',fact:'🌿 Manaus, deep in the Amazon, is one of the largest cities in the world without road connection to the outside world.'},
+  'ACT':{full:'Acre Time',desc:'UTC−5. Used in Brazil\'s westernmost state of Acre and part of Amazonas.',fact:'🌳 Acre is home to some of the most biodiverse rainforest on Earth — and one of Brazil\'s most remote states.'},
+  'FNT':{full:'Fernando de Noronha Time',desc:'UTC−2. Used only on the remote Fernando de Noronha archipelago off Brazil\'s northeast coast.',fact:'🐢 Fernando de Noronha is a UNESCO World Heritage site famous for sea turtles and crystal-clear waters.'},
+  'ART':{full:'Argentina Time',desc:'UTC−3. Argentina uses a single nationwide time zone with no daylight saving time since 2009.',fact:'🥩 Argentina is the only major South American country that spans from the subtropics to near-Antarctica in one time zone.'},
+  'CLT':{full:'Chile Standard Time',desc:'UTC−4. Chile\'s standard time. Chile observes daylight saving (CLST, UTC−3) in southern hemisphere summer.',fact:'🌋 Chile spans over 4,000 km from north to south — yet uses only two time zones (plus Easter Island).'},
+  'CLST':{full:'Chile Summer Time',desc:'UTC−3. Chile\'s daylight saving time during Southern Hemisphere summer (October to April).',fact:'🍷 Chile\'s wine country in the Maipo Valley enjoys long summer evenings under CLST.'},
+  'PET':{full:'Peru Time',desc:'UTC−5. Peru does not observe daylight saving time, staying at UTC−5 year-round.',fact:'🏔️ Machu Picchu, one of the world\'s most visited sites, sits in the PET timezone at over 2,400 meters elevation.'},
+  'COT':{full:'Colombia Time',desc:'UTC−5. Colombia does not observe daylight saving time.',fact:'☕ Colombia is the world\'s third-largest coffee producer — and its growers work on COT year-round.'},
+  'VET':{full:'Venezuela Time',desc:'UTC−4. Venezuela controversially moved to UTC−4:30 in 2007, then back to UTC−4 in 2016.',fact:'🛢️ Venezuela\'s unusual clock change in 2007 was ordered by Hugo Chávez as a political statement.'},
+  'PYT':{full:'Paraguay Time',desc:'UTC−4. Paraguay observes daylight saving (PYST, UTC−3) in the Southern Hemisphere summer.',fact:'🌱 Paraguay generates nearly all its electricity from hydropower, making it one of the cleanest energy grids in the world.'},
+  'PYST':{full:'Paraguay Summer Time',desc:'UTC−3. Paraguay\'s DST period during the Southern Hemisphere summer.',fact:'🎶 Paraguay\'s harp music traditions thrive during the long summer evenings of PYST.'},
+  'UYT':{full:'Uruguay Time',desc:'UTC−3. Uruguay does not currently observe daylight saving time, having suspended it in 2015.',fact:'⚽ Uruguay was the first FIFA World Cup champion in 1930 — and it all happened on UTC−3.'},
+  'BOT':{full:'Bolivia Time',desc:'UTC−4. Bolivia does not observe daylight saving time.',fact:'🏔️ La Paz, one of the world\'s highest capital cities at 3,650m, sits on permanent BOT.'},
+  'ECT':{full:'Ecuador Time',desc:'UTC−5. Ecuador (except the Galápagos) does not observe daylight saving time.',fact:'🦎 The Galápagos Islands use their own time (GALT, UTC−6), one hour behind mainland Ecuador.'},
+  'GYT':{full:'Guyana Time',desc:'UTC−4. Guyana does not observe daylight saving time.',fact:'🌊 Guyana is home to Kaieteur Falls — one of the world\'s most powerful waterfalls.'},
+  'SRT':{full:'Suriname Time',desc:'UTC−3. Suriname uses a fixed UTC−3 offset with no daylight saving.',fact:'🌴 Suriname is the smallest sovereign state in South America and the only Dutch-speaking country in the Americas.'},
+  'GFT':{full:'French Guiana Time',desc:'UTC−3. French Guiana is an overseas territory of France, maintaining UTC−3 year-round.',fact:'🚀 The Guiana Space Centre near Kourou is the European Space Agency\'s primary launch site.'},
+  'GALT':{full:'Galápagos Time',desc:'UTC−6. Used only on the Galápagos Islands, one hour behind mainland Ecuador.',fact:'🦕 Darwin\'s observations in the Galápagos led to his theory of evolution — still on their own clock.'},
+  'EAST':{full:'Easter Island Time',desc:'UTC−6. Used on Easter Island (Rapa Nui), Chile\'s remote Pacific territory.',fact:'🗿 Easter Island\'s famous moai statues were built between the 13th and 16th centuries — on an island in permanent EAST.'},
+  // ── ASIA ────────────────────────────────────────────────────────
+  'SLST':{full:'Sri Lanka Standard Time',desc:'UTC+5:30. Sri Lanka shares the same offset as India, without observing DST.',fact:'🍵 Sri Lanka is one of the world\'s largest tea exporters — and it all runs on UTC+5:30.'},
+  'NPT':{full:'Nepal Time',desc:'UTC+5:45. Nepal has one of the world\'s most unusual offsets — 15 minutes ahead of India.',fact:'🏔️ Nepal is the only country at UTC+5:45. The 15-minute offset was set to differentiate from India.'},
+  'BST_BD':{full:'Bangladesh Standard Time',desc:'UTC+6. Bangladesh does not observe daylight saving time.',fact:'🌾 Bangladesh is one of the world\'s most densely populated countries, running a single time zone.'},
+  'MMT':{full:'Myanmar Time',desc:'UTC+6:30. Myanmar uses a rare 30-minute offset with no DST.',fact:'🏛️ Myanmar is one of only a few nations with a 30-minute UTC offset, unchanged since colonial times.'},
+  'ICT':{full:'Indochina Time',desc:'UTC+7. Used across Thailand, Vietnam, Laos, Cambodia, and western Indonesia.',fact:'🛺 Bangkok, Ho Chi Minh City, and Phnom Penh all share ICT — making Southeast Asia coordination easier.'},
+  'WIB':{full:'Western Indonesia Time',desc:'UTC+7. Used in Java, Sumatra, and West/Central Kalimantan.',fact:'🏝️ Jakarta, the world\'s most populous city, runs on WIB — and Indonesia spans three time zones total.'},
+  'WITA':{full:'Central Indonesia Time',desc:'UTC+8. Used in Bali, Lombok, Sulawesi, and East/South Kalimantan.',fact:'🌺 Bali, one of the world\'s top tourist destinations, runs on WITA — perfectly placed between WIB and WIT.'},
+  'WIT':{full:'Eastern Indonesia Time',desc:'UTC+9. Used in Maluku and Papua (West Papua and Papua provinces).',fact:'🦜 The Bird of Paradise, found in Papua, lives in one of the world\'s most biodiverse regions — on WIT.'},
+  'TLT':{full:'Timor-Leste Time',desc:'UTC+9. East Timor (Timor-Leste) uses UTC+9, the same as Japan and Korea.',fact:'🌏 Timor-Leste became independent in 2002 — one of the world\'s newest nations, running on UTC+9.'},
+  'PHT':{full:'Philippine Time',desc:'UTC+8. The Philippines uses a single time zone for all its 7,641 islands, without DST.',fact:'🏄 The Philippines is one of the world\'s largest archipelagos — and it all runs on one clock.'},
+  'MYT':{full:'Malaysia Time',desc:'UTC+8. Malaysia uses a single time zone despite being split between the peninsula and Borneo.',fact:'🏙️ Kuala Lumpur shares MYT with Singapore and Hong Kong — a deliberate economic alignment.'},
+  'SGT':{full:'Singapore Time',desc:'UTC+8. Singapore uses a permanent UTC+8 offset with no daylight saving.',fact:'🦁 Singapore moved to UTC+8 in 1982 — it\'s geographically closer to UTC+7 but chose +8 for regional trade.'},
+  'HKT':{full:'Hong Kong Time',desc:'UTC+8. Hong Kong\'s official time zone, aligned with mainland China.',fact:'🌆 Hong Kong has maintained continuous UTC+8 since 1979 with no daylight saving.'},
+  'KST':{full:'Korea Standard Time',desc:'UTC+9. Used by both South Korea and North Korea.',fact:'🇰🇷 North Korea briefly switched to UTC+8:30 in 2015, calling it "Pyongyang Time," before returning to UTC+9 in 2018.'},
+  'XJT':{full:'Xinjiang Time',desc:'UTC+6. Informally used in China\'s Xinjiang region, though officially China uses a single UTC+8 zone.',fact:'🏜️ People in Xinjiang often use "unofficial" UTC+6 locally, while official business runs on Beijing\'s UTC+8.'},
+  'GET':{full:'Georgia Time',desc:'UTC+4. Georgia (the country) uses UTC+4 with no daylight saving.',fact:'🍷 Georgia is one of the world\'s oldest wine-making regions, dating back 8,000 years — all on UTC+4.'},
+  'AMT_ARM':{full:'Armenia Time',desc:'UTC+4. Armenia uses UTC+4 with no daylight saving time.',fact:'🏔️ Armenia is home to Mount Ararat — visible from the capital Yerevan — though the mountain itself is in Turkey.'},
+  'AZT':{full:'Azerbaijan Time',desc:'UTC+4. Azerbaijan does not observe daylight saving time.',fact:'🔥 Azerbaijan means "Land of Fire" — it has been exporting oil since the 1800s.'},
+  'UZT':{full:'Uzbekistan Time',desc:'UTC+5. Uzbekistan uses a fixed UTC+5 with no daylight saving.',fact:'🏺 Samarkand, one of the oldest cities on the Silk Road, runs on UZT.'},
+  'TMT':{full:'Turkmenistan Time',desc:'UTC+5. Turkmenistan uses a fixed UTC+5 offset.',fact:'🔥 The Darvaza gas crater ("Door to Hell") has been burning continuously since 1971 — on TMT.'},
+  'TJT':{full:'Tajikistan Time',desc:'UTC+5. Tajikistan uses a fixed UTC+5 offset with no DST.',fact:'🏔️ Tajikistan is the most mountainous country in Central Asia — over 90% of its land is mountains.'},
+  'KGT':{full:'Kyrgyzstan Time',desc:'UTC+6. Kyrgyzstan uses a fixed UTC+6 offset.',fact:'🐎 Kyrgyzstan is famous for its nomadic horse culture — and the world\'s second largest alpine lake, Issyk-Kul.'},
+  'ALMT':{full:'Alma-Ata Time',desc:'UTC+6. Used in most of Kazakhstan.',fact:'🍎 The word "Alma-Ata" means "Father of Apples" — Kazakhstan is the ancestral home of the apple.'},
+  'QYZT':{full:'Qyzylorda Time',desc:'UTC+5. Used in the Qyzylorda region of Kazakhstan.',fact:'🚀 The Baikonur Cosmodrome, where Sputnik launched in 1957, is in the QYZT zone.'},
+  'AFT':{full:'Afghanistan Time',desc:'UTC+4:30. Afghanistan uses a rare 30-minute offset with no DST.',fact:'🏔️ Afghanistan is one of the few remaining countries using a 30-minute UTC offset.'},
+  'NOVT':{full:'Novosibirsk Time',desc:'UTC+7. The time zone for Novosibirsk, Russia\'s third-largest city.',fact:'🚂 The Trans-Siberian Railway passes through Novosibirsk — the largest city in Siberia.'},
+  'OMST':{full:'Omsk Time',desc:'UTC+6. Used in Omsk, Russia.',fact:'🌾 Omsk sits at the confluence of the Ob and Irtysh rivers — a historic center of Siberian trade.'},
+  'KRAT':{full:'Krasnoyarsk Time',desc:'UTC+7. Used in the Krasnoyarsk region of Russia.',fact:'🌲 The Krasnoyarsk region contains some of the world\'s largest untouched taiga forests.'},
+  'IRKT':{full:'Irkutsk Time',desc:'UTC+8. Used near Lake Baikal in Russia.',fact:'🌊 Lake Baikal, in the IRKT zone, holds 20% of the world\'s unfrozen surface fresh water.'},
+  'YAKT':{full:'Yakutsk Time',desc:'UTC+9. Yakutia is one of the coldest inhabited places on Earth.',fact:'🥶 Yakutsk regularly records temperatures below −50°C — the coldest major city in the world.'},
+  'VLAT':{full:'Vladivostok Time',desc:'UTC+10. Used in Russia\'s Far East Pacific coast.',fact:'🚂 Vladivostok is the eastern terminus of the Trans-Siberian Railway, 9,289 km from Moscow.'},
+  'MAGT':{full:'Magadan Time',desc:'UTC+11. Used in the Magadan region of Russia.',fact:'⛏️ Magadan was the gateway to Stalin\'s Gulag labor camps — a dark chapter of Soviet history.'},
+  'SAKT':{full:'Sakhalin Time',desc:'UTC+11. Used on Sakhalin Island, Russia.',fact:'🦀 Sakhalin Island is known for its giant crab and oil reserves — a strategic Pacific outpost.'},
+  'PETT':{full:'Kamchatka Time',desc:'UTC+12. Used on the Kamchatka Peninsula, Russia.',fact:'🌋 Kamchatka has over 300 volcanoes, including 29 active ones — all on UTC+12.'},
+  'ANAT':{full:'Anadyr Time',desc:'UTC+12. The easternmost time zone of Russia.',fact:'🐻 Anadyr is the administrative center of Chukotka — Russia\'s easternmost region, facing Alaska across the Bering Strait.'},
+  'ULAT':{full:'Ulaanbaatar Time',desc:'UTC+8. Mongolia\'s primary time zone.',fact:'🐎 Mongolia has more horses than people — and the world\'s largest contiguous nomadic culture.'},
+  'TRT':{full:'Turkey Time',desc:'UTC+3. Turkey permanently switched to UTC+3 in 2016, abandoning DST entirely.',fact:'🕌 Turkey\'s 2016 permanent clock change was controversial — it means sunrise in winter can come as late as 9am in Istanbul.'},
+  'AST_ME':{full:'Arabia Standard Time',desc:'UTC+3. Used by Saudi Arabia, Iraq, Kuwait, Qatar, Bahrain, and Yemen. No DST.',fact:'🕌 The call to prayer from Mecca echoes on Arabia Standard Time — the heartbeat of the Islamic world.'},
+  'GST':{full:'Gulf Standard Time',desc:'UTC+4. Used by the UAE, Oman, and Réunion. No DST observed.',fact:'🏙️ Dubai and Abu Dhabi run on GST — the same offset as Moscow, despite being thousands of miles apart.'},
+  'IRST':{full:'Iran Standard Time',desc:'UTC+3:30. Iran uses a rare 30-minute offset and observes DST (IRDT, UTC+4:30).',fact:'🏺 Iran is one of only a handful of nations still using a 30-minute UTC offset.'},
+  'IRDT':{full:'Iran Daylight Time',desc:'UTC+4:30. Iran\'s summer time, observed from late March to late September.',fact:'🌹 Iran\'s nowruz (Persian New Year) falls near the DST transition — clocks and calendars both change together.'},
+  // ── PACIFIC ─────────────────────────────────────────────────────
+  'FJT':{full:'Fiji Time',desc:'UTC+12. Fiji observes DST (FJST, UTC+13) in the Southern Hemisphere summer.',fact:'🏝️ Fiji is one of the first places on Earth to welcome each new day.'},
+  'FJST':{full:'Fiji Summer Time',desc:'UTC+13. Fiji\'s DST observance, making it one of the furthest-ahead zones on the planet.',fact:'🌺 During FJST, Fiji is 21 hours ahead of Los Angeles.'},
+  'TOT':{full:'Tonga Time',desc:'UTC+13. Tonga is one of the first countries to see each new day.',fact:'🐋 Tonga is one of the best places on Earth to swim with humpback whales — on the leading edge of time.'},
+  'WST_SAM':{full:'West Samoa Time',desc:'UTC+13. Samoa moved across the International Date Line in 2011 to align with Australia and New Zealand.',fact:'📅 When Samoa moved east of the date line in 2011, they skipped December 30 entirely.'},
+  'PGT':{full:'Papua New Guinea Time',desc:'UTC+10. Papua New Guinea does not observe DST.',fact:'🦜 PNG is home to over 800 languages — the most linguistically diverse country on Earth.'},
+  'SBT':{full:'Solomon Islands Time',desc:'UTC+11. The Solomon Islands do not observe DST.',fact:'🌊 The Solomon Islands were the site of some of the Pacific War\'s most intense naval battles.'},
+  'VUT':{full:'Vanuatu Time',desc:'UTC+11. Vanuatu does not observe DST.',fact:'🌋 Vanuatu sits atop the Pacific Ring of Fire — it has some of the most active volcanoes in the world.'},
+  'NCT':{full:'New Caledonia Time',desc:'UTC+11. New Caledonia is a French special collectivity in the Pacific.',fact:'🐠 New Caledonia\'s lagoon is a UNESCO World Heritage site — the world\'s largest.'},
+  'CHAST':{full:'Chatham Standard Time',desc:'UTC+12:45. Chatham Islands use an unusual 45-minute offset.',fact:'🐦 The Chatham Islands are home to the black robin — once reduced to just 5 individuals, now recovered to over 300.'},
+  'CHADT':{full:'Chatham Daylight Time',desc:'UTC+13:45. Chatham Islands\' DST — one of the world\'s most extreme UTC offsets.',fact:'📍 At UTC+13:45 DST, Chatham Islands is nearly a full day ahead of the US West Coast.'},
+  'LHST':{full:'Lord Howe Island Time',desc:'UTC+10:30. Lord Howe Island uses a unique 30-minute DST offset.',fact:'🌿 Lord Howe Island is home to the Lord Howe stick insect — thought extinct until rediscovered in 2001.'},
+  'LHDT':{full:'Lord Howe Island Daylight Time',desc:'UTC+11. Lord Howe Island\'s summer time — only 30 minutes ahead of standard, unlike most DST zones.',fact:'🦤 Lord Howe\'s DST is only 30 minutes rather than the usual 60 — the island does things its own way.'},
+  'MHT':{full:'Marshall Islands Time',desc:'UTC+12. The Marshall Islands do not observe DST.',fact:'☢️ The Marshall Islands were the site of US nuclear testing at Bikini Atoll in the 1940s and 50s.'},
+  'GILT':{full:'Gilbert Island Time',desc:'UTC+12. Used in Kiribati\'s Gilbert Islands.',fact:'🌊 Kiribati (including the Gilberts) is one of the first places to see the new year each January 1st.'},
+  'TVT':{full:'Tuvalu Time',desc:'UTC+12. Tuvalu does not observe DST.',fact:'🌊 Tuvalu is one of the world\'s most threatened nations by rising sea levels — its highest point is just 4.5 meters.'},
+  'NRT':{full:'Nauru Time',desc:'UTC+12. Nauru does not observe DST.',fact:'🏝️ Nauru is the world\'s smallest island nation and third-smallest country overall.'},
+  'TAHT':{full:'Tahiti Time',desc:'UTC−10. French Polynesia\'s main island group. No DST.',fact:'🎨 Paul Gauguin spent his most celebrated years painting in Tahiti — all on UTC−10.'},
+  'MART':{full:'Marquesas Time',desc:'UTC−9:30. The Marquesas Islands use a unique 30-minute offset within French Polynesia.',fact:'🗿 The Marquesas Islands were home to the ancient Polynesian culture that spread across the Pacific.'},
+  'GAMT':{full:'Gambier Time',desc:'UTC−9. The Gambier Islands, part of French Polynesia.',fact:'🐚 The Gambier Islands are known for their black pearl farming — one of French Polynesia\'s key exports.'},
+  'TKT':{full:'Tokelau Time',desc:'UTC+13. Tokelau switched across the date line in 2011 along with Samoa.',fact:'🌴 Tokelau has no airport — it\'s only reachable by a 2-day boat journey from Samoa.'},
+  'NUT':{full:'Niue Time',desc:'UTC−11. Niue is one of the world\'s least-visited countries.',fact:'🐳 Niue is nicknamed "The Rock" — a raised coral atoll famous for whale watching.'},
+  'CKT':{full:'Cook Islands Time',desc:'UTC−10. The Cook Islands do not observe DST.',fact:'🌺 The Cook Islands are self-governing in free association with New Zealand — on their own clock.'},
+  'SST':{full:'Samoa Standard Time',desc:'UTC−11. Used in American Samoa and the Midway Islands.',fact:'🏈 American Samoa produces more NFL players per capita than any US state or territory.'},
+  // ── AUSTRALIA ───────────────────────────────────────────────────
+  'AWST':{full:'Australian Western Standard Time',desc:'UTC+8. Used by Western Australia. No DST observed.',fact:'💎 Perth is one of the most isolated major cities on Earth — and the sunniest in Australia.'},
+  'ACWST':{full:'Australian Central Western Standard Time',desc:'UTC+8:45. Used only in a small part of Western Australia near the SA border — one of the world\'s rarest offsets.',fact:'🚂 The Eucla region uses UTC+8:45 — the legacy of an old telegraph station that set its own clocks.'},
+  // ── AFRICA ──────────────────────────────────────────────────────
+  'WAST':{full:'West Africa Summer Time',desc:'UTC+2. Namibia\'s DST observance during Southern Hemisphere summer.',fact:'🦁 Namibia\'s Etosha National Park is one of Africa\'s great wildlife sanctuaries — on WAST in summer.'},
+  // ── INDIAN OCEAN ────────────────────────────────────────────────
+  'MVT':{full:'Maldives Time',desc:'UTC+5. The Maldives does not observe DST.',fact:'🌊 The Maldives is the world\'s lowest-lying country — its highest natural point is just 2.4 meters above sea level.'},
+  'MUT':{full:'Mauritius Time',desc:'UTC+4. Mauritius does not currently observe DST.',fact:'🦤 Mauritius was home to the dodo — the world\'s most famous extinct bird.'},
+  'MUST':{full:'Mauritius Summer Time',desc:'UTC+5. Mauritius\'s former DST observance, last used in 2008.',fact:'🌺 Mauritius abandoned DST in 2008 after finding it caused more problems than it solved.'},
+  'RET':{full:'Réunion Time',desc:'UTC+4. Réunion is a French overseas department in the Indian Ocean.',fact:'🌋 Réunion\'s Piton de la Fournaise is one of the world\'s most active volcanoes.'},
+  'SCT':{full:'Seychelles Time',desc:'UTC+4. The Seychelles archipelago does not observe DST.',fact:'🐢 The Seychelles is home to the giant Aldabra tortoise — the largest land tortoise on Earth.'},
+  'TFT':{full:'French Southern and Antarctic Time',desc:'UTC+5. Used in the remote Kerguelen Islands.',fact:'🌬️ The Kerguelen Islands are so remote and windswept they are called the "Desolation Islands."'},
+  'IOT':{full:'British Indian Ocean Territory Time',desc:'UTC+6. Used on Diego Garcia and the Chagos Archipelago.',fact:'🪸 The Chagos Archipelago has some of the most pristine coral reefs in the world.'},
+  'CXT':{full:'Christmas Island Time',desc:'UTC+7. Christmas Island is an Australian territory in the Indian Ocean.',fact:'🦀 Christmas Island is famous for its annual red crab migration — 50 million crabs march to the sea.'},
+  'CCT':{full:'Cocos Islands Time',desc:'UTC+6:30. The Cocos (Keeling) Islands use a rare 30-minute offset.',fact:'🌴 The Cocos Islands were privately owned by the Clunies-Ross family for over 150 years.'},
+  // ── ATLANTIC ────────────────────────────────────────────────────
+  'AZOT':{full:'Azores Time',desc:'UTC−1. The Azores archipelago, Portugal\'s remote Atlantic islands.',fact:'🌋 The Azores sit atop the Mid-Atlantic Ridge — some of the youngest land on Earth, geologically speaking.'},
+  'AZOST':{full:'Azores Summer Time',desc:'UTC+0. The Azores\' DST period, aligning with GMT.',fact:'🐋 The Azores are one of the best places in the world to watch whales — over 20 species pass through.'},
+  'CVT':{full:'Cape Verde Time',desc:'UTC−1. Cape Verde is an archipelago off the west coast of Africa.',fact:'🎵 Cape Verde is the birthplace of morna — the melancholic music style made famous by Cesária Évora.'},
+  'GST_ATL':{full:'South Georgia Time',desc:'UTC−2. Used on the remote South Georgia and South Sandwich Islands.',fact:'🐧 South Georgia hosts one of the world\'s largest king penguin colonies — over 300,000 birds.'},
+  'FKST':{full:'Falkland Islands Time',desc:'UTC−3. The Falkland Islands permanently moved to UTC−3 in 2010, abolishing DST.',fact:'🐑 The Falkland Islands have more sheep than people — about 500,000 sheep for 3,500 residents.'},
+  // ── MISC NEW ────────────────────────────────────────────────────
+  'AKDT':{full:'Alaska Daylight Time',desc:'UTC−8. Summer time in Alaska, one hour ahead of AKST.',fact:'🌅 In summer, Anchorage gets over 19 hours of daylight even before the clock change.'},
+  'HDT':{full:'Hawaii-Aleutian Daylight Time',desc:'UTC−9. Observed only in the Aleutian Islands — Hawaii never observes DST.',fact:'🌊 The Aleutian Islands stretch so far west they nearly reach Russia across the Bering Sea.'},
+  'PONT':{full:'Pohnpei Standard Time',desc:'UTC+11. Used in Pohnpei and Kosrae states of Micronesia.',fact:'🏛️ The ancient ruins of Nan Madol on Pohnpei — built on artificial islands — have puzzled archaeologists for centuries.'},
+  'KOST':{full:'Kosrae Time',desc:'UTC+11. Used in Kosrae, Federated States of Micronesia.',fact:'🐠 Kosrae is known as the "Jewel of Micronesia" for its pristine coral reefs.'},
+  'WAKT':{full:'Wake Island Time',desc:'UTC+12. Wake Island is an unincorporated US territory in the Pacific.',fact:'⚔️ Wake Island was the site of a fierce battle in December 1941, just after Pearl Harbor.'},
+  'FET':{full:'Further-eastern European Time',desc:'UTC+3. Used in Belarus, which does not observe DST.',fact:'🏛️ Belarus abandoned DST in 2011, staying permanently on UTC+3 — the same as Moscow.'},
+  'SAMT':{full:'Samara Time',desc:'UTC+4. Used in Russia\'s Samara and Udmurtia regions.',fact:'🚀 Samara (formerly Kuibyshev) was the secret backup capital of the USSR during World War II.'},
+  'YEKT':{full:'Yekaterinburg Time',desc:'UTC+5. The Ural Mountains region of Russia.',fact:'👑 Yekaterinburg is where the last Russian Tsar, Nicholas II, and his family were executed in 1918.'},
+  'SRET':{full:'Srednekolymsk Time',desc:'UTC+11. Used in the Srednekolymsk region of Russia.',fact:'🥶 Srednekolymsk is one of the coldest permanently inhabited places on Earth.'},
+  'PETT':{full:'Kamchatka Time',desc:'UTC+12. Used on Russia\'s Kamchatka Peninsula and Chukotka.',fact:'🌋 Kamchatka\'s Valley of Geysers is the second largest geyser field in the world.'},
 };
 const TZ_ALIASES={'UTC+0':'UTC','UTC-0':'UTC','GMT+0':'GMT','GMT-0':'GMT','HAT':'NST','HAA':'AST','HNT':'NST','HNA':'AST','WET':'WET','CET':'CET','EET':'EET','IRDT':'IRST','IDT':'IST_IL','WITA':'SGT','WIT':'JST','LINT':'NZDT'};
 
@@ -1167,9 +1750,120 @@ function openCoffeeCard(evt){
 function closeCoffeeCard(){document.getElementById('coffeeOverlay').classList.remove('open');}
 document.getElementById('coffeeOverlay').addEventListener('click',e=>{if(e.target.id==='coffeeOverlay')closeCoffeeCard();});
 
+function countryFlag(cc){
+  if(!cc||!prefFlags)return'';
+  const code=cc.toUpperCase();
+  if(code.length!==2)return'';
+  return String.fromCodePoint(...[...code].map(c=>0x1F1E6-65+c.charCodeAt(0)));
+}
 // ── MINUTE CLOCK ───────────────────────────────────────────────────
 let _minuteInterval=null;
 let _minuteTimeout=null;
+// ── COUNTRY FACTS ──────────────────────────────────────────────────
+const COUNTRY_FACTS={
+  'US':"The US has no official national language — English just kind of showed up and never left.",
+  'CA':"Canada has more lakes than the rest of the world combined. They're basically a giant lake with some moose in it.",
+  'MX':"Mexico City is built on the ruins of the Aztec capital Tenochtitlan. Every renovation project is an archaeological dig.",
+  'BR':"Brazil is the only Portuguese-speaking country in the Americas. It got separated from the group on a field trip and never found its way back.",
+  'AR':"Argentina has more psychologists per capita than any other country. Make of that what you will.",
+  'CL':"Chile stretches across 38 degrees of latitude. It's basically just a very ambitious coastline.",
+  'CO':"Colombia tried changing the spelling confusion with British Columbia in 1986. It has not ended the confusion.",
+  'PE':"Peru is home to Lake Titicaca — the world's highest navigable lake at 3,812 meters. Yes, that's its actual name.",
+  'VE':"Venezuela has Angel Falls — the world's highest waterfall at 979 meters, named after a pilot who crash-landed on top of it.",
+  'UY':"Uruguay was the first country to legalize recreational marijuana nationwide. Priorities sorted.",
+  'PY':"Paraguay is landlocked and shares this distinction with Bolivia. They've never let each other forget it.",
+  'BO':"Bolivia has two capital cities — Sucre and La Paz. They couldn't agree on one, so they kept both.",
+  'EC':"Ecuador is named after the equator, which runs right through it. They really committed to the bit.",
+  'GB':"The UK invented the World Wide Web and then spent 30 years arguing about it on social media. Checks out.",
+  'FR':"France has 13 time zones — more than any other country. Russia only has 11. France wins again.",
+  'DE':"Germany has over 1,500 types of beer and over 300 types of bread. They take carbs very seriously.",
+  'IT':"Italy is shaped like a boot kicking Sicily. Geographers have noted this. Sicilians are aware.",
+  'ES':"Spain's La Tomatina festival involves throwing 150,000 tomatoes at strangers. This is considered fun.",
+  'PT':"Portugal is the oldest nation-state in Europe, with borders largely unchanged since 1139. They figured it out early.",
+  'NL':"The Netherlands has more bicycles than people. The bikes are winning.",
+  'BE':"Belgium has three official languages, two main ethnic groups, and six governments. It runs anyway.",
+  'CH':"Switzerland has four official languages and hasn't been in a war since 1815. Coincidence? Probably not.",
+  'AT':"Austria and Australia are confused so often that the Austrian embassy in Washington keeps a sign: 'No kangaroos in Austria.'",
+  'SE':"Sweden has a word — 'lagom' — meaning 'just the right amount.' The entire national philosophy in one word.",
+  'NO':"Norway's coastline, if stretched straight, would reach halfway around the Earth.",
+  'DK':"Denmark is consistently ranked one of the world's happiest countries. They attribute it to 'hygge' — essentially cozy vibes.",
+  'FI':"Finland has more saunas than cars. With 3 million saunas for 5.5 million people, you're never far from a good sweat.",
+  'PL':"The Czech Republic drinks more beer per capita than any other country. They are not ashamed of this.",
+  'CZ':"The Czech Republic drinks more beer per capita than any other country. They are not ashamed of this.",
+  'HU':"Hungary's parliament building is one of the largest in the world — bigger than the UK's, despite Hungary being much smaller.",
+  'GR':"Greece has more archaeological museums than any other country. History keeps showing up wherever they dig.",
+  'RO':"Romania is home to Dracula's castle — though the real Vlad the Impaler was more of a dinner party problem than a vampire.",
+  'RU':"Russia spans 11 time zones. When it's Monday morning in Moscow, it's already Tuesday afternoon in Kamchatka.",
+  'TR':"Turkey is the only country spanning two continents. Istanbul has a foot in both Europe and Asia — sometimes literally.",
+  'JP':"Japan has over 6,800 islands but 97% of the population lives on just 4. The rest are for dramatic anime scenery.",
+  'CN':"China has one official time zone despite spanning five geographical ones. Beijing time it is, whether you like it or not.",
+  'IN':"India has the world's largest movie industry by number of films. Hollywood is basically a rounding error.",
+  'KR':"South Korea has had the world's fastest average internet since 2000. They've been waiting for everyone else to catch up.",
+  'TH':"Thailand's capital Bangkok has a full ceremonial name that is 169 characters long. Bangkok is the nickname.",
+  'VN':"Vietnam is shaped like a dragon — which is entirely intentional according to Vietnamese legend.",
+  'ID':"Indonesia has over 17,000 islands. Finding your keys in the morning is the least of their problems.",
+  'MY':"Malaysia has two separate parts divided by the South China Sea. East and West Malaysia have a long-distance relationship.",
+  'SG':"Singapore is a city-state where fines for littering start at $300. It is extremely clean.",
+  'PH':"The Philippines has 7,641 islands. They counted. Several times.",
+  'AU':"Australia is the only continent that is also a country. It looked at the others sharing and said 'no thanks.'",
+  'NZ':"New Zealand was the first country to give women the right to vote, in 1893. They've been ahead of the curve since.",
+  'ZA':"South Africa has three capital cities — Pretoria, Cape Town, and Bloemfontein. Three is two more than most think is necessary.",
+  'EG':"Egypt is about 94% desert. The 6% that isn't is extremely busy.",
+  'NG':"Nigeria produces more movies than the US. Nollywood makes roughly 2,500 films a year. Hollywood is watching nervously.",
+  'KE':"Kenya's Great Rift Valley is where some of the earliest human fossils were found. We all started here.",
+  'ET':"Ethiopia follows a calendar 7-8 years behind the Gregorian calendar. They're either charmingly retro or fashionably late.",
+  'GH':"Ghana was the first sub-Saharan African country to gain independence from colonial rule, in 1957.",
+  'TZ':"Tanzania is home to Kilimanjaro — the world's highest freestanding mountain and Africa's highest peak.",
+  'MA':"Morocco is the only African country with coastlines on both the Atlantic Ocean and the Mediterranean Sea.",
+  'IL':"Israel is roughly the size of New Jersey but has eight climatic zones. New Jersey has one, and it's debatable.",
+  'SA':"Saudi Arabia covers about 80% of the Arabian Peninsula. It's mostly desert, but the sand is very well organized.",
+  'AE':"The UAE went from a fishing and pearl-diving economy to one of the world's richest nations in about 50 years.",
+  'IR':"Iran is home to one of the world's oldest civilizations, dating back 7,000 years. They've seen things.",
+  'IQ':"Iraq is home to Mesopotamia — the cradle of civilization. Writing, the wheel, and beer were all invented here. Priorities.",
+  'PK':"Pakistan's Khewra Salt Mine is so large it has a mosque and a post office inside.",
+  'BD':"Bangladesh has 170 million people in an area the size of Iowa. Personal space is a concept, not a reality.",
+  'LK':"Sri Lanka produces about 23% of the world's cinnamon. Every chai latte has a little Sri Lanka in it.",
+  'NP':"Nepal contains eight of the world's ten highest mountains. The mountains are not subtle about this.",
+  'KH':"Cambodia's Angkor Wat is the largest religious monument in the world — and it's on the national flag, because why not.",
+  'CU':"Cuba has a 99.8% literacy rate. They are very well-read about their situation.",
+  'JM':"Jamaica is the birthplace of reggae, ska, and Bob Marley. It has contributed disproportionately to the world's good vibes.",
+  'HT':"Haiti was the first Black republic and the first Caribbean nation to gain independence, in 1804.",
+  'TT':"Trinidad and Tobago invented the steel pan — the only acoustic instrument invented in the 20th century.",
+  'IE':"Ireland has no snakes — St. Patrick allegedly drove them out. Herpetologists say they were never there. The legend is better.",
+  'IS':"Iceland has no mosquitoes. None. Zero. This alone makes it worth visiting.",
+  'HR':"Croatia has over 1,000 Adriatic islands. Game of Thrones filmed there because it already looked fictional.",
+  'RS':"Serbia is the world's largest exporter of raspberries, supplying about 30% of the global market.",
+  'KZ':"Kazakhstan is the world's largest landlocked country — bigger than Western Europe combined.",
+  'UZ':"Uzbekistan is one of only two doubly landlocked countries — surrounded entirely by other landlocked countries.",
+  'GE':"Georgia claims to be the birthplace of wine, with evidence dating back 8,000 years. They've had a lot of time to perfect it.",
+  'AM':"Armenia was the first country to adopt Christianity as its state religion, in 301 AD.",
+  'AZ':"Azerbaijan has more mud volcanoes than anywhere else on Earth — about 400. Most are disappointingly undramatic.",
+  'UA':"Ukraine produces about 15% of the world's wheat. It is literally the breadbasket of Europe.",
+};
+const COUNTRY_FACTS_FALLBACK=[
+  "🌍 This flag is so rare even our fact-checker hasn't been there yet. Respect.",
+  "📍 Fun fact: someone you know lives here. That's remarkable when you think about it.",
+  "🗺️ This flag has colors. Possibly stripes. Maybe a symbol. It's definitely a flag.",
+];
+let _flagPopupCC=null;
+let _noteOpenKey=null;
+function showCountryFact(cc,evt){
+  if(evt)evt.stopPropagation();
+  const flagEmoji=countryFlag(cc);
+  const popup=document.getElementById('notePopup');
+  if(_flagPopupCC===cc&&popup.classList.contains('show')){
+    popup.classList.remove('show');_flagPopupCC=null;return;
+  }
+  _flagPopupCC=cc;_noteOpenKey=null;
+  const code=(cc||'').toUpperCase();
+  const fact=COUNTRY_FACTS[code]||COUNTRY_FACTS_FALLBACK[Math.floor(Math.random()*COUNTRY_FACTS_FALLBACK.length)];
+  popup.innerHTML=`<strong>${flagEmoji} ${code}</strong><br><br>${fact}`;
+  popup.style.fontStyle='normal';
+  popup.style.borderColor='';
+  _positionPopup(popup,evt.target.getBoundingClientRect());
+  popup.classList.add('show');
+}
+
 function scheduleNextMinute(){
   // Clear any existing timers so we don't double-tick
   if(_minuteTimeout)clearTimeout(_minuteTimeout);
@@ -1181,12 +1875,12 @@ function scheduleNextMinute(){
     _minuteInterval=setInterval(tick,60000);
   },ms);
 }
-function tick(){renderMyCard();renderAll();}
+function tick(){renderBoth();}
 
 // Re-sync immediately when the user returns to the tab/app
 document.addEventListener('visibilitychange',()=>{
   if(document.visibilityState==='visible'){
-    renderMyCard();renderAll();
+    renderBoth();
     scheduleNextMinute(); // re-align to the current minute boundary
   }
 });
@@ -1199,7 +1893,7 @@ async function detectMyLocation(){
   navigator.geolocation.getCurrentPosition(async pos=>{
     myLat=pos.coords.latitude;myLon=pos.coords.longitude;
     try{const r=await fetch(`https://timeapi.io/api/timezone/coordinate?latitude=${myLat}&longitude=${myLon}`);const d=await r.json();if(d.timeZone)myTZ=d.timeZone;}catch(e){}
-    try{const r2=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${myLat}&lon=${myLon}&format=jsonv2`,{headers:{'User-Agent':'MyTimeZones/1.0 (JonLButcher@yahoo.com)'}});const d2=await r2.json();if(d2.address)myLocLabel=formatLocation(d2.address)||myLocLabel;}catch(e){}
+    try{const r2=await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${myLat}&lon=${myLon}&format=jsonv2`,{headers:{'User-Agent':'MyTimeZones/1.0 (JonLButcher@yahoo.com)'}});const d2=await r2.json();if(d2.address){myLocLabel=formatLocation(d2.address)||myLocLabel;myCC=(d2.address.country_code||'').toUpperCase();}}catch(e){}
     mySunTimes=calcSunTimes(myLat,myLon,myTZ);
     fetchMissingCoords();fetchMyWeather();finishLocate();
   },()=>finishLocate());
@@ -1225,8 +1919,9 @@ function finishLocate(){
   const b=document.getElementById('locBadge');
   b.className='loc-badge';
   b.textContent='📍 '+myLocLabel;
-  renderMyCard();renderAll();
-  // Re-sync the minute clock so it ticks exactly on the minute again
+  // Clear my weather cache so new location gets fresh fetch
+  clearWeatherCache('__my');
+  renderBoth();
   scheduleNextMinute();
 }
 
@@ -1234,8 +1929,9 @@ function finishLocate(){
 async function doSearch(){
   const city=document.getElementById('editCity').value.trim();if(!city)return;
   const btn=document.getElementById('searchBtn'),rd=document.getElementById('searchResults'),sb=document.getElementById('saveBtn');
-  btn.disabled=true;btn.textContent='…';rd.innerHTML='<div class="result-status">🔍 Searching…</div>';
-  sb.disabled=true;foundTZ=null;foundLat=null;foundLon=null;selectedResultIdx=null;searchResultsData=[];
+  btn.disabled=true;btn.textContent='…';
+  rd.innerHTML='<div class="search-anim"><span class="search-anim-globe">🌎</span><span class="search-anim-lens">🔍</span></div>';
+  sb.disabled=true;foundTZ=null;foundLat=null;foundLon=null;foundCC=null;selectedResultIdx=null;searchResultsData=[];
   try{
     const hasComma=city.includes(',');
     const url=hasComma
@@ -1274,9 +1970,10 @@ function renderResultsList(){
 }
 function selectResult(idx){
   selectedResultIdx=idx;const r=searchResultsData[idx];
-  foundTZ=r.tz;foundLat=r.lat;foundLon=r.lon;
+  foundTZ=r.tz;foundLat=r.lat;foundLon=r.lon;foundCC=(r.address&&r.address.country_code)||null;
   const loc=formatLocation(r.address||{});if(loc)document.getElementById('editCity').value=loc;
-  document.getElementById('saveBtn').disabled=!document.getElementById('editName').value.trim();renderResultsList();
+  validateEditName();
+  renderResultsList();
 }
 
 // ── RENDER ─────────────────────────────────────────────────────────
@@ -1285,7 +1982,27 @@ function renderMyCard(){
   document.getElementById('myTime').textContent=fmtTime(myTZ);
   document.getElementById('myDate').textContent=fmtDate(myTZ);
   document.getElementById('myTZpill').textContent=tzAbbr(myTZ);
-  document.getElementById('myLoc').textContent=myLocLabel;
+  const flagEl=document.getElementById('myFlag');
+  if(flagEl){
+    const fl=prefFlags?(myCC?countryFlag(myCC):'🏴‍☠️'):'';
+    flagEl.textContent=fl;
+    if(fl==='🏴‍☠️'){
+      flagEl.style.cursor='pointer';
+      flagEl.onclick=(e=>{
+        e.stopPropagation();
+        const popup=document.getElementById('notePopup');
+        if(_flagPopupCC==='_pirate'&&popup.classList.contains('show')){popup.classList.remove('show');_flagPopupCC=null;return;}
+        _flagPopupCC='_pirate';
+        popup.innerHTML='<strong>🏴‍☠️ Unknown Waters</strong><br><br>Your location couldn\'t be identified — which means you\'re either in international waters, deep in the wilderness, or just really hard to find. The Jolly Roger flies for those who answer to no country. Sail on.';
+        popup.style.fontStyle='normal';popup.style.borderColor='';
+        _positionPopup(popup,e.target.getBoundingClientRect());
+        popup.classList.add('show');
+      });
+    } else {
+      flagEl.onclick=fl&&myCC?(e=>showCountryFact(myCC,e)):null;
+      flagEl.style.cursor=fl&&myCC?'pointer':'default';
+    }
+  }
   const coffeeEl=document.getElementById('myCoffee');
   coffeeEl.style.display=isCoffeeTime(myTZ)?'inline':'none';
   if(myLat!==null){
@@ -1320,44 +2037,43 @@ function cardHTML(key,keys){
   const dayNightClick=isDayHere?`openFlowerGame(event)`:(isNightHere?`openMoonCard(event)`:'');
   const cardTZAbbr=has?tzAbbr(p.tz):'';
 
-  return`<div class="preset-card ${isActive?'active':''} ${!has?'unset':''}" id="card-${key}" onclick="tapCard('${key}')">
-    <div class="card-main">
-      <div class="card-left">
-        <div class="card-name">${p.label}</div>
-        <div class="card-city-row">
-          <span class="card-city">${has?(p.city||p.tz):'Not configured yet'}</span>
-          ${has?`<span class="card-weather" id="wx-${key}" title="${wx?wx.desc:''}" onclick="openWxCard('${key}','${(p.city||p.tz).replace(/'/g,"\\'")}',event)">${wx?wx.emoji:''}</span>`:''}
+  return`<div class="preset-card ${isActive?'active':''} ${!has?'unset':''}" id="card-${key}" onclick="tapCard('${key}')" style="${p.color&&isActive?`border-color:${p.color}`:''}">
+    ${p.color?`<div class="card-color-stripe" style="background:${p.color}"></div>`:''}
+    <div class="card-main${isActive?' active-card':''}">
+      <div class="card-left-col">
+        <div class="card-name">${p.note?`<span class="note-icon" onclick="showNote('${key}',event)" title="Show note">📝</span> `:''}${p.label}</div>
+        <div class="card-city">${has?(p.city||p.tz):'Not configured yet'}</div>
+        <div class="card-bottom-left">${has?`
+          <span class="tz-pill" onclick="openTZInfoForCard('${cardTZAbbr}','${p.tz}',event)">${cardTZAbbr}</span>
+          ${p.cc&&prefFlags?`<span style="font-size:1rem;cursor:pointer" onclick="showCountryFact('${p.cc}',event)">${countryFlag(p.cc)}</span>`:''}
+          ${wx?`<span class="card-weather" id="wx-${key}" title="${wx.desc}" onclick="openWxCard('${key}','${(p.city||p.tz).replace(/'/g,"\\'")}',event)">${wx.emoji}</span>`:''}
+        `:''}
         </div>
       </div>
-      <div class="card-actions">
-        ${has?`<div class="card-right">
-          <div class="card-time-row">
-            ${coffee?`<span class="card-coffee" title="☕ It's 3 PM! Coffee facts!" onclick="openCoffeeCard(event)">☕</span>`:''}
-            <span class="card-time" 
-              onpointerdown="startLongPress('${key}',event)" 
-              onpointerup="cancelLongPress()" 
-              onpointerleave="cancelLongPress()"
-              style="cursor:pointer;user-select:none">${fmtTime(p.tz)}</span>
-          </div>
-          <div class="card-date">${fmtDate(p.tz)}${dd?` <span style="font-size:0.65rem;color:#C0392B;font-weight:700">${dd}</span>`:''}</div>
-          <div class="card-icons">
-            ${dayNight?`<span class="sun-icon" ${dayNightClick?`onclick="${dayNightClick}"`:''}  title="${isDayHere?'Tap for sun game':(isNightHere?'Tap to learn about moon phases':'')}">${dayNight}</span>`:''}
-            <span class="call-wrap ${callCls}" title="${callCls==='call-green'?'Good time to call':callCls==='call-yellow'?'Borderline hours':'Likely sleeping'} — tap to calculate" onclick="openCallModal('${key}',event)"><span class="call-ph">☎</span></span>
-          </div>
-        </div>`:''}
-        ${isActive?`<div class="reorder-col">
-          <button class="reorder-btn" onclick="movePreset('${key}',-1,event)" ${keys.indexOf(key)===0?'disabled':''}>▲</button>
-          <button class="edit-btn" onclick="openEdit('${key}',event)">✏️</button>
-          <button class="reorder-btn" onclick="movePreset('${key}',1,event)" ${keys.indexOf(key)===keys.length-1?'disabled':''}>▼</button>
-        </div>`:''}
-        ${!has?`<button class="edit-btn" onclick="openEdit('${key}',event)">✏️ Set up</button>`:''}
+      <div class="card-right-col">
+        <div class="card-time-cell">${has?`${coffee?`<span class="card-coffee" title="☕ It's 3 PM! Coffee facts!" onclick="openCoffeeCard(event)">☕</span>`:''}
+          <span class="card-time"
+            onpointerdown="startLongPress('${key}',event)"
+            onpointerup="cancelLongPress()"
+            onpointerleave="cancelLongPress()"
+            style="cursor:pointer;user-select:none">${fmtTime(p.tz)}</span>`:''}</div>
+        <div class="card-date">${has?`${fmtDate(p.tz)}${dd?` <span style="font-size:0.65rem;color:#C0392B;font-weight:700">${dd}</span>`:''}`:''}</div>
+        <div class="card-bottom-right">${has?`
+          ${dayNight?`<span class="sun-icon" ${dayNightClick?`onclick="${dayNightClick}"`:''}>${dayNight}</span>`:''}
+          <span class="call-wrap ${callCls}" onclick="openCallModal('${key}',event)"><span class="call-ph">☎</span></span>
+        `:''}
+        </div>
       </div>
+      ${isActive?`<div class="card-reorder-col">
+        <button class="reorder-btn" onclick="movePreset('${key}',-1,event)" ${keys.indexOf(key)===0?'disabled':''}>▲</button>
+        <button class="edit-btn" onclick="openEdit('${key}',event)">✏️</button>
+        <button class="reorder-btn" onclick="movePreset('${key}',1,event)" ${keys.indexOf(key)===keys.length-1?'disabled':''}>▼</button>
+      </div>`:''}
     </div>
     <div class="diff-panel ${isActive&&has?'show':''} ${diff&&diff.neg?'neg':''}">
       <span class="diff-val ${diff&&diff.neg?'neg':''}">${diff?diff.text:''}</span>
       <div class="diff-right">
         ${sunStr?`<span style="font-size:0.61rem;color:var(--muted)">${sunStr}</span>`:''}
-        ${cardTZAbbr?`<span class="diff-tz" onclick="openTZInfoForCard('${cardTZAbbr}','${p.tz}',event)" title="What is ${cardTZAbbr}?">${cardTZAbbr}</span>`:''}
       </div>
     </div>
   </div>`;
@@ -1436,31 +2152,53 @@ function calcCallTime(){
   // Best time suggestion
   const bestEl=document.getElementById('callBestTime');
   if(bestEl){
-    if(!isSleeping&&!isEarly&&!isLate){
-      bestEl.textContent='';
-    } else {
-      const offset=(offsetH(p.tz)-offsetH(myTZ)); // their offset from you in hours
-      // Green window in their local minutes
-      const theirStartMin=greenStart; // prefCallStart*60
-      const theirEndMin=greenEnd;     // prefCallEnd*60
-      // Convert to your local time by subtracting offset
-      const myStartMin=theirStartMin - offset*60;
-      const myEndMin=theirEndMin - offset*60;
-      const fmtMin=totalMin=>{
-        // Normalize to 0–1439
-        let m=((totalMin%1440)+1440)%1440;
-        const hh=Math.floor(m/60),mm=m%60;
-        const h12=hh%12||12,ap=hh>=12?'PM':'AM';
-        return h12+':'+String(mm).padStart(2,'0')+' '+ap;
-      };
-      bestEl.innerHTML=`💡 Best to call between <strong>${fmtMin(myStartMin)} – ${fmtMin(myEndMin)}</strong> your time`;
-    }
+    const offset=(offsetH(p.tz)-offsetH(myTZ)); // positive = they are ahead of you
+    const myStartMin=greenStart - offset*60; // convert their call window to your local minutes
+    const myEndMin=greenEnd - offset*60;
+    const fmtMin=totalMin=>{
+      let m=((totalMin%1440)+1440)%1440;
+      const hh=Math.floor(m/60),mm=m%60;
+      const h12=hh%12||12,ap=hh>=12?'PM':'AM';
+      return h12+':'+String(mm).padStart(2,'0')+' '+ap;
+    };
+    bestEl.innerHTML=`💡 Best to call between <strong>${fmtMin(myStartMin)} – ${fmtMin(myEndMin)}</strong> your time`;
   }
 }
 document.getElementById('callOverlay').addEventListener('click',e=>{if(e.target.id==='callOverlay')closeCallModal();});
 
 // ── EDIT MODAL ─────────────────────────────────────────────────────
 function tapCard(key){const was=selectedKey===key;selectedKey=was?null:key;renderAll();}
+
+// ── NOTE POPUP ─────────────────────────────────────────────────────
+function _positionPopup(popup,r){
+  const popH=120; // estimated popup height
+  const spaceBelow=window.innerHeight-r.bottom-6;
+  const spaceAbove=r.top-6;
+  popup.style.left=Math.min(r.left,window.innerWidth-280)+'px';
+  if(spaceBelow>=popH||spaceBelow>=spaceAbove){
+    popup.style.top=(r.bottom+6)+'px';
+    popup.style.bottom='auto';
+  } else {
+    popup.style.top='auto';
+    popup.style.bottom=(window.innerHeight-r.top+6)+'px';
+  }
+}
+function showNote(key,evt){
+  if(evt)evt.stopPropagation();
+  const p=state[key];if(!p||!p.note)return;
+  const popup=document.getElementById('notePopup');
+  if(_noteOpenKey===key&&popup.classList.contains('show')){
+    popup.classList.remove('show');_noteOpenKey=null;return;
+  }
+  _noteOpenKey=key;_flagPopupCC=null;
+  popup.textContent=p.note;
+  popup.style.borderColor=p.color||'';
+  const r=evt.target.getBoundingClientRect();
+  popup.style.left=Math.min(r.left,window.innerWidth-280)+'px';
+  popup.style.top=(r.bottom+6)+'px';
+  popup.style.bottom='auto';
+  popup.classList.add('show');
+}
 
 // ── CLIPBOARD ──────────────────────────────────────────────────────
 let _longPressTimer=null;
@@ -1502,42 +2240,54 @@ function movePreset(key,dir,evt){
   const idx=keys.indexOf(key);
   const newIdx=idx+dir;
   if(newIdx<0||newIdx>=keys.length)return;
-  // Swap in localStorage order by swapping the keys in state
   const otherKey=keys[newIdx];
-  // We store order implicitly via Object.keys — swap by rebuilding state
+  // Preset order is determined by Object.keys(state) insertion order.
+  // To reorder, we swap the two entries in the entries array then rebuild state.
   const entries=Object.entries(state);
   const idxA=entries.findIndex(e=>e[0]===key);
   const idxB=entries.findIndex(e=>e[0]===otherKey);
   [entries[idxA],entries[idxB]]=[entries[idxB],entries[idxA]];
-  // Rebuild state preserving reference
+  // Clear and repopulate state in new order
   Object.keys(state).forEach(k=>delete state[k]);
   entries.forEach(([k,v])=>state[k]=v);
   saveState();renderAll();
 }
+let editColor=null;
+function setEditColor(val){
+  editColor=val;
+  document.getElementById('editColorPick').value=val;
+}
+function clearEditColor(){
+  editColor=null;
+  document.getElementById('editColorPick').value='#1A5276';
+}
+
 function openEdit(key,evt){
   if(evt)evt.stopPropagation();
-  editKey=key;foundTZ=null;foundLat=null;foundLon=null;selectedResultIdx=null;searchResultsData=[];
+  editKey=key;foundTZ=null;foundLat=null;foundLon=null;foundCC=null;selectedResultIdx=null;searchResultsData=[];
   const p=state[key];
-  const isFixed=(key==='p1'||key==='p2');
   document.getElementById('modalTitle').textContent='Edit: '+p.label;
   document.getElementById('editName').value=p.label;
   document.getElementById('editName').disabled=false;
   validateEditName();
+  document.getElementById('editNote').value=p.note||'';
   document.getElementById('editCity').value=p.city||'';
   document.getElementById('searchResults').innerHTML='';
   document.getElementById('saveBtn').disabled=!p.tz||!p.label.trim();
+  editColor=p.color||null;
+  document.getElementById('editColorPick').value=p.color||'#1A5276';
   const clrBtn=document.getElementById('clearBtn');
-  clrBtn.style.display=(p.tz||!isFixed)?'':'none';
-  clrBtn.textContent=isFixed?'Reset':'Remove';
+  clrBtn.style.display='';
+  clrBtn.textContent='Remove';
   document.getElementById('overlay').classList.add('open');
 }
 function closeModal(){
   document.getElementById('overlay').classList.remove('open');
-  // If this was a newly added custom slot with no timezone set, remove it cleanly
-  if(editKey&&editKey!=='p1'&&editKey!=='p2'&&state[editKey]&&!state[editKey].tz){
+  // Only clean up if this was a brand new preset with no TZ AND no label typed
+  if(editKey&&state[editKey]&&!state[editKey].tz&&!state[editKey].label){
     removePreset(editKey);
   }
-  editKey=null;foundTZ=null;foundLat=null;foundLon=null;searchResultsData=[];selectedResultIdx=null;
+  editKey=null;foundTZ=null;foundLat=null;foundLon=null;foundCC=null;searchResultsData=[];selectedResultIdx=null;
   renderAll();
 }
 function validateEditName(){
@@ -1552,34 +2302,101 @@ function validateEditName(){
 function saveEdit(){
   if(!editKey)return;const p=state[editKey];
   const n=document.getElementById('editName').value.trim();if(n)p.label=n;
+  p.note=document.getElementById('editNote').value.trim();
+  if(editColor)p.color=editColor; else delete p.color;
   p.city=document.getElementById('editCity').value.trim();
-  if(foundTZ){p.tz=foundTZ;p.lat=foundLat;p.lon=foundLon;delete weatherCache[editKey];}
-  saveState();closeModal();renderAll();
+  const savedKey=editKey;
+  const savedLat=foundLat;
+  const savedLon=foundLon;
+  const hadNewTZ=!!foundTZ;
+  if(foundTZ){p.tz=foundTZ;p.lat=foundLat;p.lon=foundLon;if(foundCC)p.cc=foundCC;clearWeatherCache(savedKey);}
+  saveState();closeModal();renderBoth();
+  if(savedLat&&savedLon)setTimeout(()=>fetchWeatherForCoords(savedKey,savedLat,savedLon),200);
+  else if(hadNewTZ&&state[savedKey]&&!state[savedKey].lat)fetchMissingCoords();
 }
 function clearPreset(){
   if(!editKey)return;
-  if(editKey==='p1'||editKey==='p2'){
-    // Fixed slots: reset to default blank state
-    delete weatherCache[editKey];delete weatherFullCache[editKey];
-    state[editKey]={...FIXED_DEFAULTS[editKey]};
-    if(selectedKey===editKey)selectedKey=null;
-    saveState();closeModal();renderAll();
-  }else{
-    // Custom slots: remove entirely
-    removePreset(editKey);
-    closeModal();
-  }
+  removePreset(editKey);
+  closeModal();
 }
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')closeModal();});
+document.addEventListener('click',e=>{
+  const popup=document.getElementById('notePopup');
+  if(!popup||!popup.classList.contains('show'))return;
+  // Don't dismiss if tapping a note icon, flag, or the popup itself
+  const onc=e.target.getAttribute('onclick')||'';
+  if(e.target.classList.contains('note-icon')||onc.includes('showCountryFact')||e.target.id==='notePopup')return;
+  popup.classList.remove('show');_noteOpenKey=null;_flagPopupCC=null;
+});
 
-// ── MIDNIGHT REFRESH ───────────────────────────────────────────────
+// ── DID YOU KNOW ───────────────────────────────────────────────────
+const DYK_FACTS=[
+  '... you can long-press the time on any preset card to instantly copy it to your clipboard?',
+  '... you can long-press the time on the You Are Here card to copy "It\'s X:XX here in City, State" to your clipboard?',
+  '... the phone icon on each card is color-coded — green means it\'s a great time to call, yellow means early or late, and red means they\'re likely sleeping?',
+  '... you can tap the call calculator phone icon to find the best window to reach someone, and it will tell you the exact time range in your local time?',
+  '... you can add a private note 📝 to any preset — like a birthday, favorite food, or "work cell only"?',
+  '... tapping the 📝 icon on a preset card toggles the note open and closed?',
+  '... you can give each preset its own custom color stripe that also tints the border when the card is active?',
+  '... you can reorder your preset cards by tapping a card to activate it, then using the ▲ and ▼ buttons?',
+  '... tapping the timezone pill on any card opens a full description of that timezone — including which countries use it and a fun fact?',
+  '... the sun ☀️ and moon 🌙 icons show whether it\'s currently daytime or nighttime at that location?',
+  '... tapping the ☀️ on a preset launches a hidden sunflower game?',
+  '... tapping the moon icon opens a moon phase guide showing the current phase and what comes next?',
+  '... you can tap the weather icon on any card to open a detailed weather card with feels like temperature, humidity, wind speed, and a forecast?',
+  '... the weather forecast for US locations is pulled directly from the National Weather Service for maximum accuracy?',
+  '... after 30 minutes the weather updated time changes to a 🔄 Refresh button — tapping it refreshes weather for all your cards at once?',
+  '... you can switch between °C and °F inside the weather detail card, and the wind speed switches between km/h and mph automatically?',
+  '... the call calculator shows a sleeping animation when someone\'s local time is in the middle of the night — and the plane waits for the forecast to load before displaying it?',
+  '... you can set a custom "good hours to call" window and buffer zone in Settings, so the green/yellow/red phone colors match your preferences?',
+  '... tapping the location badge on the You Are Here card refreshes your GPS location and re-syncs the clock to the exact minute?',
+  '... the app continues to track time accurately even after you\'ve been away from it — it re-syncs the moment you return?',
+  '... you can toggle country flags on or off in Settings — when on, each preset shows its country\'s flag next to the timezone?',
+  '... you can search for a city using "City, State" format (like "Madison, WI") to narrow down results faster?',
+  '... the app works completely offline once loaded — no internet required to display times, dates, or timezone info?',
+  '... you can install ChronoZone as a home screen app by tapping "Add to Home Screen" in your browser — it then launches fullscreen with no browser chrome?',
+  '... the sunrise and sunset times for each preset location are shown in the expanded card panel when you tap a preset?',
+];
+let _dykOrder=[];
+let _dykIndex=0;
+
+function _shuffleDYK(){
+  _dykOrder=[...Array(DYK_FACTS.length).keys()];
+  for(let i=_dykOrder.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [_dykOrder[i],_dykOrder[j]]=[_dykOrder[j],_dykOrder[i]];
+  }
+  _dykIndex=0;
+}
+function openDidYouKnow(){
+  if(!_dykOrder.length)_shuffleDYK();
+  _renderDYK();
+  document.getElementById('dykOverlay').classList.add('open');
+}
+function _renderDYK(){
+  const idx=_dykOrder[_dykIndex];
+  document.getElementById('dykText').textContent=(_dykIndex+1)+') '+DYK_FACTS[idx];
+  document.getElementById('dykCounter').textContent=(_dykIndex+1)+' of '+DYK_FACTS.length;
+}
+function nextDidYouKnow(){
+  _dykIndex=(_dykIndex+1)%DYK_FACTS.length;
+  // Reshuffle when we've cycled through all
+  if(_dykIndex===0)_shuffleDYK();
+  _renderDYK();
+}
+function closeDidYouKnow(){
+  document.getElementById('dykOverlay').classList.remove('open');
+}
+document.getElementById('dykOverlay').addEventListener('click',e=>{
+  if(e.target.id==='dykOverlay')closeDidYouKnow();
+});
 function scheduleMidnightRefresh(){
   const now=new Date(),midnight=new Date(now);midnight.setHours(24,0,0,0);
-  setTimeout(()=>{renderMyCard();renderAll();scheduleMidnightRefresh();},midnight-now);
+  setTimeout(()=>{renderBoth();scheduleMidnightRefresh();},midnight-now);
 }
 
 // ── INIT ───────────────────────────────────────────────────────────
-renderMyCard();renderAll();detectMyLocation();scheduleNextMinute();scheduleMidnightRefresh();
+renderBoth();detectMyLocation();scheduleNextMinute();scheduleMidnightRefresh();
 </script>
 </body>
 </html>
