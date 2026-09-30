@@ -2,193 +2,356 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14161a">
 <title>Tile Maker 64</title>
 <style>
 :root{
-  --bg:#14161a; --panel:#1d2026; --panel2:#252932; --line:#333844; --text:#e6e8ee; --muted:#8f97a8;
-  --accent:#4f9dff; --accent2:#2f7be0; --danger:#ff6b6b; --ok:#4ad19a;
+  --bg:#14161a; --panel:#1d2026; --panel2:#262a33; --line:#363b47; --text:#e8eaf0; --muted:#99a1b3;
+  --accent:#4f9dff; --accent2:#2f7be0; --danger:#ff6b6b; --ok:#4ad19a; --warn:#ffcf5a;
 }
-*{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--text);font:14px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:10px 16px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
-header h1{font-size:16px;margin:0 12px 0 0;letter-spacing:.3px}
-header h1 span{color:var(--accent)}
-.spacer{flex:1}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,Roboto,"Segoe UI",sans-serif}
+body{padding-bottom:calc(104px + env(safe-area-inset-bottom))}
 button,select,input{font:inherit}
-button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:6px;padding:6px 12px;cursor:pointer}
-button:hover:not(:disabled){border-color:var(--accent)}
-button:disabled{opacity:.4;cursor:default}
+button{background:var(--panel2);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:0 14px;min-height:46px;cursor:pointer}
+button:active:not(:disabled){background:var(--accent2)}
+button:disabled{opacity:.4}
 button.primary{background:var(--accent2);border-color:var(--accent2);color:#fff;font-weight:600}
-button.primary:hover:not(:disabled){background:var(--accent)}
 button.on{background:var(--accent2);border-color:var(--accent)}
-button.sm{padding:3px 8px;font-size:12px}
-input[type=number],input[type=text],select{background:#12141a;color:var(--text);border:1px solid var(--line);border-radius:6px;padding:5px 8px;width:100%}
-input[type=color]{width:38px;height:30px;padding:0;background:none;border:1px solid var(--line);border-radius:6px}
-input[type=range]{width:100%;accent-color:var(--accent)}
-main{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,1fr);gap:16px;padding:16px;max-width:1500px;margin:0 auto}
-@media(max-width:980px){main{grid-template-columns:1fr}}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px}
-.card h3{margin:0 0 10px;font-size:13px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);display:flex;align-items:center;gap:8px}
-.card h3 .n{background:var(--accent2);color:#fff;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px}
-.stack{display:flex;flex-direction:column;gap:16px;min-width:0}
+button.sm{min-height:40px;padding:0 10px;font-size:14px}
+input[type=number],input[type=text],select{background:#111318;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:0 10px;width:100%;min-height:46px}
+input[type=color]{width:52px;height:46px;padding:2px;background:none;border:1px solid var(--line);border-radius:10px}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:40px;background:transparent;margin:0}
+input[type=range]::-webkit-slider-runnable-track{height:6px;background:var(--line);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:var(--accent);border:3px solid #fff;margin-top:-12px}
+input[type=range]::-moz-range-track{height:6px;background:var(--line);border-radius:3px}
+input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;background:var(--accent);border:3px solid #fff}
+input[type=checkbox]{width:22px;height:22px;accent-color:var(--accent)}
+
+header{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:10}
+header h1{font-size:17px;margin:0;flex:1;white-space:nowrap}
+header h1 span{color:var(--accent)}
+header button{min-height:42px;padding:0 12px}
+main{max-width:760px;margin:0 auto;padding:12px;display:flex;flex-direction:column;gap:14px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px}
+.card h2{margin:0 0 8px;font-size:15px;display:flex;align-items:center;gap:8px}
+.card h2 .n{background:var(--accent2);color:#fff;border-radius:50%;width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;flex:none}
+details.help{background:#171a20;border:1px solid var(--line);border-left:3px solid var(--accent);border-radius:8px;margin:0 0 10px;font-size:14px}
+details.help summary{padding:10px 12px;cursor:pointer;color:var(--accent);font-weight:600}
+details.help .hb{padding:0 12px 10px;color:#c9cfdc}
+details.help .hb p{margin:6px 0}
+details.help .hb ul,details.help .hb ol{margin:6px 0;padding-left:20px}
+details.help .hb li{margin:3px 0}
 .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-.row.tight{gap:4px}
+.row>.grow{flex:1;min-width:120px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-label.f{display:block;font-size:12px;color:var(--muted)}
-label.f>span{display:block;margin-bottom:2px}
-label.chk{display:flex;align-items:center;gap:6px;font-size:13px;cursor:pointer}
-.sl{display:grid;grid-template-columns:120px 1fr 34px;gap:8px;align-items:center;margin:6px 0;font-size:13px}
-.sl b{text-align:right;font-variant-numeric:tabular-nums}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label.f{display:block;font-size:13px;color:var(--muted)}
+label.f>span{display:block;margin-bottom:3px}
+label.chk{display:flex;align-items:center;gap:10px;font-size:15px;min-height:44px}
+.muted{color:var(--muted);font-size:13px}
+b.v{font-variant-numeric:tabular-nums}
 #srcWrap{position:relative}
-#src{display:block;width:100%;height:clamp(320px,62vh,640px);background:#0c0d10;border-radius:8px;outline:none;touch-action:none}
-#hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);pointer-events:none;padding:20px}
+#src{display:block;width:100%;height:clamp(300px,52vh,520px);background:#0c0d10;border-radius:10px;outline:none;touch-action:none}
+#hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);pointer-events:none;padding:24px}
 #hint.hide{display:none}
-.drop #src{outline:2px dashed var(--accent)}
-.muted{color:var(--muted);font-size:12px}
-.chips{display:flex;flex-wrap:wrap;gap:6px;min-height:30px;margin:8px 0}
-.chip{display:flex;align-items:center;gap:6px;padding:3px 8px 3px 4px;font-size:12px}
-.chip i{width:20px;height:20px;border-radius:4px;border:1px solid #0006;display:inline-block}
-.chip b{color:var(--danger)}
-.panes{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start}
+.pad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(3,54px);gap:6px;justify-content:center}
+.pad button{min-height:0;font-size:22px;padding:0;touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.seg{display:flex}
+.seg button{border-radius:0;flex:1}
+.seg button:first-child{border-radius:10px 0 0 10px}.seg button:last-child{border-radius:0 10px 10px 0}
+.sl{margin:8px 0}
+.slh{display:flex;justify-content:space-between;font-size:14px}
+.slc{display:flex;align-items:center;gap:6px}
+.slc .step{min-height:42px;width:44px;padding:0;font-size:22px;flex:none;touch-action:manipulation}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;min-height:30px}
+.chip{display:flex;align-items:center;gap:8px;padding:0 12px 0 6px;min-height:42px;font-size:14px}
+.chip i{width:26px;height:26px;border-radius:6px;border:1px solid #0008;display:inline-block}
+.chip b{color:var(--danger);font-size:18px}
 .pane{min-width:0}
-.pane h4{margin:0 0 4px;font-size:12px;color:var(--muted);font-weight:600;display:flex;gap:8px;justify-content:space-between}
-.pane canvas{display:block;image-rendering:pixelated;max-width:100%;height:auto;border:1px solid var(--line);border-radius:4px}
-.pane.pickable canvas.picking{cursor:crosshair}
-#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#000c;border:1px solid var(--line);padding:8px 14px;border-radius:8px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:20}
+.pane h4{margin:0 0 4px;font-size:13px;color:var(--muted);font-weight:600}
+.pane canvas{display:block;image-rendering:pixelated;border:1px solid var(--line);border-radius:6px}
+.pane canvas.fit{width:100%;height:auto}
+#pOrig.armed{outline:3px solid var(--accent);touch-action:none;cursor:crosshair}
+.panes{display:flex;flex-wrap:wrap;gap:14px}
+.panes .pane{max-width:100%;overflow:auto}
+#loupeBox{position:fixed;z-index:30;pointer-events:none;display:none;text-align:center}
+#loupeBox canvas{border:3px solid #fff;border-radius:12px;background:#000;box-shadow:0 4px 16px #000a;display:block;margin:0 auto}
+#loupeLbl{display:inline-block;background:#000d;padding:2px 8px;border-radius:6px;font-size:13px;margin-top:4px}
+#bar{position:fixed;left:0;right:0;bottom:0;z-index:15;background:var(--panel);border-top:1px solid var(--line);padding:8px 12px calc(8px + env(safe-area-inset-bottom));display:flex;gap:8px;align-items:center;justify-content:center}
+#bar canvas{width:56px;height:56px;image-rendering:pixelated;border:1px solid var(--line);border-radius:6px;flex:none}
+#bar button{min-height:56px}
+#bar .primary{flex:1;max-width:280px}
+#toast{position:fixed;bottom:calc(92px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);background:#000e;border:1px solid var(--line);padding:10px 16px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:40;max-width:90vw;text-align:center}
 #toast.show{opacity:1}
-kbd{background:#12141a;border:1px solid var(--line);border-radius:4px;padding:0 4px;font-size:11px}
-.wide{grid-column:1/-1}
+#help{position:fixed;inset:0;background:#000b;z-index:50;display:none;overflow-y:auto;padding:12px}
+#help.open{display:block}
+#help .box{max-width:720px;margin:0 auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+#help h2{margin:0 0 6px;font-size:20px}
+#help h3{margin:18px 0 4px;font-size:16px;color:var(--accent)}
+#help p,#help li{font-size:15px;color:#d5dae6}
+#help ul,#help ol{padding-left:22px}
+#help .close{width:100%;margin-top:14px}
+kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 5px;font-size:12px}
 </style>
 </head>
 <body>
 <header>
   <h1>Tile Maker <span>64</span></h1>
-  <button id="btnOpen" class="primary">Open Image…</button>
-  <button id="btnUndo" disabled title="Ctrl+Z">Undo</button>
-  <button id="btnRedo" disabled title="Ctrl+Y">Redo</button>
-  <span class="spacer"></span>
-  <span class="muted" id="fileInfo">No image loaded</span>
-  <input type="file" id="file" accept="image/*" hidden>
+  <button id="btnUndo" disabled>↶ Undo</button>
+  <button id="btnRedo" disabled>↷ Redo</button>
+  <button id="btnHelp" class="primary">? Help</button>
 </header>
 
 <main>
-  <div class="stack">
-    <section class="card">
-      <h3><span class="n">1</span> Crop &amp; scale to 64×64</h3>
-      <div id="srcWrap">
-        <canvas id="src" tabindex="0"></canvas>
-        <div id="hint">Drop an image here, paste one (Ctrl+V), or click <b>&nbsp;Open Image…</b></div>
-      </div>
-      <div class="row" style="margin-top:8px">
-        <button class="sm" id="zFit">Fit</button>
-        <button class="sm" id="z100">100%</button>
-        <button class="sm" id="zSel">Zoom to selection</button>
-        <button class="sm" id="zOut">−</button>
-        <button class="sm" id="zIn">+</button>
-        <span class="muted" id="zInfo"></span>
-      </div>
-      <div class="muted" style="margin-top:6px">
-        Drag inside the box to move, drag a corner to resize (always square). Wheel = zoom, right-drag / <kbd>Space</kbd>+drag = pan.
-        <kbd>←↑↓→</kbd> nudge (<kbd>Shift</kbd> ×10), <kbd>Alt</kbd>+arrows resize.
-      </div>
-      <div class="grid3" style="margin-top:10px">
-        <label class="f"><span>X (left edge)</span><input type="number" id="fx" min="0" step="1"></label>
-        <label class="f"><span>Y (top edge)</span><input type="number" id="fy" min="0" step="1"></label>
-        <label class="f"><span>Size (square)</span><input type="number" id="fs" min="1" step="1"></label>
-      </div>
-      <div class="row" style="margin-top:8px">
-        <button class="sm" id="bMax">Max square</button>
-        <button class="sm" id="bCenter">Center</button>
-        <button class="sm" id="bSnap" title="Nearest multiple of 64 that fits — cleanest downscale">Snap size ×64</button>
-        <label class="f" style="margin-left:auto;min-width:170px"><span>Downscale method</span>
-          <select id="method"><option value="smooth">Smooth (detailed art)</option><option value="nearest">Nearest (crisp pixels)</option></select>
-        </label>
-      </div>
-      <div class="muted" id="cropInfo" style="margin-top:6px"></div>
-    </section>
-  </div>
-
-  <div class="stack">
-    <section class="card">
-      <h3><span class="n">2</span> Transparent background</h3>
-      <div class="row">
-        <button id="bPick" class="on">Eyedropper</button>
-        <button id="bCorners" class="sm">Pick 4 corners</button>
-        <input type="color" id="colHex" value="#ffffff" title="Add a color manually">
-        <button id="bAddHex" class="sm">Add color</button>
-        <button id="bClear" class="sm">Clear all</button>
-      </div>
-      <div class="muted" style="margin-top:6px">Eyedropper: click a pixel in the <b>Original</b> preview below. Add as many colors as you like.</div>
-      <div class="chips" id="chips"></div>
-
-      <div class="sl"><span>Shades darker −</span><input type="range" id="tolDown" min="0" max="128" value="3"><b id="vDown">3</b></div>
-      <div class="sl"><span>Shades lighter +</span><input type="range" id="tolUp" min="0" max="128" value="3"><b id="vUp">3</b></div>
-      <label class="chk"><input type="checkbox" id="link" checked> Link both sliders</label>
-      <div class="muted">Per-channel (R, G, B) range around each picked color.</div>
-
-      <div style="margin-top:10px">
-        <label class="f"><span>Remove where</span>
-          <select id="mode">
-            <option value="contig">Connected to the image edges only (keeps matching colors inside the icon)</option>
-            <option value="global">Everywhere in the image</option>
-          </select>
-        </label>
-      </div>
-      <div class="sl" style="margin-top:10px"><span>Soft edge</span><input type="range" id="soft" min="0" max="48" value="0"><b id="vSoft">0</b></div>
-      <div class="sl"><span>Shrink edge px</span><input type="range" id="erode" min="0" max="3" step="1" value="0"><b id="vErode">0</b></div>
-      <div class="muted">Soft edge fades near-miss pixels next to the removed area. Shrink edge eats halo pixels.</div>
-      <div class="muted" id="statInfo" style="margin-top:6px"></div>
-    </section>
-
-    <section class="card">
-      <h3><span class="n">4</span> Export</h3>
-      <div class="row">
-        <div style="flex:1;min-width:160px"><label class="f"><span>File name</span><input type="text" id="fname" value="tile_64"></label></div>
-      </div>
-      <div class="row" style="margin-top:8px">
-        <label class="chk"><input type="checkbox" id="autoNum"> Auto-number (_001, _002…)</label>
-      </div>
-      <div class="row" style="margin-top:10px">
-        <button id="bSave" class="primary" disabled>Save PNG (64×64)</button>
-        <button id="bCopy" disabled>Copy to clipboard</button>
-      </div>
-    </section>
-  </div>
-
-  <section class="card wide">
-    <h3><span class="n">3</span> Preview</h3>
-    <div class="row" style="margin-bottom:10px">
-      <label class="f" style="min-width:220px;flex:0 1 260px"><span>Zoom: <b id="zoomVal">5</b>×</span><input type="range" id="zoom" min="1" max="16" value="5"></label>
-      <label class="chk"><input type="checkbox" id="grid" checked> Pixel grid</label>
-      <label class="chk">Light bg <input type="color" id="lightBg" value="#f4f4f2"></label>
-      <label class="chk">Dark bg <input type="color" id="darkBg" value="#1c1c1e"></label>
+  <!-- STEP 1 -->
+  <section class="card">
+    <h2><span class="n">1</span> Open an image</h2>
+    <details class="help" data-k="s1" open><summary>How this step works</summary><div class="hb">
+      <p>Tap <b>Open image</b> and choose a picture from Photos, Files or Downloads. Any PNG, JPG or WebP works. The image never leaves your phone.</p>
+      <p>Tip: use the largest, cleanest version of your artwork you have. The tool shrinks it down to 64×64 (and optionally 128×128), so more source detail means a sharper result.</p>
+    </div></details>
+    <div class="row">
+      <button id="btnOpen" class="primary grow">Open image…</button>
     </div>
-    <div class="panes" id="panes">
-      <div class="pane pickable"><h4>Original (64×64 crop) <span id="hoverHex"></span></h4><canvas id="pOrig"></canvas></div>
+    <div class="muted" id="fileInfo" style="margin-top:6px">No image loaded yet.</div>
+    <input type="file" id="file" accept="image/*" hidden>
+  </section>
+
+  <!-- STEP 2 -->
+  <section class="card">
+    <h2><span class="n">2</span> Choose the square</h2>
+    <details class="help" data-k="s2" open><summary>How this step works</summary><div class="hb">
+      <p>The bright box is the part of your image that becomes the tile. It is always a <b>perfect square</b>. Everything outside the box is dimmed and thrown away.</p>
+      <ul>
+        <li><b>Move</b>: drag inside the box with one finger.</li>
+        <li><b>Resize</b>: drag one of the four white corner squares.</li>
+        <li><b>Draw a new box</b>: drag on the dimmed area.</li>
+        <li><b>Zoom / pan the picture</b>: pinch with two fingers (dragging with two fingers pans). Or use the Fit / 100% / Zoom to box buttons.</li>
+        <li><b>Exact edges</b>: zoom in on the box's edge, then use the arrow pad (tap or hold). Set the pad to <b>1 px</b> for precision or <b>10 px</b> for speed. You can also type exact X, Y and Size numbers.</li>
+      </ul>
+      <p>The label on the picture shows the box position and size in source pixels. <b>Snap ×64</b> sets the size to a clean multiple of 64, which gives the sharpest shrink.</p>
+      <p><b>Downscale method</b>: <i>Smooth</i> blends pixels (best for detailed art); <i>Crisp</i> picks single pixels (best for pixel art).</p>
+      <p>Page won't scroll? Touching the picture moves the box, so scroll by touching the dark space outside it.</p>
+    </div></details>
+    <div id="srcWrap">
+      <canvas id="src" tabindex="0"></canvas>
+      <div id="hint">Tap <b>&nbsp;Open image&nbsp;</b> above to start.</div>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="sm" id="zFit">Fit</button>
+      <button class="sm" id="z100">100%</button>
+      <button class="sm" id="zSel">Zoom to box</button>
+      <button class="sm" id="zOut">−</button>
+      <button class="sm" id="zIn">+</button>
+      <span class="muted" id="zInfo"></span>
+    </div>
+
+    <div class="row" style="margin-top:10px;align-items:flex-start">
+      <div class="pad">
+        <span></span><button id="nUp" aria-label="Move up">▲</button><span></span>
+        <button id="nLeft" aria-label="Move left">◀</button><span class="muted" style="text-align:center;align-self:center">move</span><button id="nRight" aria-label="Move right">▶</button>
+        <span></span><button id="nDown" aria-label="Move down">▼</button><span></span>
+      </div>
+      <div class="grow">
+        <div class="muted" style="margin-bottom:4px">Step size</div>
+        <div class="seg"><button id="st1" class="on">1 px</button><button id="st10">10 px</button></div>
+        <div class="muted" style="margin:10px 0 4px">Box size</div>
+        <div class="seg"><button id="nSmaller">− smaller</button><button id="nBigger">bigger +</button></div>
+      </div>
+    </div>
+
+    <div class="grid3" style="margin-top:10px">
+      <label class="f"><span>X (left)</span><input type="number" inputmode="numeric" id="fx" min="0" step="1"></label>
+      <label class="f"><span>Y (top)</span><input type="number" inputmode="numeric" id="fy" min="0" step="1"></label>
+      <label class="f"><span>Size</span><input type="number" inputmode="numeric" id="fs" min="1" step="1"></label>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <button class="sm" id="bMax">Biggest square</button>
+      <button class="sm" id="bCenter">Center</button>
+      <button class="sm" id="bSnap">Snap ×64</button>
+    </div>
+    <label class="f" style="margin-top:10px"><span>Downscale method</span>
+      <select id="method"><option value="smooth">Smooth (detailed art)</option><option value="nearest">Crisp (pixel art)</option></select>
+    </label>
+    <div class="muted" id="cropInfo" style="margin-top:8px"></div>
+  </section>
+
+  <!-- STEP 3 -->
+  <section class="card">
+    <h2><span class="n">3</span> Make the background transparent</h2>
+    <details class="help" data-k="s3" open><summary>How this step works</summary><div class="hb">
+      <ol>
+        <li>Tap <b>Pick color</b>, then <b>touch and hold</b> on the <b>Original</b> picture below. A magnifier appears above your finger. Slide to the background pixel you want gone and <b>lift</b> to add it. (Tap Pick color again for another.)</li>
+        <li>Quick option: <b>Pick 4 corners</b> grabs the background color from all four corners.</li>
+        <li>Adjust <b>Shades darker / lighter</b>. Example: background is off-white and you want to also remove colors up to 3 shades away in either direction, so set both to 3. Higher values remove more.</li>
+        <li>Watch the <b>Result</b> picture and the little previews in the bar at the bottom of the screen. The result is shown on a dark background so leftover fringe is easy to spot.</li>
+      </ol>
+      <p><b>Remove where</b>: <i>Connected to the edges</i> only removes background touching the outside of the picture, so matching colors <i>inside</i> your icon (white eyes, highlights) survive. <i>Everywhere</i> removes every matching pixel.</p>
+      <p><b>Clean edge color</b> fixes the pale halo: edge pixels are usually a blend of your art and the old background, so their color is replaced with the nearby art color. Raise it if a light fringe shows on dark. Lower it (or use 0) if thin outlines start disappearing.</p>
+      <p><b>Soft edge</b> fades pixels that are almost, but not quite, background. <b>Shrink edge</b> eats a thin layer off the outline.</p>
+      <p>The removal is done on the full-size crop <i>before</i> shrinking, so edges come out naturally smooth instead of stair-stepped.</p>
+    </div></details>
+
+    <div class="grid2">
+      <div class="pane"><h4>Original</h4><canvas id="pOrig" class="fit"></canvas></div>
+      <div class="pane"><h4>Result (on dark)</h4><canvas id="pMini" class="fit"></canvas></div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button id="bPick" class="primary grow">Pick color</button>
+      <button id="bCorners" class="sm">Pick 4 corners</button>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <input type="color" id="colHex" value="#ffffff" aria-label="Manual color">
+      <button class="sm" id="bAddHex">Add this color</button>
+      <button class="sm" id="bClear">Clear all</button>
+    </div>
+    <div class="chips" id="chips"></div>
+
+    <div class="sliderMount" data-id="tolDown" data-label="Shades darker −" data-min="0" data-max="128" data-val="3"></div>
+    <div class="sliderMount" data-id="tolUp" data-label="Shades lighter +" data-min="0" data-max="128" data-val="3"></div>
+    <label class="chk"><input type="checkbox" id="link" checked> Keep both sliders the same</label>
+
+    <label class="f" style="margin-top:8px"><span>Remove where</span>
+      <select id="mode">
+        <option value="contig">Connected to the edges (keeps matches inside the icon)</option>
+        <option value="global">Everywhere in the image</option>
+      </select>
+    </label>
+    <div class="sliderMount" data-id="clean" data-label="Clean edge color (px)" data-min="0" data-max="4" data-val="1"></div>
+    <div class="sliderMount" data-id="soft" data-label="Soft edge" data-min="0" data-max="48" data-val="0"></div>
+    <div class="sliderMount" data-id="erode" data-label="Shrink edge (tile px)" data-min="0" data-max="3" data-val="0"></div>
+    <div class="muted" id="statInfo"></div>
+  </section>
+
+  <!-- STEP 4 -->
+  <section class="card">
+    <h2><span class="n">4</span> Check the preview</h2>
+    <details class="help" data-k="s4" open><summary>How this step works</summary><div class="hb">
+      <p>These show your finished 64×64 tile on a light background, a dark background and a checkerboard (checkerboard = the transparent parts). This is how it will look in light and dark mode in your app.</p>
+      <ul>
+        <li><b>Zoom</b> slider: enlarge the tile. Scroll sideways inside a picture if it is bigger than the screen.</li>
+        <li><b>Pixel grid</b>: shows each real tile pixel.</li>
+        <li>Change the light / dark colors to match your app's actual backgrounds.</li>
+        <li><b>Actual size</b> is the real 64×64 at 1×. The dark version there is what to judge for jagged edges.</li>
+      </ul>
+      <p>Not happy? Go back to step 3 and adjust. Nothing is saved until step 5.</p>
+    </div></details>
+    <div class="sliderMount" data-id="zoom" data-label="Zoom (×)" data-min="1" data-max="16" data-val="3"></div>
+    <div class="row">
+      <label class="chk"><input type="checkbox" id="grid"> Pixel grid</label>
+      <label class="chk">Light <input type="color" id="lightBg" value="#f4f4f2"></label>
+      <label class="chk">Dark <input type="color" id="darkBg" value="#1c1c1e"></label>
+    </div>
+    <div class="panes" style="margin-top:8px">
+      <div class="pane"><h4>Original (before)</h4><canvas id="pOrig2"></canvas></div>
       <div class="pane"><h4>Result on light</h4><canvas id="pLight"></canvas></div>
       <div class="pane"><h4>Result on dark</h4><canvas id="pDark"></canvas></div>
-      <div class="pane"><h4>Result on checker</h4><canvas id="pCheck"></canvas></div>
+      <div class="pane"><h4>Result on checkerboard</h4><canvas id="pCheck"></canvas></div>
       <div class="pane"><h4>Actual size (1×)</h4>
-        <div class="row tight"><canvas id="aLight"></canvas><canvas id="aDark"></canvas></div>
+        <div class="row" style="gap:4px;flex-wrap:nowrap"><canvas id="aLight"></canvas><canvas id="aDark"></canvas></div>
       </div>
     </div>
   </section>
+
+  <!-- STEP 5 -->
+  <section class="card">
+    <h2><span class="n">5</span> Save your PNG</h2>
+    <details class="help" data-k="s5" open><summary>How this step works</summary><div class="hb">
+      <ul>
+        <li>Tick the size(s) you want: <b>64×64</b> (default), <b>128×128</b>, or both. The 128 version is made straight from your full-size crop, not stretched from the 64.</li>
+        <li>Type a file name. The size is added automatically, e.g. <i>sword_64.png</i> and <i>sword_128.png</i>. Turn on <b>Auto-number</b> to get <i>sword_001_64.png</i>, then <i>sword_002_64.png</i> on the next save, so files never overwrite each other.</li>
+        <li>Tap <b>Save PNG</b> (bottom bar). Files go to your phone's <b>Downloads</b> folder. If Chrome asks to allow multiple downloads, tap Allow.</li>
+        <li><b>Share</b> sends the file(s) to another app (Drive, Messages, email…) without saving first.</li>
+      </ul>
+      <p>PNG keeps the transparent background, which is what lets one file work in both light and dark mode.</p>
+    </div></details>
+    <div class="row">
+      <label class="chk"><input type="checkbox" id="e64" checked> 64×64</label>
+      <label class="chk"><input type="checkbox" id="e128"> 128×128</label>
+    </div>
+    <label class="f"><span>File name</span><input type="text" id="fname" value="tile" autocapitalize="off" autocomplete="off"></label>
+    <label class="chk"><input type="checkbox" id="autoNum"> Auto-number (_001, _002…)</label>
+    <div class="muted" id="fnPreview"></div>
+  </section>
 </main>
+
+<div id="bar">
+  <canvas id="mLight" title="On light"></canvas>
+  <canvas id="mDark" title="On dark"></canvas>
+  <button id="bSave" class="primary" disabled>Save PNG</button>
+  <button id="bShare" disabled>Share</button>
+</div>
+
+<div id="loupeBox"><canvas id="loupe" width="108" height="108"></canvas><span id="loupeLbl"></span></div>
 <div id="toast"></div>
+
+<div id="help"><div class="box">
+  <h2>Tile Maker 64 — how to use it</h2>
+  <p>This tool turns any picture into a small, square, transparent-background PNG tile (64×64, 128×128 or both) that works on light and dark backgrounds.</p>
+  <h3>Quick start</h3>
+  <ol>
+    <li><b>Open image</b> — pick a picture.</li>
+    <li><b>Choose the square</b> — drag the box (corners resize it) around the part you want.</li>
+    <li><b>Make the background transparent</b> — <b>Pick color</b>, touch-and-hold the background in the Original picture, lift. Adjust the shade sliders until it looks right.</li>
+    <li><b>Check the preview</b> on light and dark.</li>
+    <li><b>Save PNG</b> from the bottom bar.</li>
+  </ol>
+  <h3>Getting around</h3>
+  <ul>
+    <li>Every step has a blue <b>“How this step works”</b> box. Tap it to collapse or expand.</li>
+    <li>The bar at the bottom always shows a live mini preview on light and dark, plus Save and Share.</li>
+    <li><b>Undo / Redo</b> (top) cover the box position, colors and all sliders.</li>
+  </ul>
+  <h3>Common problems</h3>
+  <ul>
+    <li><b>Pale/light fringe around the icon on dark:</b> raise <i>Clean edge color</i> to 2, and/or set <i>Shrink edge</i> to 1. Check the dark preview.</li>
+    <li><b>Holes appear inside my icon:</b> set <i>Remove where</i> to “Connected to the edges”, or lower the shade sliders.</li>
+    <li><b>Some background is left:</b> raise the shade sliders a little, pick another background color (add several), or try <i>Pick 4 corners</i>.</li>
+    <li><b>Thin outlines vanished:</b> lower <i>Clean edge color</i> or <i>Shrink edge</i> to 0.</li>
+    <li><b>Edges look chunky:</b> use <i>Smooth</i> downscale, and try <i>Snap ×64</i> for the crop size.</li>
+    <li><b>Can't find the saved file:</b> it is in your phone's <b>Downloads</b> folder (Files app).</li>
+    <li><b>The page won't scroll:</b> touching the picture in step 2 moves the box. Scroll from the space outside it.</li>
+    <li><b>Very large photos:</b> the background is removed on a version of the crop capped at 2048 px, which is more than enough for a tile. The live preview uses a lighter version while you drag sliders, then refines itself a moment after you stop.</li>
+  </ul>
+  <h3>Using this file</h3>
+  <p>This is one self-contained HTML file. Keep it in Downloads or another folder, open it from the Files app with Chrome, and it works with no internet.</p>
+  <button class="primary close" id="helpClose">Got it — close</button>
+</div></div>
 
 <script>
 (() => {
 'use strict';
 const $ = id => document.getElementById(id);
-const OUT = 64;
+const OUT = 64, FAST_CAP = 1024, FULL_CAP = 2048;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const hex = c => '#' + c.map(v => v.toString(16).padStart(2, '0')).join('');
 const unhex = h => [1, 3, 5].map(i => parseInt(h.substr(i, 2), 16));
+const store = {
+  get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+};
+
+/* ---------- sliders (built from placeholders) ---------- */
+const SLIDERS = [];
+document.querySelectorAll('.sliderMount').forEach(m => {
+  const id = m.dataset.id; SLIDERS.push(id);
+  m.className = 'sl';
+  m.innerHTML = `<div class="slh"><span>${m.dataset.label}</span><b class="v" id="v_${id}">${m.dataset.val}</b></div>
+    <div class="slc"><button class="step" data-t="${id}" data-d="-1" aria-label="less">−</button>
+    <input type="range" id="${id}" min="${m.dataset.min}" max="${m.dataset.max}" step="1" value="${m.dataset.val}">
+    <button class="step" data-t="${id}" data-d="1" aria-label="more">+</button></div>`;
+});
+document.addEventListener('click', e => {
+  const b = e.target.closest('.step'); if (!b) return;
+  const el = $(b.dataset.t); el.value = clamp(+el.value + +b.dataset.d, +el.min, +el.max);
+  el.dispatchEvent(new Event('input')); el.dispatchEvent(new Event('change'));
+});
 
 /* ---------- state + history ---------- */
-let img = null, imgName = 'tile', counter = 1, pickMode = true;
-const defState = () => ({ sel: { x: 0, y: 0, s: OUT }, smooth: true, colors: [], down: 3, up: 3, link: true, soft: 0, erode: 0, mode: 'contig' });
+let img = null, imgName = 'tile', counter = 1, armed = false;
+const defState = () => ({ sel: { x: 0, y: 0, s: OUT }, smooth: true, colors: [], down: 3, up: 3, link: true, soft: 0, erode: 0, clean: 1, mode: 'contig' });
 let S = defState();
 let hist = [JSON.stringify(S)], hi = 0;
 
@@ -202,17 +365,29 @@ function commit() {
 function updHist() { $('btnUndo').disabled = hi <= 0; $('btnRedo').disabled = hi >= hist.length - 1; }
 function undo() { if (hi > 0) { hi--; S = JSON.parse(hist[hi]); syncUI(); render(); } }
 function redo() { if (hi < hist.length - 1) { hi++; S = JSON.parse(hist[hi]); syncUI(); render(); } }
+$('btnUndo').onclick = undo; $('btnRedo').onclick = redo;
 
 function toast(msg) {
   const t = $('toast'); t.textContent = msg; t.classList.add('show');
-  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 1800);
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.remove('show'), 2200);
 }
+
+/* ---------- help ---------- */
+document.querySelectorAll('details.help').forEach(d => {
+  if (store.get('help-' + d.dataset.k) === 'closed') d.open = false;
+  d.addEventListener('toggle', () => store.set('help-' + d.dataset.k, d.open ? 'open' : 'closed'));
+});
+const openHelp = () => { $('help').classList.add('open'); $('help').scrollTop = 0; };
+$('btnHelp').onclick = openHelp;
+$('helpClose').onclick = () => { $('help').classList.remove('open'); store.set('seenHelp', '1'); };
+if (!store.get('seenHelp')) openHelp();
 
 /* ---------- canvases ---------- */
 const mk = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
 const baseCv = mk(OUT, OUT), baseCtx = baseCv.getContext('2d', { willReadFrequently: true });
-const resCv = mk(OUT, OUT), resCtx = resCv.getContext('2d');
-let baseData = null, baseKey = '', transCount = 0;
+const resCv = mk(OUT, OUT), resCtx = resCv.getContext('2d', { willReadFrequently: true });
+const procCv = mk(1, 1);
+let cropCv = null, cropData = null, cropKey = '', baseData = null, transCount = 0, workInfo = '';
 
 const checkerPat = (() => {
   const c = mk(16, 16), x = c.getContext('2d');
@@ -221,9 +396,25 @@ const checkerPat = (() => {
   return c;
 })();
 
+/* Downscale a square region (el, sx, sy, sw) into dst (N×N). Smooth = repeated halving (area-like averaging, alpha-aware). */
+function downscale(el, sx, sy, sw, N, smooth, dst) {
+  const g = dst.getContext('2d');
+  g.clearRect(0, 0, N, N);
+  if (!smooth) { g.imageSmoothingEnabled = false; g.drawImage(el, sx, sy, sw, sw, 0, 0, N, N); return; }
+  while (sw >= N * 2) {
+    const nw = Math.max(N, Math.floor(sw / 2)), c = mk(nw, nw), cx = c.getContext('2d');
+    cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high';
+    cx.drawImage(el, sx, sy, sw, sw, 0, 0, nw, nw);
+    el = c; sx = sy = 0; sw = nw;
+  }
+  g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  g.drawImage(el, sx, sy, sw, sw, 0, 0, N, N);
+}
+
 /* ---------- source view (crop editor) ---------- */
 const src = $('src'), sctx = src.getContext('2d');
-let V = { scale: 1, ox: 0, oy: 0 }, cw = 0, ch = 0, dpr = 1, drag = null, spaceDown = false;
+let V = { scale: 1, ox: 0, oy: 0 }, cw = 0, ch = 0, dpr = 1, drag = null, pinch = null;
+const ptrs = new Map();
 
 function resizeSrc() {
   const r = src.getBoundingClientRect();
@@ -276,22 +467,32 @@ function drawSrc() {
   g.strokeStyle = '#fff'; g.strokeRect(ax, ay, as, as);
   g.fillStyle = '#fff'; g.strokeStyle = '#000';
   [[rx, ry], [rx + rs, ry], [rx, ry + rs], [rx + rs, ry + rs]].forEach(([hx, hy]) => {
-    g.fillRect(Math.round(hx) - 5, Math.round(hy) - 5, 10, 10); g.strokeRect(Math.round(hx) - 4.5, Math.round(hy) - 4.5, 10, 10);
+    g.fillRect(Math.round(hx) - 13, Math.round(hy) - 13, 26, 26); g.strokeRect(Math.round(hx) - 12.5, Math.round(hy) - 12.5, 26, 26);
   });
+  const label = `x ${x}  y ${y}  ${s}×${s}`;
+  g.font = '13px system-ui,sans-serif'; const tw = g.measureText(label).width + 12;
+  g.fillStyle = 'rgba(0,0,0,.75)'; g.fillRect(6, ch - 28, tw, 22);
+  g.fillStyle = '#fff'; g.fillText(label, 12, ch - 12);
   $('zInfo').textContent = Math.round(sc * 100) + '% zoom';
 }
 
 function corners() {
   const { x, y, s } = S.sel;
   return [
-    { cx: x, cy: y, ax: x + s, ay: y + s, cur: 'nwse-resize' },
-    { cx: x + s, cy: y, ax: x, ay: y + s, cur: 'nesw-resize' },
-    { cx: x, cy: y + s, ax: x + s, ay: y, cur: 'nesw-resize' },
-    { cx: x + s, cy: y + s, ax: x, ay: y, cur: 'nwse-resize' }
+    { cx: x, cy: y, ax: x + s, ay: y + s },
+    { cx: x + s, cy: y, ax: x, ay: y + s },
+    { cx: x, cy: y + s, ax: x + s, ay: y },
+    { cx: x + s, cy: y + s, ax: x, ay: y }
   ];
 }
 function hitHandle(p) {
-  return corners().find(c => Math.abs(V.ox + c.cx * V.scale - p.x) <= 10 && Math.abs(V.oy + c.cy * V.scale - p.y) <= 10);
+  const rs = S.sel.s * V.scale, rad = clamp(rs / 3, 18, 40);
+  let best = null, bd = rad;
+  corners().forEach(c => {
+    const d = Math.hypot(V.ox + c.cx * V.scale - p.x, V.oy + c.cy * V.scale - p.y);
+    if (d < bd) { bd = d; best = c; }
+  });
+  return best;
 }
 const inSel = p => { const q = toImg(p), { x, y, s } = S.sel; return q.x >= x && q.x < x + s && q.y >= y && q.y < y + s; };
 
@@ -305,42 +506,52 @@ function resizeFrom(ax, ay, px, py) {
   S.sel = { x: dirx > 0 ? ax : ax - s, y: diry > 0 ? ay : ay - s, s };
 }
 
+function startPinch() {
+  const [a, b] = [...ptrs.values()];
+  pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2, sc: V.scale, ox: V.ox, oy: V.oy };
+}
 src.addEventListener('contextmenu', e => e.preventDefault());
 src.addEventListener('pointerdown', e => {
   if (!img) return;
-  src.focus(); src.setPointerCapture(e.pointerId);
-  const p = pos(e);
-  if (e.button === 1 || e.button === 2 || (e.button === 0 && spaceDown)) { drag = { t: 'pan', sx: p.x, sy: p.y, ox: V.ox, oy: V.oy }; return; }
-  if (e.button !== 0) return;
+  src.setPointerCapture(e.pointerId);
+  const p = pos(e); ptrs.set(e.pointerId, p);
+  if (ptrs.size === 2) { if (drag) { commit(); drag = null; } startPinch(); return; }
+  if (ptrs.size > 2) return;
   const h = hitHandle(p), q = toImg(p);
   if (h) drag = { t: 'resize', ax: h.ax, ay: h.ay };
   else if (inSel(p)) drag = { t: 'move', qx: q.x, qy: q.y, sel: { ...S.sel } };
   else {
     const ax = clamp(Math.round(q.x), 0, img.width), ay = clamp(Math.round(q.y), 0, img.height);
-    drag = { t: 'resize', ax, ay }; resizeFrom(ax, ay, ax, ay); render();
+    drag = { t: 'resize', ax, ay }; resizeFrom(ax, ay, ax, ay); syncUI(); render();
   }
 });
 src.addEventListener('pointermove', e => {
-  if (!img) return;
-  const p = pos(e);
-  if (!drag) {
-    const h = hitHandle(p);
-    src.style.cursor = spaceDown ? 'grab' : h ? h.cur : inSel(p) ? 'move' : 'crosshair';
-    return;
+  if (!img || !ptrs.has(e.pointerId)) return;
+  const p = pos(e); ptrs.set(e.pointerId, p);
+  if (pinch && ptrs.size >= 2) {
+    const [a, b] = [...ptrs.values()];
+    const d = Math.hypot(a.x - b.x, a.y - b.y) || 1, mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+    const ns = clamp(pinch.sc * d / pinch.d, 0.02, 80);
+    const ix = (pinch.mx - pinch.ox) / pinch.sc, iy = (pinch.my - pinch.oy) / pinch.sc;
+    V.scale = ns; V.ox = mx - ix * ns; V.oy = my - iy * ns; drawSrc(); return;
   }
+  if (!drag) return;
   const q = toImg(p);
-  if (drag.t === 'pan') { V.ox = drag.ox + p.x - drag.sx; V.oy = drag.oy + p.y - drag.sy; drawSrc(); }
-  else if (drag.t === 'move') {
+  if (drag.t === 'move') {
     const s = drag.sel.s;
     S.sel = { s, x: clamp(drag.sel.x + Math.round(q.x - drag.qx), 0, img.width - s), y: clamp(drag.sel.y + Math.round(q.y - drag.qy), 0, img.height - s) };
-    syncUI(); render();
-  } else if (drag.t === 'resize') {
-    resizeFrom(drag.ax, drag.ay, Math.round(q.x), Math.round(q.y)); syncUI(); render();
+  } else {
+    resizeFrom(drag.ax, drag.ay, Math.round(q.x), Math.round(q.y));
   }
+  syncUI(); render();
 });
-const endDrag = () => { if (drag && drag.t !== 'pan') commit(); drag = null; };
-src.addEventListener('pointerup', endDrag);
-src.addEventListener('pointercancel', endDrag);
+const endPtr = e => {
+  ptrs.delete(e.pointerId);
+  if (pinch && ptrs.size < 2) pinch = null;
+  if (drag) { commit(); drag = null; }
+};
+src.addEventListener('pointerup', endPtr);
+src.addEventListener('pointercancel', endPtr);
 src.addEventListener('wheel', e => {
   if (!img) return; e.preventDefault();
   const p = pos(e); zoomAt(p.x, p.y, e.deltaY < 0 ? 1.18 : 1 / 1.18);
@@ -356,7 +567,7 @@ $('zSel').onclick = () => {
   V.ox = cw / 2 - (x + s / 2) * V.scale; V.oy = ch / 2 - (y + s / 2) * V.scale; drawSrc();
 };
 
-/* ---------- selection fields / buttons ---------- */
+/* ---------- selection fields / nudge pad ---------- */
 function setSel(x, y, s) {
   const m = Math.min(img.width, img.height);
   s = clamp(Math.round(s), 1, m);
@@ -384,46 +595,49 @@ $('bSnap').onclick = () => {
 };
 $('method').onchange = e => { S.smooth = e.target.value === 'smooth'; commit(); render(); };
 
-/* ---------- pipeline ---------- */
-function buildBase() {
-  const { x, y, s } = S.sel, key = `${x},${y},${s},${S.smooth}`;
-  if (key === baseKey) return; baseKey = key;
-  baseCtx.clearRect(0, 0, OUT, OUT);
-  if (!S.smooth) {
-    baseCtx.imageSmoothingEnabled = false;
-    baseCtx.drawImage(img, x, y, s, s, 0, 0, OUT, OUT);
-  } else {
-    let el = img, sx = x, sy = y, sw = s;
-    while (sw >= OUT * 2) {
-      const nw = Math.max(OUT, Math.floor(sw / 2)), c = mk(nw, nw), cx = c.getContext('2d');
-      cx.imageSmoothingEnabled = true; cx.imageSmoothingQuality = 'high';
-      cx.drawImage(el, sx, sy, sw, sw, 0, 0, nw, nw);
-      el = c; sx = sy = 0; sw = nw;
-    }
-    baseCtx.imageSmoothingEnabled = true; baseCtx.imageSmoothingQuality = 'high';
-    baseCtx.drawImage(el, sx, sy, sw, sw, 0, 0, OUT, OUT);
-  }
-  baseData = baseCtx.getImageData(0, 0, OUT, OUT);
+let step = 1;
+$('st1').onclick = () => { step = 1; $('st1').classList.add('on'); $('st10').classList.remove('on'); };
+$('st10').onclick = () => { step = 10; $('st10').classList.add('on'); $('st1').classList.remove('on'); };
+function nudge(dx, dy, ds) {
+  if (!img) return;
+  const { x, y, s } = S.sel;
+  if (ds) setSel(x, y, s + ds * step); else setSel(x + dx * step, y + dy * step, s);
+  syncUI(); render();
 }
+function holdRepeat(btn, fn) {
+  let t = 0, iv = 0, active = false;
+  const stop = () => { clearTimeout(t); clearInterval(iv); if (active) { active = false; commit(); } };
+  btn.addEventListener('pointerdown', e => { e.preventDefault(); active = true; fn(); t = setTimeout(() => { iv = setInterval(fn, 70); }, 380); });
+  ['pointerup', 'pointerleave', 'pointercancel'].forEach(ev => btn.addEventListener(ev, stop));
+  btn.addEventListener('contextmenu', e => e.preventDefault());
+}
+holdRepeat($('nUp'), () => nudge(0, -1, 0)); holdRepeat($('nDown'), () => nudge(0, 1, 0));
+holdRepeat($('nLeft'), () => nudge(-1, 0, 0)); holdRepeat($('nRight'), () => nudge(1, 0, 0));
+holdRepeat($('nSmaller'), () => nudge(0, 0, -1)); holdRepeat($('nBigger'), () => nudge(0, 0, 1));
 
-function buildResult() {
-  const n = OUT * OUT, out = new ImageData(new Uint8ClampedArray(baseData.data), OUT, OUT), d = out.data;
-  const keys = S.colors;
-  transCount = 0;
+/* ---------- pipeline ---------- */
+/* 1) crop at working resolution  2) remove background there  3) callers downscale the result */
+function process(cap) {
+  const { x, y, s } = S.sel, w = Math.min(s, cap), key = `${x},${y},${s},${w}`;
+  if (cropKey !== key) {
+    cropCv = mk(w, w);
+    const g = cropCv.getContext('2d', { willReadFrequently: true });
+    if (s <= cap) { g.imageSmoothingEnabled = false; g.drawImage(img, x, y, s, s, 0, 0, s, s); }
+    else downscale(img, x, y, s, w, true, cropCv);
+    cropData = g.getImageData(0, 0, w, w); cropKey = key;
+  }
+  const d = new Uint8ClampedArray(cropData.data), n = w * w, keys = S.colors;
   if (keys.length) {
     const lo = S.down, hi = S.up, soft = S.soft;
-    const ex = new Int16Array(n);
+    const ex = new Uint8Array(n);
     for (let i = 0; i < n; i++) {
-      const r = d[i * 4], g = d[i * 4 + 1], b = d[i * 4 + 2];
-      if (d[i * 4 + 3] === 0) { ex[i] = 0; continue; }
-      let best = 999;
-      for (const k of keys) {
-        let m = 0;
-        for (let c = 0; c < 3; c++) {
-          const v = c === 0 ? r : c === 1 ? g : b;
-          const e = Math.max(k[c] - lo - v, v - (k[c] + hi), 0);
-          if (e > m) m = e;
-        }
+      const i4 = i * 4;
+      if (d[i4 + 3] === 0) continue;
+      const r = d[i4], g = d[i4 + 1], b = d[i4 + 2];
+      let best = 255;
+      for (let k = 0; k < keys.length; k++) {
+        const K = keys[k];
+        let m = Math.max(K[0] - lo - r, r - (K[0] + hi), K[1] - lo - g, g - (K[1] + hi), K[2] - lo - b, b - (K[2] + hi), 0);
         if (m < best) best = m;
       }
       ex[i] = best;
@@ -433,40 +647,88 @@ function buildResult() {
     else {
       const q = new Int32Array(n); let qh = 0, qt = 0;
       const seed = i => { if (!rem[i] && ex[i] === 0) { rem[i] = 1; q[qt++] = i; } };
-      for (let i = 0; i < OUT; i++) { seed(i); seed((OUT - 1) * OUT + i); seed(i * OUT); seed(i * OUT + OUT - 1); }
+      for (let i = 0; i < w; i++) { seed(i); seed((w - 1) * w + i); seed(i * w); seed(i * w + w - 1); }
       while (qh < qt) {
-        const i = q[qh++], px = i % OUT, py = (i / OUT) | 0;
-        if (px > 0) seed(i - 1); if (px < OUT - 1) seed(i + 1);
-        if (py > 0) seed(i - OUT); if (py < OUT - 1) seed(i + OUT);
+        const i = q[qh++], px = i % w, py = (i / w) | 0;
+        if (px > 0) seed(i - 1); if (px < w - 1) seed(i + 1);
+        if (py > 0) seed(i - w); if (py < w - 1) seed(i + w);
       }
     }
-    const nb = i => {
-      const px = i % OUT, py = (i / OUT) | 0;
-      return (px > 0 && rem[i - 1]) || (px < OUT - 1 && rem[i + 1]) || (py > 0 && rem[i - OUT]) || (py < OUT - 1 && rem[i + OUT]);
-    };
     for (let i = 0; i < n; i++) {
       if (rem[i]) { d[i * 4 + 3] = 0; continue; }
-      if (soft > 0 && ex[i] <= soft && (S.mode === 'global' || nb(i)))
-        d[i * 4 + 3] = Math.round(d[i * 4 + 3] * ex[i] / (soft + 1));
-    }
-    for (let it = 0; it < S.erode; it++) {
-      const kill = [];
-      for (let i = 0; i < n; i++) {
-        if (d[i * 4 + 3] === 0) continue;
-        const px = i % OUT, py = (i / OUT) | 0;
-        if ((px > 0 && d[(i - 1) * 4 + 3] === 0) || (px < OUT - 1 && d[(i + 1) * 4 + 3] === 0) ||
-            (py > 0 && d[(i - OUT) * 4 + 3] === 0) || (py < OUT - 1 && d[(i + OUT) * 4 + 3] === 0)) kill.push(i);
+      if (soft > 0 && ex[i] <= soft) {
+        const px = i % w, py = (i / w) | 0;
+        if (S.mode === 'global' || (px > 0 && rem[i - 1]) || (px < w - 1 && rem[i + 1]) || (py > 0 && rem[i - w]) || (py < w - 1 && rem[i + w]))
+          d[i * 4 + 3] = Math.round(d[i * 4 + 3] * ex[i] / (soft + 1));
       }
-      kill.forEach(i => d[i * 4 + 3] = 0);
+    }
+    const E = S.erode > 0 ? Math.max(1, Math.round(S.erode * w / OUT)) : 0;
+    const Dc = S.clean > 0 ? Math.max(1, Math.round(S.clean * w / s)) : 0;
+    const D = Math.min(254, E + Dc);
+    if (D > 0) {
+      const dist = new Uint8Array(n).fill(255), q = new Int32Array(n); let qh = 0, qt = 0;
+      for (let i = 0; i < n; i++) {
+        if (d[i * 4 + 3] !== 0) continue;
+        const px = i % w, py = (i / w) | 0;
+        if ((px > 0 && d[(i - 1) * 4 + 3] !== 0) || (px < w - 1 && d[(i + 1) * 4 + 3] !== 0) ||
+            (py > 0 && d[(i - w) * 4 + 3] !== 0) || (py < w - 1 && d[(i + w) * 4 + 3] !== 0)) { dist[i] = 0; q[qt++] = i; }
+      }
+      const srcCount = qt;
+      while (qh < qt) {
+        const i = q[qh++], di = dist[i]; if (di >= D) continue;
+        const px = i % w, py = (i / w) | 0;
+        if (px > 0 && dist[i - 1] === 255 && d[(i - 1) * 4 + 3] !== 0) { dist[i - 1] = di + 1; q[qt++] = i - 1; }
+        if (px < w - 1 && dist[i + 1] === 255 && d[(i + 1) * 4 + 3] !== 0) { dist[i + 1] = di + 1; q[qt++] = i + 1; }
+        if (py > 0 && dist[i - w] === 255 && d[(i - w) * 4 + 3] !== 0) { dist[i - w] = di + 1; q[qt++] = i - w; }
+        if (py < w - 1 && dist[i + w] === 255 && d[(i + w) * 4 + 3] !== 0) { dist[i + w] = di + 1; q[qt++] = i + w; }
+      }
+      for (let k = srcCount; k < qt; k++) { const j = q[k]; if (dist[j] <= E) d[j * 4 + 3] = 0; }
+      if (Dc > 0) {
+        for (let k = qt - 1; k >= srcCount; k--) {
+          const j = q[k], dj = dist[j]; if (dj <= E) continue;
+          const px = j % w, py = (j / w) | 0;
+          let r = 0, g = 0, b = 0, c = 0;
+          const add = m => { if (dist[m] > dj && d[m * 4 + 3] !== 0) { r += d[m * 4]; g += d[m * 4 + 1]; b += d[m * 4 + 2]; c++; } };
+          if (px > 0) add(j - 1); if (px < w - 1) add(j + 1); if (py > 0) add(j - w); if (py < w - 1) add(j + w);
+          if (c) { d[j * 4] = r / c; d[j * 4 + 1] = g / c; d[j * 4 + 2] = b / c; }
+        }
+      }
     }
   }
-  for (let i = 0; i < n; i++) if (d[i * 4 + 3] === 0) transCount++;
-  resCtx.putImageData(out, 0, 0);
+  if (procCv.width !== w) { procCv.width = w; procCv.height = w; }
+  procCv.getContext('2d').putImageData(new ImageData(d, w, w), 0, 0);
+  return { cv: procCv, w };
+}
+
+let rafId = 0, fullTimer = 0;
+function render() {
+  drawSrc();
+  if (!img) return;
+  if (!rafId) rafId = requestAnimationFrame(() => { rafId = 0; compute(FAST_CAP); });
+  clearTimeout(fullTimer);
+  fullTimer = setTimeout(() => { if (S.sel.s > FAST_CAP) compute(FULL_CAP); }, 300);
+}
+function compute(cap) {
+  if (!img) return;
+  const P = process(cap);
+  downscale(P.cv, 0, 0, P.w, OUT, S.smooth, resCv);
+  downscale(cropCv, 0, 0, P.w, OUT, S.smooth, baseCv);
+  baseData = baseCtx.getImageData(0, 0, OUT, OUT);
+  const rd = resCtx.getImageData(0, 0, OUT, OUT).data; transCount = 0;
+  for (let i = 3; i < rd.length; i += 4) if (rd[i] === 0) transCount++;
+  const { s } = S.sel, r = s / OUT;
+  $('cropInfo').textContent = `Box ${s}×${s}px → ${OUT}×${OUT}` + (r >= 1 ? ` (÷${r.toFixed(2)})` : ` (×${(1 / r).toFixed(2)} enlarge)`) +
+    (Number.isInteger(r) ? '' : ' — not a whole multiple of 64; “Snap ×64” gives the sharpest result.') +
+    (s > cap ? ` Background removal runs on a ${P.w}px version of the crop.` : '');
+  $('statInfo').textContent = `Transparent: ${transCount} of ${OUT * OUT} tile pixels (${(transCount / (OUT * OUT) * 100).toFixed(1)}%)`;
+  drawPreviews();
+  $('bSave').disabled = $('bShare').disabled = false;
 }
 
 /* ---------- previews ---------- */
-function paint(cv, source, kind, z, grid) {
+function paint(cv, source, kind, z, grid, css) {
   const size = OUT * z; cv.width = size; cv.height = size;
+  if (css) cv.style.width = size + 'px';
   const g = cv.getContext('2d');
   if (kind === 'light') { g.fillStyle = $('lightBg').value; g.fillRect(0, 0, size, size); }
   else if (kind === 'dark') { g.fillStyle = $('darkBg').value; g.fillRect(0, 0, size, size); }
@@ -481,43 +743,34 @@ function paint(cv, source, kind, z, grid) {
 }
 function drawPreviews() {
   const z = +$('zoom').value, grid = $('grid').checked;
-  $('zoomVal').textContent = z;
-  paint($('pOrig'), baseCv, 'check', z, grid);
-  paint($('pLight'), resCv, 'light', z, grid);
-  paint($('pDark'), resCv, 'dark', z, grid);
-  paint($('pCheck'), resCv, 'check', z, grid);
+  paint($('pOrig'), baseCv, 'check', 4, false);
+  paint($('pMini'), resCv, 'dark', 4, false);
+  paint($('pOrig2'), baseCv, 'check', z, grid, true);
+  paint($('pLight'), resCv, 'light', z, grid, true);
+  paint($('pDark'), resCv, 'dark', z, grid, true);
+  paint($('pCheck'), resCv, 'check', z, grid, true);
   paint($('aLight'), resCv, 'light', 1, false);
   paint($('aDark'), resCv, 'dark', 1, false);
-  $('pOrig').classList.toggle('picking', pickMode);
-}
-
-function render() {
-  drawSrc();
-  if (!img) return;
-  buildBase(); buildResult(); drawPreviews();
-  const { s } = S.sel, r = s / OUT;
-  $('cropInfo').textContent = `Crop ${S.sel.x},${S.sel.y}  ${s}×${s}px → ${OUT}×${OUT}  (${r >= 1 ? '÷' + r.toFixed(2) : '×' + (1 / r).toFixed(2)})` +
-    (Number.isInteger(r) ? '' : '  — not a whole multiple of 64; “Snap size ×64” gives the cleanest result');
-  $('statInfo').textContent = `Transparent: ${transCount} px (${(transCount / (OUT * OUT) * 100).toFixed(1)}%)`;
-  $('bSave').disabled = $('bCopy').disabled = false;
+  paint($('mLight'), resCv, 'light', 1, false);
+  paint($('mDark'), resCv, 'dark', 1, false);
 }
 
 function syncUI(except) {
   const set = (id, v) => { const el = $(id); if (el !== except && el.value !== String(v)) el.value = v; };
   set('fx', S.sel.x); set('fy', S.sel.y); set('fs', S.sel.s);
   set('method', S.smooth ? 'smooth' : 'nearest'); set('mode', S.mode);
-  set('tolDown', S.down); set('tolUp', S.up); set('soft', S.soft); set('erode', S.erode);
+  set('tolDown', S.down); set('tolUp', S.up); set('soft', S.soft); set('erode', S.erode); set('clean', S.clean);
   $('link').checked = S.link;
-  $('vDown').textContent = S.down; $('vUp').textContent = S.up; $('vSoft').textContent = S.soft; $('vErode').textContent = S.erode;
+  SLIDERS.forEach(id => { $('v_' + id).textContent = $(id).value; });
   const box = $('chips'); box.innerHTML = '';
-  if (!S.colors.length) box.innerHTML = '<span class="muted">No colors picked yet.</span>';
+  if (!S.colors.length) box.innerHTML = '<span class="muted">No background colors picked yet.</span>';
   S.colors.forEach((c, i) => {
     const b = document.createElement('button'); b.className = 'chip'; b.title = 'Remove this color';
     b.innerHTML = `<i style="background:${hex(c)}"></i><span>${hex(c)}</span><b>×</b>`;
     b.onclick = () => { S.colors.splice(i, 1); commit(); syncUI(); render(); };
     box.appendChild(b);
   });
-  updHist();
+  updHist(); updFnPreview();
 }
 
 /* ---------- transparency controls ---------- */
@@ -529,110 +782,118 @@ $('tolDown').oninput = e => { S.down = +e.target.value; if (S.link) S.up = S.dow
 $('tolUp').oninput = e => { S.up = +e.target.value; if (S.link) S.down = S.up; syncUI(e.target); render(); };
 $('soft').oninput = e => { S.soft = +e.target.value; syncUI(e.target); render(); };
 $('erode').oninput = e => { S.erode = +e.target.value; syncUI(e.target); render(); };
-['tolDown', 'tolUp', 'soft', 'erode'].forEach(id => $(id).addEventListener('change', () => commit()));
+$('clean').oninput = e => { S.clean = +e.target.value; syncUI(e.target); render(); };
+['tolDown', 'tolUp', 'soft', 'erode', 'clean'].forEach(id => $(id).addEventListener('change', () => commit()));
 $('link').onchange = e => { S.link = e.target.checked; if (S.link) S.up = S.down; commit(); syncUI(); render(); };
 $('mode').onchange = e => { S.mode = e.target.value; commit(); render(); };
 $('bClear').onclick = () => { S.colors = []; commit(); syncUI(); render(); };
-$('bAddHex').onclick = () => { if (addColor(unhex($('colHex').value))) { commit(); syncUI(); render(); } };
+$('bAddHex').onclick = () => { if (addColor(unhex($('colHex').value))) { commit(); syncUI(); render(); } else toast('Color already in the list'); };
 $('bCorners').onclick = () => {
-  if (!img) return;
+  if (!img || !baseData) { toast('Open an image first'); return; }
   const d = baseData.data; let any = false;
   [[0, 0], [OUT - 1, 0], [0, OUT - 1], [OUT - 1, OUT - 1]].forEach(([x, y]) => { const i = (y * OUT + x) * 4; any = addColor([d[i], d[i + 1], d[i + 2]]) || any; });
-  if (any) { commit(); syncUI(); render(); }
+  if (any) { commit(); syncUI(); render(); toast('Corner colors added'); }
 };
-$('bPick').onclick = () => { pickMode = !pickMode; $('bPick').classList.toggle('on', pickMode); drawPreviews(); };
 
-const pOrig = $('pOrig');
+/* eyedropper with loupe: arm, touch-and-hold on Original, slide, lift to pick */
+const pOrig = $('pOrig'), lctx = $('loupe').getContext('2d');
+function setArmed(a) {
+  armed = a; pOrig.classList.toggle('armed', a);
+  $('bPick').textContent = a ? 'Touch & hold the Original picture…' : 'Pick color';
+  $('bPick').classList.toggle('on', a);
+}
+$('bPick').onclick = () => { if (!img) { toast('Open an image first'); return; } setArmed(!armed); };
 function pixAt(e) {
   const r = pOrig.getBoundingClientRect();
   return { x: clamp(Math.floor((e.clientX - r.left) / r.width * OUT), 0, OUT - 1), y: clamp(Math.floor((e.clientY - r.top) / r.height * OUT), 0, OUT - 1) };
 }
-pOrig.addEventListener('mousemove', e => {
-  if (!baseData) return;
-  const p = pixAt(e), i = (p.y * OUT + p.x) * 4, c = [baseData.data[i], baseData.data[i + 1], baseData.data[i + 2]];
-  $('hoverHex').textContent = `(${p.x},${p.y}) ${hex(c)}`;
+const colorAt = p => { const i = (p.y * OUT + p.x) * 4; return [baseData.data[i], baseData.data[i + 1], baseData.data[i + 2]]; };
+function showLoupe(e) {
+  const p = pixAt(e), c = colorAt(p);
+  lctx.imageSmoothingEnabled = false; lctx.fillStyle = '#000'; lctx.fillRect(0, 0, 108, 108);
+  lctx.drawImage(baseCv, p.x - 4, p.y - 4, 9, 9, 0, 0, 108, 108);
+  lctx.lineWidth = 2; lctx.strokeStyle = '#000'; lctx.strokeRect(48, 48, 12, 12);
+  lctx.strokeStyle = '#fff'; lctx.strokeRect(49, 49, 10, 10);
+  $('loupeLbl').textContent = `${hex(c)}  (${p.x},${p.y})`;
+  const box = $('loupeBox'); box.style.display = 'block';
+  box.style.left = clamp(e.clientX - 60, 4, innerWidth - 124) + 'px';
+  box.style.top = (e.clientY - 165 < 60 ? e.clientY + 50 : e.clientY - 165) + 'px';
+}
+let picking = false;
+pOrig.addEventListener('pointerdown', e => { if (!armed || !baseData) return; picking = true; pOrig.setPointerCapture(e.pointerId); showLoupe(e); });
+pOrig.addEventListener('pointermove', e => {
+  if (picking) showLoupe(e);
 });
-pOrig.addEventListener('mouseleave', () => $('hoverHex').textContent = '');
-pOrig.addEventListener('click', e => {
-  if (!baseData || !pickMode) return;
-  const p = pixAt(e), i = (p.y * OUT + p.x) * 4;
-  if (addColor([baseData.data[i], baseData.data[i + 1], baseData.data[i + 2]])) { commit(); syncUI(); render(); }
-  else toast('Color already in the list');
+pOrig.addEventListener('pointerup', e => {
+  if (!picking) return; picking = false; $('loupeBox').style.display = 'none';
+  const c = colorAt(pixAt(e));
+  if (addColor(c)) { commit(); syncUI(); render(); toast(`Added ${hex(c)}. Tap Pick color for another.`); }
+  else toast('That color is already in the list');
+  setArmed(false);
 });
-['zoom', 'grid', 'lightBg', 'darkBg'].forEach(id => $(id).addEventListener('input', () => img && drawPreviews()));
+pOrig.addEventListener('pointercancel', () => { picking = false; $('loupeBox').style.display = 'none'; });
+['zoom', 'grid', 'lightBg', 'darkBg'].forEach(id => $(id).addEventListener('input', () => { $('v_zoom').textContent = $('zoom').value; if (img) drawPreviews(); }));
 
 /* ---------- loading ---------- */
 function loadFile(f) {
   if (!f || !f.type.startsWith('image/')) { toast('That is not an image file'); return; }
   const url = URL.createObjectURL(f), im = new Image();
   im.onload = () => {
-    img = im; imgName = (f.name || 'tile').replace(/\.[^.]+$/, '') || 'tile';
+    img = im; imgName = (f.name || 'tile').replace(/\.[^.]+$/, '').replace(/[^\w\- ]+/g, '_') || 'tile';
     S = defState(); const m = Math.min(im.width, im.height);
     S.sel = { s: m, x: Math.floor((im.width - m) / 2), y: Math.floor((im.height - m) / 2) };
-    hist = [JSON.stringify(S)]; hi = 0; baseKey = '';
-    $('fname').value = imgName + '_64'; counter = 1;
+    hist = [JSON.stringify(S)]; hi = 0; cropKey = '';
+    $('fname').value = imgName; counter = 1; setArmed(false);
     $('fileInfo').textContent = `${f.name || 'pasted image'} · ${im.width}×${im.height}px`;
     resizeSrc(); fitView(); syncUI(); render();
+    toast('Image loaded. Next: choose the square (step 2).');
   };
   im.onerror = () => toast('Could not read that image');
   im.src = url;
 }
 $('btnOpen').onclick = () => $('file').click();
 $('file').onchange = e => { loadFile(e.target.files[0]); e.target.value = ''; };
-window.addEventListener('dragover', e => { e.preventDefault(); document.body.classList.add('drop'); });
-window.addEventListener('dragleave', e => { if (!e.relatedTarget) document.body.classList.remove('drop'); });
-window.addEventListener('drop', e => { e.preventDefault(); document.body.classList.remove('drop'); loadFile(e.dataTransfer.files[0]); });
-window.addEventListener('paste', e => {
-  const it = [...(e.clipboardData ? e.clipboardData.items : [])].find(i => i.type.startsWith('image/'));
-  if (it) loadFile(it.getAsFile());
-});
-$('btnUndo').onclick = undo; $('btnRedo').onclick = redo;
-
-/* ---------- keyboard ---------- */
-window.addEventListener('keydown', e => {
-  const t = e.target, typing = t.tagName === 'INPUT' && t.type !== 'range' && t.type !== 'checkbox' || t.tagName === 'SELECT';
-  if ((e.ctrlKey || e.metaKey) && !typing) {
-    const k = e.key.toLowerCase();
-    if (k === 'z') { e.preventDefault(); e.shiftKey ? redo() : undo(); return; }
-    if (k === 'y') { e.preventDefault(); redo(); return; }
-  }
-  if (typing) return;
-  if (e.key === ' ') { spaceDown = true; src.style.cursor = 'grab'; if (t === src || t === document.body) e.preventDefault(); return; }
-  if (e.key === 'Escape' && pickMode) { $('bPick').click(); return; }
-  if (!img || !e.key.startsWith('Arrow')) return;
-  e.preventDefault();
-  const st = e.shiftKey ? 10 : 1;
-  const dx = e.key === 'ArrowLeft' ? -st : e.key === 'ArrowRight' ? st : 0;
-  const dy = e.key === 'ArrowUp' ? -st : e.key === 'ArrowDown' ? st : 0;
-  const { x, y, s } = S.sel;
-  if (e.altKey) setSel(x, y, s + (dx || dy));
-  else setSel(x + dx, y + dy, s);
-  commit(); syncUI(); render();
-});
-window.addEventListener('keyup', e => { if (e.key === ' ') { spaceDown = false; src.style.cursor = 'crosshair'; } });
+window.addEventListener('dragover', e => e.preventDefault());
+window.addEventListener('drop', e => { e.preventDefault(); loadFile(e.dataTransfer.files[0]); });
 
 /* ---------- export ---------- */
-function fileName() {
-  let n = ($('fname').value.trim() || 'tile_64').replace(/\.png$/i, '').replace(/[\\/:*?"<>|]/g, '_');
-  if ($('autoNum').checked) n += '_' + String(counter).padStart(3, '0');
-  return n + '.png';
+function sizes() { const a = []; if ($('e64').checked) a.push(64); if ($('e128').checked) a.push(128); return a; }
+function baseName() { return ($('fname').value.trim() || 'tile').replace(/\.png$/i, '').replace(/[\\/:*?"<>|]/g, '_'); }
+function nameFor(N) { return baseName() + ($('autoNum').checked ? '_' + String(counter).padStart(3, '0') : '') + '_' + N + '.png'; }
+function updFnPreview() { const a = sizes(); $('fnPreview').textContent = a.length ? 'Will save: ' + a.map(nameFor).join(', ') : 'Tick at least one size.'; }
+['e64', 'e128', 'autoNum', 'fname'].forEach(id => $(id).addEventListener('input', updFnPreview));
+
+async function makeFiles() {
+  const a = sizes();
+  if (!a.length) { toast('Tick at least one size (64 or 128).'); return null; }
+  const P = process(FULL_CAP), files = [];
+  for (const N of a) {
+    const c = mk(N, N); downscale(P.cv, 0, 0, P.w, N, S.smooth, c);
+    const b = await new Promise(r => c.toBlob(r, 'image/png'));
+    files.push(new File([b], nameFor(N), { type: 'image/png' }));
+  }
+  return files;
 }
-$('bSave').onclick = () => {
+$('bSave').onclick = async () => {
   if (!img) return;
-  const name = fileName();
-  resCv.toBlob(b => {
-    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = name;
-    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
-    if ($('autoNum').checked) counter++;
-    toast('Saved ' + name);
-  }, 'image/png');
+  const files = await makeFiles(); if (!files) return;
+  for (const f of files) {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(f); a.download = f.name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+    await new Promise(r => setTimeout(r, 400));
+  }
+  if ($('autoNum').checked) counter++;
+  updFnPreview(); toast('Saved to Downloads: ' + files.map(f => f.name).join(', '));
+  render();
 };
-$('bCopy').onclick = () => {
+$('bShare').onclick = async () => {
   if (!img) return;
-  resCv.toBlob(async b => {
-    try { await navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]); toast('Copied to clipboard'); }
-    catch (err) { toast('Clipboard not available here — use Save PNG'); }
-  }, 'image/png');
+  const files = await makeFiles(); if (!files) return;
+  try {
+    if (navigator.canShare && navigator.canShare({ files })) { await navigator.share({ files, title: 'Tile' }); if ($('autoNum').checked) { counter++; updFnPreview(); } }
+    else toast('Sharing files is not supported here. Use Save PNG.');
+  } catch (err) { if (err && err.name !== 'AbortError') toast('Share failed. Use Save PNG.'); }
+  render();
 };
 
 syncUI(); resizeSrc();
