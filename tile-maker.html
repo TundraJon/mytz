@@ -66,9 +66,13 @@ b.v{font-variant-numeric:tabular-nums}
 .slc{display:flex;align-items:center;gap:6px}
 .slc .step{min-height:42px;width:44px;padding:0;font-size:22px;flex:none;touch-action:manipulation}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0;min-height:30px}
-.chip{display:flex;align-items:center;gap:8px;padding:0 12px 0 6px;min-height:42px;font-size:14px}
-.chip i{width:26px;height:26px;border-radius:6px;border:1px solid #0008;display:inline-block}
-.chip b{color:var(--danger);font-size:18px}
+.chip{display:flex;align-items:stretch;gap:10px;padding:6px 6px 6px 6px;font-size:14px;border-radius:12px;background:var(--panel2);border:2px solid var(--line);cursor:pointer;user-select:none;-webkit-user-select:none;min-width:150px}
+.chip.sel{border-color:var(--accent);background:#20324d}
+.chip i{width:40px;border-radius:8px;border:1px solid #0008;display:block;flex:none}
+.chip .tx{display:flex;flex-direction:column;justify-content:center;line-height:1.35;flex:1}
+.chip .tx b{font-variant-numeric:tabular-nums;font-size:15px}
+.chip .tx span{color:var(--muted);font-size:13px;font-variant-numeric:tabular-nums}
+.chip .rm{align-self:flex-start;color:var(--danger);font-size:22px;line-height:1;padding:2px 6px;margin-left:2px}
 .pane{min-width:0}
 .pane h4{margin:0 0 4px;font-size:13px;color:var(--muted);font-weight:600}
 .pane canvas{display:block;image-rendering:pixelated;border:1px solid var(--line);border-radius:6px}
@@ -129,6 +133,7 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
         <li><b>Resize</b>: drag one of the four white corner squares.</li>
         <li><b>Draw a new box</b>: drag on the dimmed area.</li>
         <li><b>Zoom / pan the picture</b>: pinch with two fingers (dragging with two fingers pans). Or use the Fit / 100% / Zoom to box buttons.</li>
+        <li><b>Straighten</b>: if the picture is tilted, use the Straighten slider (or type degrees, like 1.5) to turn it under the box. A grid appears while you adjust so you can line up an edge or horizon. If the box overlaps an empty corner, those pixels become transparent and you'll see a warning.</li>
         <li><b>Exact edges</b>: zoom in on the box's edge, then use the arrow pad (tap or hold). Set the pad to <b>1 px</b> for precision or <b>10 px</b> for speed. You can also type exact X, Y and Size numbers.</li>
       </ul>
       <p>The label on the picture shows the box position and size in source pixels. <b>Snap ×64</b> sets the size to a clean multiple of 64, which gives the sharpest shrink.</p>
@@ -148,7 +153,18 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
       <span class="muted" id="zInfo"></span>
     </div>
 
-    <div class="row" style="margin-top:10px;align-items:flex-start">
+    <div style="margin-top:12px">
+      <div class="slh"><span><b>Straighten</b> <span class="muted">(+ turns the picture clockwise)</span></span></div>
+      <div class="slc"><button class="step" data-t="angle" data-d="-1" aria-label="less">−</button>
+        <input type="range" id="angle" min="-450" max="450" step="1" value="0">
+        <button class="step" data-t="angle" data-d="1" aria-label="more">+</button></div>
+      <div class="row" style="margin-top:4px">
+        <label class="f grow"><span>Degrees</span><input type="number" id="angNum" inputmode="decimal" step="0.1" min="-45" max="45" value="0"></label>
+        <button id="angReset" class="sm" style="align-self:flex-end">Reset to 0°</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:12px;align-items:flex-start">
       <div class="pad">
         <span></span><button id="nUp" aria-label="Move up">▲</button><span></span>
         <button id="nLeft" aria-label="Move left">◀</button><span class="muted" style="text-align:center;align-self:center">move</span><button id="nRight" aria-label="Move right">▶</button>
@@ -163,8 +179,8 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
     </div>
 
     <div class="grid3" style="margin-top:10px">
-      <label class="f"><span>X (left)</span><input type="number" inputmode="numeric" id="fx" min="0" step="1"></label>
-      <label class="f"><span>Y (top)</span><input type="number" inputmode="numeric" id="fy" min="0" step="1"></label>
+      <label class="f"><span>X (left)</span><input type="number" inputmode="numeric" id="fx" step="1"></label>
+      <label class="f"><span>Y (top)</span><input type="number" inputmode="numeric" id="fy" step="1"></label>
       <label class="f"><span>Size</span><input type="number" inputmode="numeric" id="fs" min="1" step="1"></label>
     </div>
     <div class="row" style="margin-top:8px">
@@ -185,7 +201,7 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
       <ol>
         <li>Tap <b>Pick color</b>, then <b>touch and hold</b> on the <b>Original</b> picture below. A magnifier appears above your finger. Slide to the background pixel you want gone and <b>lift</b> to add it. (Tap Pick color again for another.)</li>
         <li>Quick option: <b>Pick 4 corners</b> grabs the background color from all four corners.</li>
-        <li>Adjust <b>Shades darker / lighter</b>. Example: background is off-white and you want to also remove colors up to 3 shades away in either direction, so set both to 3. Higher values remove more.</li>
+        <li>Each picked color is a <b>pill</b>: swatch on the left, hex code on the right, and under it <b>− N + N</b>, the darker and lighter shades removed for that color. <b>Tap a pill to select it</b> (it gets a blue outline); the two sliders below then change <i>only that color</i>. Example: white at 5/5, blue at 30/30, red at 13/13. New colors start at 3/3. Tap the × to delete a color.</li>
         <li>Watch the <b>Result</b> picture and the little previews in the bar at the bottom of the screen. The result is shown on a dark background so leftover fringe is easy to spot.</li>
       </ol>
       <p><b>Remove where</b>: <i>Connected to the edges</i> only removes background touching the outside of the picture, so matching colors <i>inside</i> your icon (white eyes, highlights) survive. <i>Everywhere</i> removes every matching pixel.</p>
@@ -208,6 +224,7 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
       <button class="sm" id="bClear">Clear all</button>
     </div>
     <div class="chips" id="chips"></div>
+    <div class="muted" id="editing" style="margin-bottom:2px"></div>
 
     <div class="sliderMount" data-id="tolDown" data-label="Shades darker −" data-min="0" data-max="128" data-val="3"></div>
     <div class="sliderMount" data-id="tolUp" data-label="Shades lighter +" data-min="0" data-max="128" data-val="3"></div>
@@ -235,6 +252,7 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
         <li><b>Pixel grid</b>: shows each real tile pixel.</li>
         <li>Change the light / dark colors to match your app's actual backgrounds.</li>
         <li><b>Actual size</b> is the real 64×64 at 1×. The dark version there is what to judge for jagged edges.</li>
+        <li>Below it, the <b>128×128</b> version on light (top) and dark (bottom). This is a true 128 render, identical to the 128 file you can save.</li>
       </ul>
       <p>Not happy? Go back to step 3 and adjust. Nothing is saved until step 5.</p>
     </div></details>
@@ -251,6 +269,8 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
       <div class="pane"><h4>Result on checkerboard</h4><canvas id="pCheck"></canvas></div>
       <div class="pane"><h4>Actual size (1×)</h4>
         <div class="row" style="gap:4px;flex-wrap:nowrap"><canvas id="aLight"></canvas><canvas id="aDark"></canvas></div>
+        <h4 style="margin-top:12px">Actual size 128×128 (1×)</h4>
+        <div style="display:flex;flex-direction:column;gap:6px"><canvas id="bLight"></canvas><canvas id="bDark"></canvas></div>
       </div>
     </div>
   </section>
@@ -293,8 +313,8 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
   <h3>Quick start</h3>
   <ol>
     <li><b>Open image</b> — pick a picture.</li>
-    <li><b>Choose the square</b> — drag the box (corners resize it) around the part you want.</li>
-    <li><b>Make the background transparent</b> — <b>Pick color</b>, touch-and-hold the background in the Original picture, lift. Adjust the shade sliders until it looks right.</li>
+    <li><b>Choose the square</b> — drag the box (corners resize it) around the part you want. If the picture is tilted, use <b>Straighten</b>.</li>
+    <li><b>Make the background transparent</b> — <b>Pick color</b>, touch-and-hold the background in the Original picture, lift. Tap a color pill, then adjust the shade sliders for that color. Every color keeps its own − / + amounts.</li>
     <li><b>Check the preview</b> on light and dark.</li>
     <li><b>Save PNG</b> from the bottom bar.</li>
   </ol>
@@ -308,7 +328,7 @@ kbd{background:#111318;border:1px solid var(--line);border-radius:4px;padding:0 
   <ul>
     <li><b>Pale/light fringe around the icon on dark:</b> raise <i>Clean edge color</i> to 2, and/or set <i>Shrink edge</i> to 1. Check the dark preview.</li>
     <li><b>Holes appear inside my icon:</b> set <i>Remove where</i> to “Connected to the edges”, or lower the shade sliders.</li>
-    <li><b>Some background is left:</b> raise the shade sliders a little, pick another background color (add several), or try <i>Pick 4 corners</i>.</li>
+    <li><b>Some background is left:</b> tap that color's pill and raise its shade sliders a little, pick another background color (add several), or try <i>Pick 4 corners</i>.</li>
     <li><b>Thin outlines vanished:</b> lower <i>Clean edge color</i> or <i>Shrink edge</i> to 0.</li>
     <li><b>Edges look chunky:</b> use <i>Smooth</i> downscale, and try <i>Snap ×64</i> for the crop size.</li>
     <li><b>Can't find the saved file:</b> it is in your phone's <b>Downloads</b> folder (Files app).</li>
@@ -351,7 +371,7 @@ document.addEventListener('click', e => {
 
 /* ---------- state + history ---------- */
 let img = null, imgName = 'tile', counter = 1, armed = false;
-const defState = () => ({ sel: { x: 0, y: 0, s: OUT }, smooth: true, colors: [], down: 3, up: 3, link: true, soft: 0, erode: 0, clean: 1, mode: 'contig' });
+const defState = () => ({ sel: { x: 0, y: 0, s: OUT }, angle: 0, smooth: true, colors: [], cur: -1, link: true, soft: 0, erode: 0, clean: 1, mode: 'contig' });
 let S = defState();
 let hist = [JSON.stringify(S)], hi = 0;
 
@@ -384,6 +404,7 @@ if (!store.get('seenHelp')) openHelp();
 
 /* ---------- canvases ---------- */
 const mk = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; };
+const res128Cv = mk(128, 128);
 const baseCv = mk(OUT, OUT), baseCtx = baseCv.getContext('2d', { willReadFrequently: true });
 const resCv = mk(OUT, OUT), resCtx = resCv.getContext('2d', { willReadFrequently: true });
 const procCv = mk(1, 1);
@@ -413,7 +434,7 @@ function downscale(el, sx, sy, sw, N, smooth, dst) {
 
 /* ---------- source view (crop editor) ---------- */
 const src = $('src'), sctx = src.getContext('2d');
-let V = { scale: 1, ox: 0, oy: 0 }, cw = 0, ch = 0, dpr = 1, drag = null, pinch = null;
+let V = { scale: 1, ox: 0, oy: 0 }, cw = 0, ch = 0, dpr = 1, drag = null, pinch = null, guides = false, guideTimer = 0;
 const ptrs = new Map();
 
 function resizeSrc() {
@@ -426,10 +447,31 @@ function resizeSrc() {
 }
 new ResizeObserver(resizeSrc).observe(src);
 
+/* Stage space = the original image's pixel coordinates. The picture can be rotated about its center;
+   the crop box lives in stage space and may cover the rotated picture's bounding area. */
+function bounds() {
+  const W = img.width, H = img.height, a = S.angle * Math.PI / 180, c = Math.abs(Math.cos(a)), sn = Math.abs(Math.sin(a));
+  const BW = W * c + H * sn, BH = W * sn + H * c;
+  const x0 = Math.ceil(W / 2 - BW / 2 - 1e-6), y0 = Math.ceil(H / 2 - BH / 2 - 1e-6);
+  const x1 = Math.floor(W / 2 + BW / 2 + 1e-6), y1 = Math.floor(H / 2 + BH / 2 + 1e-6);
+  return { x0, y0, x1, y1, w: x1 - x0, h: y1 - y0 };
+}
+function inscribedSide() {
+  const a = S.angle * Math.PI / 180;
+  return Math.max(1, Math.floor(Math.min(img.width, img.height) / (Math.abs(Math.cos(a)) + Math.abs(Math.sin(a))) + 1e-6));
+}
+function cornersOutside() {
+  const { x, y, s } = S.sel, W = img.width, H = img.height, a = -S.angle * Math.PI / 180, cs = Math.cos(a), sn = Math.sin(a);
+  return [[x, y], [x + s, y], [x, y + s], [x + s, y + s]].some(([px, py]) => {
+    const dx = px - W / 2, dy = py - H / 2, ix = dx * cs - dy * sn + W / 2, iy = dx * sn + dy * cs + H / 2;
+    return ix < -0.5 || iy < -0.5 || ix > W + 0.5 || iy > H + 0.5;
+  });
+}
 function fitView() {
   if (!img) return;
-  V.scale = Math.min(cw / img.width, ch / img.height) * 0.96;
-  V.ox = (cw - img.width * V.scale) / 2; V.oy = (ch - img.height * V.scale) / 2;
+  const B = bounds();
+  V.scale = Math.min(cw / B.w, ch / B.h) * 0.96;
+  V.ox = cw / 2 - img.width / 2 * V.scale; V.oy = ch / 2 - img.height / 2 * V.scale;
 }
 function zoomAt(mx, my, f) {
   const ns = clamp(V.scale * f, 0.02, 80);
@@ -446,11 +488,20 @@ function drawSrc() {
   $('hint').classList.toggle('hide', !!img);
   if (!img) { $('zInfo').textContent = ''; return; }
   const W = img.width, H = img.height, sc = V.scale;
+  g.save();
+  g.translate(V.ox + W / 2 * sc, V.oy + H / 2 * sc); g.rotate(S.angle * Math.PI / 180); g.translate(-W / 2 * sc, -H / 2 * sc);
   g.fillStyle = g.createPattern(checkerPat, 'repeat');
-  g.fillRect(V.ox, V.oy, W * sc, H * sc);
+  g.fillRect(0, 0, W * sc, H * sc);
   g.imageSmoothingEnabled = sc < 1;
-  g.drawImage(img, V.ox, V.oy, W * sc, H * sc);
-  if (sc >= 8) {
+  g.drawImage(img, 0, 0, W * sc, H * sc);
+  g.restore();
+  if (guides) {
+    g.strokeStyle = 'rgba(80,200,255,.45)'; g.lineWidth = 1; g.beginPath();
+    for (let x = 0; x < cw; x += 40) { g.moveTo(x + .5, 0); g.lineTo(x + .5, ch); }
+    for (let y = 0; y < ch; y += 40) { g.moveTo(0, y + .5); g.lineTo(cw, y + .5); }
+    g.stroke();
+  }
+  if (sc >= 8 && S.angle === 0) {
     g.strokeStyle = 'rgba(255,255,255,.14)'; g.lineWidth = 1; g.beginPath();
     const x0 = Math.max(0, Math.floor(-V.ox / sc)), x1 = Math.min(W, Math.ceil((cw - V.ox) / sc));
     const y0 = Math.max(0, Math.floor(-V.oy / sc)), y1 = Math.min(H, Math.ceil((ch - V.oy) / sc));
@@ -497,11 +548,11 @@ function hitHandle(p) {
 const inSel = p => { const q = toImg(p), { x, y, s } = S.sel; return q.x >= x && q.x < x + s && q.y >= y && q.y < y + s; };
 
 function resizeFrom(ax, ay, px, py) {
-  const W = img.width, H = img.height;
+  const B = bounds();
   const dx = px - ax, dy = py - ay;
-  const dirx = dx > 0 ? 1 : dx < 0 ? -1 : (ax < W ? 1 : -1);
-  const diry = dy > 0 ? 1 : dy < 0 ? -1 : (ay < H ? 1 : -1);
-  const room = Math.min(dirx > 0 ? W - ax : ax, diry > 0 ? H - ay : ay);
+  const dirx = dx > 0 ? 1 : dx < 0 ? -1 : (ax < B.x1 ? 1 : -1);
+  const diry = dy > 0 ? 1 : dy < 0 ? -1 : (ay < B.y1 ? 1 : -1);
+  const room = Math.min(dirx > 0 ? B.x1 - ax : ax - B.x0, diry > 0 ? B.y1 - ay : ay - B.y0);
   const s = clamp(Math.max(Math.abs(dx), Math.abs(dy)), 1, Math.max(1, room));
   S.sel = { x: dirx > 0 ? ax : ax - s, y: diry > 0 ? ay : ay - s, s };
 }
@@ -521,7 +572,7 @@ src.addEventListener('pointerdown', e => {
   if (h) drag = { t: 'resize', ax: h.ax, ay: h.ay };
   else if (inSel(p)) drag = { t: 'move', qx: q.x, qy: q.y, sel: { ...S.sel } };
   else {
-    const ax = clamp(Math.round(q.x), 0, img.width), ay = clamp(Math.round(q.y), 0, img.height);
+    const B = bounds(), ax = clamp(Math.round(q.x), B.x0, B.x1), ay = clamp(Math.round(q.y), B.y0, B.y1);
     drag = { t: 'resize', ax, ay }; resizeFrom(ax, ay, ax, ay); syncUI(); render();
   }
 });
@@ -539,7 +590,8 @@ src.addEventListener('pointermove', e => {
   const q = toImg(p);
   if (drag.t === 'move') {
     const s = drag.sel.s;
-    S.sel = { s, x: clamp(drag.sel.x + Math.round(q.x - drag.qx), 0, img.width - s), y: clamp(drag.sel.y + Math.round(q.y - drag.qy), 0, img.height - s) };
+    const B = bounds();
+    S.sel = { s, x: clamp(drag.sel.x + Math.round(q.x - drag.qx), B.x0, B.x1 - s), y: clamp(drag.sel.y + Math.round(q.y - drag.qy), B.y0, B.y1 - s) };
   } else {
     resizeFrom(drag.ax, drag.ay, Math.round(q.x), Math.round(q.y));
   }
@@ -569,9 +621,9 @@ $('zSel').onclick = () => {
 
 /* ---------- selection fields / nudge pad ---------- */
 function setSel(x, y, s) {
-  const m = Math.min(img.width, img.height);
+  const B = bounds(), m = Math.min(B.w, B.h);
   s = clamp(Math.round(s), 1, m);
-  S.sel = { s, x: clamp(Math.round(x), 0, img.width - s), y: clamp(Math.round(y), 0, img.height - s) };
+  S.sel = { s, x: clamp(Math.round(x), B.x0, B.x1 - s), y: clamp(Math.round(y), B.y0, B.y1 - s) };
 }
 ['fx', 'fy', 'fs'].forEach(id => {
   $(id).addEventListener('input', e => {
@@ -583,17 +635,33 @@ function setSel(x, y, s) {
   });
   $(id).addEventListener('change', () => { if (!img) return; commit(); syncUI(); });
 });
-$('bMax').onclick = () => { if (!img) return; const m = Math.min(img.width, img.height); setSel((img.width - m) / 2, (img.height - m) / 2, m); commit(); syncUI(); render(); };
+$('bMax').onclick = () => { if (!img) return; const m = inscribedSide(); setSel((img.width - m) / 2, (img.height - m) / 2, m); commit(); syncUI(); render(); };
 $('bCenter').onclick = () => { if (!img) return; const { s } = S.sel; setSel((img.width - s) / 2, (img.height - s) / 2, s); commit(); syncUI(); render(); };
 $('bSnap').onclick = () => {
   if (!img) return;
-  const m = Math.min(img.width, img.height), { x, y, s } = S.sel;
+  const B = bounds(), m = Math.min(B.w, B.h), { x, y, s } = S.sel;
   let t = Math.max(1, Math.round(s / OUT)) * OUT;
   if (t > m) t = Math.max(OUT, Math.floor(m / OUT) * OUT);
   if (t > m) t = m;
   setSel(x + (s - t) / 2, y + (s - t) / 2, t); commit(); syncUI(); render();
 };
 $('method').onchange = e => { S.smooth = e.target.value === 'smooth'; commit(); render(); };
+
+function showGuides() {
+  guides = true; clearTimeout(guideTimer);
+  guideTimer = setTimeout(() => { guides = false; drawSrc(); }, 1500);
+}
+function applyAngle(a) {
+  if (!img) return;
+  S.angle = clamp(Math.round(a * 10) / 10, -45, 45);
+  const { x, y, s } = S.sel; setSel(x, y, s);
+  cropKey = ''; showGuides(); syncUI(); render();
+}
+$('angle').addEventListener('input', e => applyAngle(+e.target.value / 10));
+$('angle').addEventListener('change', () => commit());
+$('angNum').addEventListener('input', e => { const v = parseFloat(e.target.value); if (!isNaN(v)) { applyAngle(v); syncUI(e.target); } });
+$('angNum').addEventListener('change', () => { if (!img) return; commit(); syncUI(); });
+$('angReset').onclick = () => { if (!img) return; applyAngle(0); commit(); };
 
 let step = 1;
 $('st1').onclick = () => { step = 1; $('st1').classList.add('on'); $('st10').classList.remove('on'); };
@@ -618,17 +686,25 @@ holdRepeat($('nSmaller'), () => nudge(0, 0, -1)); holdRepeat($('nBigger'), () =>
 /* ---------- pipeline ---------- */
 /* 1) crop at working resolution  2) remove background there  3) callers downscale the result */
 function process(cap) {
-  const { x, y, s } = S.sel, w = Math.min(s, cap), key = `${x},${y},${s},${w}`;
+  const { x, y, s } = S.sel, w = Math.min(s, cap), key = `${x},${y},${s},${w},${S.angle}`;
   if (cropKey !== key) {
     cropCv = mk(w, w);
     const g = cropCv.getContext('2d', { willReadFrequently: true });
-    if (s <= cap) { g.imageSmoothingEnabled = false; g.drawImage(img, x, y, s, s, 0, 0, s, s); }
+    if (S.angle !== 0) {
+      const k = w / s;
+      g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+      g.setTransform(k, 0, 0, k, -x * k, -y * k);
+      g.translate(img.width / 2, img.height / 2); g.rotate(S.angle * Math.PI / 180); g.translate(-img.width / 2, -img.height / 2);
+      g.drawImage(img, 0, 0);
+      g.setTransform(1, 0, 0, 1, 0, 0);
+    }
+    else if (s <= cap) { g.imageSmoothingEnabled = false; g.drawImage(img, x, y, s, s, 0, 0, s, s); }
     else downscale(img, x, y, s, w, true, cropCv);
     cropData = g.getImageData(0, 0, w, w); cropKey = key;
   }
   const d = new Uint8ClampedArray(cropData.data), n = w * w, keys = S.colors;
   if (keys.length) {
-    const lo = S.down, hi = S.up, soft = S.soft;
+    const soft = S.soft;
     const ex = new Uint8Array(n);
     for (let i = 0; i < n; i++) {
       const i4 = i * 4;
@@ -636,7 +712,7 @@ function process(cap) {
       const r = d[i4], g = d[i4 + 1], b = d[i4 + 2];
       let best = 255;
       for (let k = 0; k < keys.length; k++) {
-        const K = keys[k];
+        const K = keys[k].c, lo = keys[k].lo, hi = keys[k].hi;
         let m = Math.max(K[0] - lo - r, r - (K[0] + hi), K[1] - lo - g, g - (K[1] + hi), K[2] - lo - b, b - (K[2] + hi), 0);
         if (m < best) best = m;
       }
@@ -712,6 +788,7 @@ function compute(cap) {
   if (!img) return;
   const P = process(cap);
   downscale(P.cv, 0, 0, P.w, OUT, S.smooth, resCv);
+  downscale(P.cv, 0, 0, P.w, 128, S.smooth, res128Cv);
   downscale(cropCv, 0, 0, P.w, OUT, S.smooth, baseCv);
   baseData = baseCtx.getImageData(0, 0, OUT, OUT);
   const rd = resCtx.getImageData(0, 0, OUT, OUT).data; transCount = 0;
@@ -719,7 +796,8 @@ function compute(cap) {
   const { s } = S.sel, r = s / OUT;
   $('cropInfo').textContent = `Box ${s}×${s}px → ${OUT}×${OUT}` + (r >= 1 ? ` (÷${r.toFixed(2)})` : ` (×${(1 / r).toFixed(2)} enlarge)`) +
     (Number.isInteger(r) ? '' : ' — not a whole multiple of 64; “Snap ×64” gives the sharpest result.') +
-    (s > cap ? ` Background removal runs on a ${P.w}px version of the crop.` : '');
+    (s > cap ? ` Background removal runs on a ${P.w}px version of the crop.` : '') +
+    (cornersOutside() ? ' ⚠ The box overlaps an empty corner of the tilted picture; those pixels will be transparent.' : '');
   $('statInfo').textContent = `Transparent: ${transCount} of ${OUT * OUT} tile pixels (${(transCount / (OUT * OUT) * 100).toFixed(1)}%)`;
   drawPreviews();
   $('bSave').disabled = $('bShare').disabled = false;
@@ -727,7 +805,7 @@ function compute(cap) {
 
 /* ---------- previews ---------- */
 function paint(cv, source, kind, z, grid, css) {
-  const size = OUT * z; cv.width = size; cv.height = size;
+  const N = source.width, size = N * z; cv.width = size; cv.height = size;
   if (css) cv.style.width = size + 'px';
   const g = cv.getContext('2d');
   if (kind === 'light') { g.fillStyle = $('lightBg').value; g.fillRect(0, 0, size, size); }
@@ -737,7 +815,7 @@ function paint(cv, source, kind, z, grid, css) {
   g.drawImage(source, 0, 0, size, size);
   if (grid && z >= 4) {
     g.strokeStyle = 'rgba(128,128,128,.35)'; g.lineWidth = 1; g.beginPath();
-    for (let i = 1; i < OUT; i++) { const p = i * z + .5; g.moveTo(p, 0); g.lineTo(p, size); g.moveTo(0, p); g.lineTo(size, p); }
+    for (let i = 1; i < N; i++) { const p = i * z + .5; g.moveTo(p, 0); g.lineTo(p, size); g.moveTo(0, p); g.lineTo(size, p); }
     g.stroke();
   }
 }
@@ -751,6 +829,8 @@ function drawPreviews() {
   paint($('pCheck'), resCv, 'check', z, grid, true);
   paint($('aLight'), resCv, 'light', 1, false);
   paint($('aDark'), resCv, 'dark', 1, false);
+  paint($('bLight'), res128Cv, 'light', 1, false);
+  paint($('bDark'), res128Cv, 'dark', 1, false);
   paint($('mLight'), resCv, 'light', 1, false);
   paint($('mDark'), resCv, 'dark', 1, false);
 }
@@ -759,15 +839,26 @@ function syncUI(except) {
   const set = (id, v) => { const el = $(id); if (el !== except && el.value !== String(v)) el.value = v; };
   set('fx', S.sel.x); set('fy', S.sel.y); set('fs', S.sel.s);
   set('method', S.smooth ? 'smooth' : 'nearest'); set('mode', S.mode);
-  set('tolDown', S.down); set('tolUp', S.up); set('soft', S.soft); set('erode', S.erode); set('clean', S.clean);
+  const cur = S.colors[S.cur];
+  set('tolDown', cur ? cur.lo : 3); set('tolUp', cur ? cur.hi : 3); set('soft', S.soft); set('erode', S.erode); set('clean', S.clean);
+  $('tolDown').disabled = $('tolUp').disabled = !cur;
+  document.querySelectorAll('.step[data-t=tolDown],.step[data-t=tolUp]').forEach(b => b.disabled = !cur);
+  $('editing').textContent = cur ? `Sliders below are editing ${hex(cur.c)}. Tap another pill to switch.` : (S.colors.length ? 'Tap a color pill to choose which color the sliders edit.' : '');
+  set('angle', Math.round(S.angle * 10)); set('angNum', S.angle.toFixed(1));
   $('link').checked = S.link;
   SLIDERS.forEach(id => { $('v_' + id).textContent = $(id).value; });
   const box = $('chips'); box.innerHTML = '';
   if (!S.colors.length) box.innerHTML = '<span class="muted">No background colors picked yet.</span>';
-  S.colors.forEach((c, i) => {
-    const b = document.createElement('button'); b.className = 'chip'; b.title = 'Remove this color';
-    b.innerHTML = `<i style="background:${hex(c)}"></i><span>${hex(c)}</span><b>×</b>`;
-    b.onclick = () => { S.colors.splice(i, 1); commit(); syncUI(); render(); };
+  S.colors.forEach((k, i) => {
+    const b = document.createElement('div'); b.className = 'chip' + (i === S.cur ? ' sel' : ''); b.setAttribute('role', 'button');
+    b.innerHTML = `<i style="background:${hex(k.c)}"></i><div class="tx"><b>${hex(k.c).toUpperCase()}</b><span>− ${k.lo} &nbsp; + ${k.hi}</span></div><span class="rm" title="Remove this color">×</span>`;
+    b.onclick = e => {
+      if (e.target.classList.contains('rm')) {
+        S.colors.splice(i, 1);
+        if (S.cur === i) S.cur = S.colors.length ? Math.min(i, S.colors.length - 1) : -1; else if (S.cur > i) S.cur--;
+        commit(); syncUI(); render();
+      } else { S.cur = i; commit(); syncUI(); }
+    };
     box.appendChild(b);
   });
   updHist(); updFnPreview();
@@ -775,19 +866,20 @@ function syncUI(except) {
 
 /* ---------- transparency controls ---------- */
 function addColor(c) {
-  if (S.colors.some(k => k[0] === c[0] && k[1] === c[1] && k[2] === c[2])) return false;
-  S.colors.push(c); return true;
+  const ex = S.colors.findIndex(k => k.c[0] === c[0] && k.c[1] === c[1] && k.c[2] === c[2]);
+  if (ex >= 0) { S.cur = ex; return false; }
+  S.colors.push({ c, lo: 3, hi: 3 }); S.cur = S.colors.length - 1; return true;
 }
-$('tolDown').oninput = e => { S.down = +e.target.value; if (S.link) S.up = S.down; syncUI(e.target); render(); };
-$('tolUp').oninput = e => { S.up = +e.target.value; if (S.link) S.down = S.up; syncUI(e.target); render(); };
+$('tolDown').oninput = e => { const k = S.colors[S.cur]; if (!k) return; k.lo = +e.target.value; if (S.link) k.hi = k.lo; syncUI(e.target); render(); };
+$('tolUp').oninput = e => { const k = S.colors[S.cur]; if (!k) return; k.hi = +e.target.value; if (S.link) k.lo = k.hi; syncUI(e.target); render(); };
 $('soft').oninput = e => { S.soft = +e.target.value; syncUI(e.target); render(); };
 $('erode').oninput = e => { S.erode = +e.target.value; syncUI(e.target); render(); };
 $('clean').oninput = e => { S.clean = +e.target.value; syncUI(e.target); render(); };
 ['tolDown', 'tolUp', 'soft', 'erode', 'clean'].forEach(id => $(id).addEventListener('change', () => commit()));
-$('link').onchange = e => { S.link = e.target.checked; if (S.link) S.up = S.down; commit(); syncUI(); render(); };
+$('link').onchange = e => { S.link = e.target.checked; const k = S.colors[S.cur]; if (S.link && k) k.hi = k.lo; commit(); syncUI(); render(); };
 $('mode').onchange = e => { S.mode = e.target.value; commit(); render(); };
-$('bClear').onclick = () => { S.colors = []; commit(); syncUI(); render(); };
-$('bAddHex').onclick = () => { if (addColor(unhex($('colHex').value))) { commit(); syncUI(); render(); } else toast('Color already in the list'); };
+$('bClear').onclick = () => { S.colors = []; S.cur = -1; commit(); syncUI(); render(); };
+$('bAddHex').onclick = () => { if (addColor(unhex($('colHex').value))) { commit(); syncUI(); render(); } else { syncUI(); toast('Color already in the list — selected it.'); } };
 $('bCorners').onclick = () => {
   if (!img || !baseData) { toast('Open an image first'); return; }
   const d = baseData.data; let any = false;
@@ -828,7 +920,7 @@ pOrig.addEventListener('pointerup', e => {
   if (!picking) return; picking = false; $('loupeBox').style.display = 'none';
   const c = colorAt(pixAt(e));
   if (addColor(c)) { commit(); syncUI(); render(); toast(`Added ${hex(c)}. Tap Pick color for another.`); }
-  else toast('That color is already in the list');
+  else { syncUI(); toast('That color is already in the list — selected it.'); }
   setArmed(false);
 });
 pOrig.addEventListener('pointercancel', () => { picking = false; $('loupeBox').style.display = 'none'; });
