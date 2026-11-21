@@ -53,4 +53,4 @@ keep-coding-instructions: true
 - **Up to Five Ideas Per Build:** Propose up to five stand-out "extras" per build. Include things competitor apps do above and beyond. Propose only. Never build any of them without approval.
 
 # Length
-- **Keep It Short:** Stay under 300 words unless the user asks for more.
+- **Keep It Short:** Stay under 200 words unless the user asks for more.
